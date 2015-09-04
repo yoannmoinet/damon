@@ -1,0 +1,43 @@
+{
+  "version": "0.0.1",
+  "name": "agents",
+  "private": true,
+  "description": "Bot agents navigating urls and doing tasks.",
+  "author": "Yoann Moinet <yoann.moinet@autodesk.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://git.autodesk.com/moinety/agents.git"
+  },
+  "bugs": {
+    "url": "https://git.autodesk.com/moinety/agents/issues"
+  },
+  "homepage": "https://git.autodesk.com/moinety/agents",
+  "main": "./src/index.js",
+  "scripts": {
+    "posttest": "npm run format && npm run lint",
+    "preversion": "npm run build",
+    "postversion": "npm run changelog",
+    "build": "npm test",
+    "test": "mocha",
+    "format": "jscs ./src/index.js ./test/agents.spec.js",
+    "lint": "eslint ./src/index.js ./test/agents.spec.js",
+    "changelog": "node ./bin/changelog.js"
+  },
+  "dependencies": {
+    "casperjs": "git+https://github.com/n1k0/casperjs.git#phantomjs2",
+    "fake-identity": "^1.0.6",
+    "faker": "^3.0.1",
+    "faye": "^1.1.2",
+    "mongoose": "^4.1.3",
+    "node-uuid": "^1.4.3",
+    "promise": "^7.0.4",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "conventional-changelog": "^0.4.3",
+    "eslint": "^1.3.1",
+    "expect.js": "^0.3.1",
+    "mocha": "^2.3.0"
+  }
+}
