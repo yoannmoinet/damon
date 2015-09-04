@@ -1,9 +1,9 @@
 var config = function (casper, pid) {
-    var log = require('./src/bots/log').config(casper);
+    var log = require('./log').config(casper);
     return {
         capture: function (params) {
             log('capture', params.name, 'INFO_BAR');
-            return casper.capture('./src/bots/captures/' +
+            return casper.capture('./captures/' +
                 pid + '/' +
                 params.name);
         },

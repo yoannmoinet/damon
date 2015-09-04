@@ -1,5 +1,15 @@
+var currentFile = require('system').args[3];
+var fs = require('fs');
+var dirname = fs.absolute(currentFile).split('/');
+
+if (dirname.length > 1) {
+    dirname.pop();
+    dirname = dirname.join('/');
+    fs.changeWorkingDirectory(dirname);
+}
+
 var casper = require('casper').create({
-    clientScripts: ['./src/bots/includes/start.js'],
+    clientScripts: ['./includes/start.js'],
     viewportSize: {
         width: 1024,
         height: 720
@@ -33,8 +43,8 @@ var casper = require('casper').create({
 var utils = require('utils');
 var system = require('system');
 var pid = system.pid;
-var log = require('./src/bots/log').config(casper);
-var actions = require('./src/bots/actions').config(casper, pid);
+var log = require('./log').config(casper);
+var actions = require('./actions').config(casper, pid);
 
 casper.on('remote.message', function (message) {
     log('console.log : ' + message, 'INFO');

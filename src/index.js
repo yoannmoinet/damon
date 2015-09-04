@@ -3,12 +3,13 @@ var faye = require('faye');
 var _ = require('underscore');
 var path = require('path');
 var uuid = require('node-uuid').v1;
-var dbConnection = require('./db').connect;
+var path = require('path');
+var dbConnection = require(path.join(__dirname, './db')).connect;
 var db;
 
 var env = process.env;
-var phantomjsPath = process.cwd() + '\\bin';
-env.PHANTOMJS_EXECUTABLE = phantomjsPath + '\\phantomjs_2.0';
+var phantomjsPath = path.join(__dirname, '../bin');
+env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.0';
 env.PATH += ';' + phantomjsPath;
 
 var mgrUuid = uuid();
@@ -20,7 +21,7 @@ var started = false;
 console.log('spawned mgr ' + process.pid);
 
 function start () {
-    addTasks('./src/bots/tasks/login.json');
+    addTasks(path.join(__dirname, './bots/tasks/login.json'));
 }
 
 function addTasks (taskFilename) {
@@ -43,6 +44,7 @@ client.subscribe('/manager/' + mgrUuid + '/actions',
 );
 
 function update() {
+    console.log('update');
     client.publish('/manager/updates', {
         managers: [{
             id: mgrUuid,
@@ -55,8 +57,8 @@ function update() {
 
 function spawnChild(tasks) {
     var child = spawn(
-        '.\\node_modules\\casperjs\\bin\\casperjs',
-        ['./src/bots/worker.js', '--tasks=' + tasks]
+        path.join(__dirname, '../node_modules/casperjs/bin/casperjs'),
+        [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks]
     );
     console.log('spawned child ' + child.pid + ' with tasks ' + tasks);
     children.push({
