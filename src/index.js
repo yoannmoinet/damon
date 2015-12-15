@@ -1,11 +1,8 @@
 var spawn = require('child_process').spawn;
-var faye = require('faye');
 var _ = require('underscore');
 var path = require('path');
 var uuid = require('node-uuid').v1;
 var path = require('path');
-var dbConnection = require(path.join(__dirname, './db')).connect;
-var db;
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
@@ -32,27 +29,7 @@ function addTasks (taskFilename) {
             tasks: taskFilename
         });
         spawnChild(taskFilename);
-        setInterval(update, 15000);
     }
-};
-
-client = new faye.Client('http://localhost:5555/bots');
-client.subscribe('/manager/' + mgrUuid + '/actions',
-    function (message) {
-        console.log('Got Message', message);
-    }
-);
-
-function update() {
-    console.log('update');
-    client.publish('/manager/updates', {
-        managers: [{
-            id: mgrUuid,
-            name: process.pid.toString(),
-            children: _.pluck(children, 'name'),
-            tasks: _.pluck(tasks, 'name')
-        }]
-    });
 };
 
 function spawnChild(tasks) {
@@ -100,9 +77,3 @@ function bindChild(child) {
     });
 }
 
-dbConnection('mongodb://localhost/bots').then(function (resp) {
-    db = resp;
-    start();
-}, function (err) {
-    console.error('ERROR', err);
-});
