@@ -1,6 +1,7 @@
 var config = function (casper) {
     return function log() {
-        var color = require('colorizer').create('Colorizer').format;
+        var color = patchRequire(require)('colorizer')
+            .create('Colorizer').format;
         var d = new Date();
         var args = Array.prototype.slice.call(arguments);
         var type = 'DEFAULT';
