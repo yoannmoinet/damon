@@ -22,7 +22,7 @@ var casper = require('casper').create({
             '(KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
     },
     verbose: false,
-    exitOnError: false,
+    exitOnError: true,
     waitTimeout: 60000,
     logLevel: 'debug',
     onDie: function (casp, message, status) {
