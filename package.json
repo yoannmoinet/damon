@@ -28,7 +28,7 @@
     "changelog": "node ./bin/changelog.js"
   },
   "dependencies": {
-    "casperjs": "git+https://github.com/n1k0/casperjs.git#phantomjs2",
+    "casperjs": "n1k0/casperjs",
     "cli": "^0.11.1",
     "node-uuid": "^1.4.3",
     "underscore": "^1.8.3"
