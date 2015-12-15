@@ -1,6 +1,16 @@
-<a name="0.0.2"></a>
-## [0.0.2](//compare/v0.0.2...v0.0.2) (2015-12-15)
+<a name="0.0.3"></a>
+## [0.0.3](//compare/v0.0.3...v0.0.3) (2015-12-15)
 
+
+
+
+<a name="0.0.3"></a>
+## [0.0.3](//compare/v0.0.2...v0.0.3) (2015-12-15)
+
+
+### Features
+
+* support windows and unix platforms 8858ef6
 
 
 
