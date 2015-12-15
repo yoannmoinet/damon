@@ -56,7 +56,7 @@ casper.on('page.resource.received', function(resource) {
             ' failed to load (' + status + ')', 'error');
     }
 });
-casper.on('complete.error', function(err) {
+/*casper.on('complete.error', function(err) {
     log('complete callback has failed: ' + err, 'ERROR');
 });
 casper.on('load.failed', function(err) {
@@ -67,7 +67,7 @@ casper.on('page.error', function (err, other) {
 });
 casper.on('resource.error', function (err) {
     log('resource error', err, 'ERROR');
-});
+});*/
 
 // removing default options passed by the Python executable
 casper.cli.drop('cli');
