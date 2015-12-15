@@ -21,7 +21,7 @@
     "posttest": "npm run format && npm run lint",
     "preversion": "npm test",
     "postversion": "npm run changelog",
-    "test": "npm run format && npm run lint && mocha",
+    "test": "npm run format && npm run lint",
     "format": "jscs ./src/index.js ./test/agents.spec.js",
     "lint": "eslint ./src/index.js ./test/agents.spec.js",
     "changelog": "node ./bin/changelog.js"
