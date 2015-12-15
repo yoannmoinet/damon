@@ -16,9 +16,8 @@ var client;
 var started = false;
 
 console.log('spawned mgr ' + process.pid);
-
-function start () {
-    addTasks(path.join(__dirname, './bots/tasks/login.json'));
+function start (file) {
+    addTasks(file);
 }
 
 function addTasks (taskFilename) {
@@ -77,3 +76,6 @@ function bindChild(child) {
     });
 }
 
+module.exports = {
+    start: start
+};

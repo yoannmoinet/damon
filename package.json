@@ -13,7 +13,10 @@
     "url": "https://git.autodesk.com/moinety/agents/issues"
   },
   "homepage": "https://git.autodesk.com/moinety/agents",
-  "main": "./src/index.js",
+  "main": "cli.js",
+  "bin": {
+    "agent": "cli.js"
+  },
   "scripts": {
     "posttest": "npm run format && npm run lint",
     "preversion": "npm run build",
@@ -26,6 +29,7 @@
   },
   "dependencies": {
     "casperjs": "git+https://github.com/n1k0/casperjs.git#phantomjs2",
+    "cli": "^0.11.1",
     "node-uuid": "^1.4.3",
     "underscore": "^1.8.3"
   },
