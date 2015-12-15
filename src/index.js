@@ -6,7 +6,9 @@ var path = require('path');
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
-env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.0';
+var isWin = /^win/.test(process.platform);
+env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.0' +
+    (isWin ? '.exe' : '');
 env.PATH += ';' + phantomjsPath;
 
 var mgrUuid = uuid();
