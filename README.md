@@ -2,6 +2,8 @@
 
 > Bots navigating urls and doing tasks.
 
+![logo](./media/demo.gif)
+
 `agent` is a CLI that runs on [CasperJS](http://casperjs.org/) which runs on [PhantomJS](http://phantomjs.org/).
 
 It feeds on JSON files that describe what tasks it needs to achieve on specified starting URL.
