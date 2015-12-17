@@ -3,6 +3,7 @@
 var cli = require('cli').enable('status', 'glob', 'version');
 var agent = require('./src/index');
 var pkg = require('./package.json');
+var path = require('path');
 cli.setApp(pkg.name, pkg.version);
 
 cli.parse({
@@ -23,6 +24,6 @@ cli.main(function (args, opts) {
     };
 
     if (opts.file) {
-        agent.start(opts.file);
+        agent.start(path.join(process.cwd(), opts.file));
     }
 });
