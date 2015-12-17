@@ -9,7 +9,7 @@ var isWin = /^win/.test(process.platform);
 env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.0' +
     (isWin ? '.exe' : '');
 env.PATH += ';' + phantomjsPath;
-console.log(env.PHANTOMJS_EXECUTABLE);
+
 var mgrUuid = uuid();
 var children = [];
 var tasks = [];
