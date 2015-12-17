@@ -52,12 +52,14 @@ function bindChild(child) {
         console.log('error', arguments);
     });
 
-    child.on('exit', function () {
+    child.on('exit', function (code, error) {
         console.log('exit', arguments);
+        process.exit(code);
     });
 
-    child.on('close', function () {
+    child.on('close', function (code, error) {
         console.log('close', arguments);
+        process.exit(code);
     });
 
     child.on('disconnect', function () {
