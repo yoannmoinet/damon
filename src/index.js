@@ -2,7 +2,6 @@ var spawn = require('child_process').spawn;
 var _ = require('underscore');
 var path = require('path');
 var uuid = require('node-uuid').v1;
-var path = require('path');
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
