@@ -85,7 +85,7 @@ function bindChild(child) {
         console.log('close', arguments);
         if (error) {
             fs.unlink(cookieFile, function() {
-                process.exit(error);
+                process.exit(1);
             });
         } 
         else {
@@ -112,7 +112,7 @@ function bindChild(child) {
 
 process.on("SIGINT", function (code, error) {
     fs.unlink(cookieFile, function() {
-        process.exit(error);
+        process.exit(0);
     });
 });
 
