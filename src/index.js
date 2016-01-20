@@ -2,6 +2,7 @@ var spawn = require('child_process').spawn;
 var _ = require('underscore');
 var path = require('path');
 var uuid = require('node-uuid').v1;
+var fs = require('fs');
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
@@ -12,30 +13,54 @@ env.PATH += ';' + phantomjsPath;
 
 var mgrUuid = uuid();
 var children = [];
-var tasks = [];
+var files = [];
 var client;
 var started = false;
+var cookieFile = 'cookies.txt';
 
 console.log('spawned mgr ' + process.pid);
-function start (file) {
-    addTasks(file);
+function start (files) {
+    if (files) {
+        if(_.isArray(files)){
+            _.each(files, function (file) {
+                addFiles(file);
+            });     
+        }
+        else {
+            addFiles(files);
+        }
+        runTask();
+    }
 }
 
-function addTasks (taskFilename) {
-    if (taskFilename) {
-        tasks.push({
-            id: uuid(),
-            name: path.basename(taskFilename),
-            tasks: taskFilename
-        });
-        spawnChild(taskFilename);
-    }
+function addFiles (taskFilename) {
+    files.push({
+        id: uuid(),
+        name: path.basename(taskFilename),
+        tasks: taskFilename
+    });
 };
+
+function runTask () {
+    var file = files.shift();
+    if (file) {
+        console.log("spawn next child")
+        spawnChild(file.tasks);
+    } 
+    else {
+        console.log("deleting cookies....");
+        fs.unlink(cookieFile, function() {
+            console.log("tasks finished");
+            process.exit(0);
+        });
+    }
+}
 
 function spawnChild(tasks) {
     var child = spawn(
         path.join(__dirname, '../node_modules/casperjs/bin/casperjs'),
-        [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks]
+        [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks,
+        '--cookies-file=./'+ cookieFile]
     );
     console.log('spawned child ' + child.pid + ' with tasks ' + tasks);
     children.push({
@@ -54,12 +79,18 @@ function bindChild(child) {
 
     child.on('exit', function (code, error) {
         console.log('exit', arguments);
-        process.exit(code);
     });
 
     child.on('close', function (code, error) {
         console.log('close', arguments);
-        process.exit(code);
+        if (error) {
+            fs.unlink(cookieFile, function() {
+                process.exit(error);
+            });
+        } 
+        else {
+            runTask();
+        }
     });
 
     child.on('disconnect', function () {
@@ -78,6 +109,12 @@ function bindChild(child) {
         console.log('## ERRROR: ', data.toString());
     });
 }
+
+process.on("SIGINT", function (code, error) {
+    fs.unlink(cookieFile, function() {
+        process.exit(error);
+    });
+});
 
 module.exports = {
     start: start
