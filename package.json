@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "casperjs": "n1k0/casperjs",
-    "cli": "^0.11.1",
+    "commander": "^2.9.0",
     "node-uuid": "^1.4.3",
     "underscore": "^1.8.3"
   },

@@ -21,14 +21,9 @@ var cookieFile = 'cookies.txt';
 console.log('spawned mgr ' + process.pid);
 function start (files) {
     if (files) {
-        if(_.isArray(files)){
-            _.each(files, function (file) {
-                addFiles(file);
-            });     
-        }
-        else {
-            addFiles(files);
-        }
+        _.each(files, function (file) {
+            addFiles(file);
+        });     
         runTask();
     }
 }
@@ -44,7 +39,6 @@ function addFiles (taskFilename) {
 function runTask () {
     var file = files.shift();
     if (file) {
-        console.log("spawn next child")
         spawnChild(file.tasks);
     } 
     else {
@@ -110,7 +104,7 @@ function bindChild(child) {
     });
 }
 
-process.on("SIGINT", function (code, error) {
+process.on('SIGINT', function (code, error) {
     fs.unlink(cookieFile, function() {
         process.exit(0);
     });
