@@ -4,7 +4,6 @@ var program = require('commander');
 var agent = require('./src/index');
 var pkg = require('./package.json');
 var path = require('path');
-var _ = require('underscore');
 
 program._name = pkg.name.slice(0, -1);
 
@@ -13,8 +12,8 @@ program
     .command('run <files...>')
     .description('Run the list of JSON tasks files. Accept glob.')
     .action(function (files) {
-        var filesList = _.map(files, function (file) {
-            return path.join(process.cwd(), file)
+        var filesList = files.map(function (file) {
+            return path.join(process.cwd(), file);
         });
         agent.start(filesList);
     });

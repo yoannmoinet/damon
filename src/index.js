@@ -19,6 +19,28 @@ var started = false;
 var cookieFile = 'cookies.txt';
 
 console.log('spawned mgr ' + process.pid);
+
+function deleteCookies (cb) {
+    console.log("deleting cookies....");
+    fs.unlink(cookieFile, function (err) {
+        if (err) {
+            console.log("Can't delete cookie file");
+        }
+        if (typeof cb === 'function') {
+            cb();
+        }
+    });
+}
+
+function end (code, err) {
+    deleteCookies(function () {
+        if (err) {
+            console.log(err);
+        }
+        process.exit(code);
+    });
+}
+
 function start (files) {
     if (files) {
         _.each(files, function (file) {
@@ -42,11 +64,7 @@ function runTask () {
         spawnChild(file.tasks);
     } 
     else {
-        console.log("deleting cookies....");
-        fs.unlink(cookieFile, function() {
-            console.log("tasks finished");
-            process.exit(0);
-        });
+        end(0);
     }
 }
 
@@ -78,9 +96,7 @@ function bindChild(child) {
     child.on('close', function (code, error) {
         console.log('close', arguments);
         if (error) {
-            fs.unlink(cookieFile, function() {
-                process.exit(1);
-            });
+            end(1, error);
         } 
         else {
             runTask();
@@ -105,9 +121,7 @@ function bindChild(child) {
 }
 
 process.on('SIGINT', function (code, error) {
-    fs.unlink(cookieFile, function() {
-        process.exit(0);
-    });
+    end(0);
 });
 
 module.exports = {
