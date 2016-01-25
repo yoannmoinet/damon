@@ -21,10 +21,10 @@ var cookieFile = 'cookies.txt';
 console.log('spawned mgr ' + process.pid);
 
 function deleteCookies (cb) {
-    console.log("deleting cookies....");
+    console.log('deleting cookies....');
     fs.unlink(cookieFile, function (err) {
         if (err) {
-            console.log("Can't delete cookie file");
+            console.log('Can\'t delete cookie file');
         }
         if (typeof cb === 'function') {
             cb();

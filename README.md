@@ -13,7 +13,7 @@ Usage:
   agent [OPTIONS] [COMMAND]
 
 Commands:
-    run <files...>  Run the list of JSON tasks files. Accept glob.
+  run <files...>  Run the list of JSON tasks files. Accept glob.
 
 Options:
    -h, --help     output usage information
