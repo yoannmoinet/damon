@@ -93,14 +93,12 @@ function replaceHandlebars (string) {
 
 function parseTask (task) {
     var handlebarRegex = new RegExp('{{([^{}]+)}}', 'g');
-
     for (param in task.params) {
         var paramValue = task.params[param];
         if (handlebarRegex.test(paramValue)) {
             task.params[param] = replaceHandlebars(paramValue);
         }
     }
-
     return task;
 }
 

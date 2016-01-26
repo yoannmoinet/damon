@@ -133,7 +133,7 @@ function bindChild(child) {
     });
 
     child.stderr.on('data', function (data) {
-        console.log('## ERRROR: ', data.toString());
+        console.log('## ERROR: ', data.toString());
     });
 }
 

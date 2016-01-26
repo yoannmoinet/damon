@@ -8,16 +8,28 @@ var config = function (casper, pid) {
                 params.name);
         },
         get: function (params) {
-            if (params.attribute) {
-                
-                var elementAttribute = casper.getElementAttribute(params.selector, params.attribute)
-                if (elementAttribute) {
-                    log('got', params.attribute + ' of ' + params.selector, 'SUCCESS');
-                    return elementAttribute;
-                }
-                return log('no ' + params.attribute +' for ' + params.selector, 'WARNING');
-                
+            var attributeValue;
+            if (params.attribute === '@text') {
+                attributeValue = casper.getElementInfo(params.selector).text;
+            } else {
+                attributeValue = casper.getElementAttribute(params.selector, params.attribute);
             }
+
+            if (attributeValue && params.modifier) {
+                var regexModifier = new RegExp(params.modifier);
+                var matchedRegex = regexModifier.exec(attributeValue);
+                if (matchedRegex) {
+                    attributeValue = matchedRegex[0];
+                } else {
+                    return log('no ' + params.attribute + ' for ' + params.selector + ' satisfying ' + params.modifier, 'ERROR');
+                }
+            }
+
+            if (attributeValue) {
+                log('got', params.attribute + ' of ' + params.selector, 'SUCCESS');
+                return attributeValue;
+            }
+            return log('no ' + params.attribute + ' for ' + params.selector, 'ERROR');
         },
         wait: function (params) {
             var vals = ['wait for'];
