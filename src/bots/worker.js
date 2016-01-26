@@ -113,9 +113,10 @@ actions.navigate(config.url, function () {
     tasks.forEach(function (task) {
         if (task.type && actions[task.type]) {
             casper.then(function () {
+                var response;
                 log('starting task', task, 'INFO_BAR');
                 task = parseTask(task);
-                var response = actions[task.type](task.params);
+                response = actions[task.type](task.params);
                 if (task.type === "get") {
                     store[task.params.key] = response;
                 }
