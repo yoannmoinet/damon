@@ -7,6 +7,18 @@ var config = function (casper, pid) {
                 pid + '/' +
                 params.name);
         },
+        get: function (params) {
+            if (params.attribute) {
+                
+                var elementAttribute = casper.getElementAttribute(params.selector, params.attribute)
+                if (elementAttribute) {
+                    log('got', params.attribute + ' of ' + params.selector, 'SUCCESS');
+                    return elementAttribute;
+                }
+                return log('no ' + params.attribute +' for ' + params.selector, 'WARNING');
+                
+            }
+        },
         wait: function (params) {
             var vals = ['wait for'];
             Object.keys(params).forEach(function (key) {

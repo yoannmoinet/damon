@@ -82,6 +82,27 @@ if (!casper.cli.has('tasks')) {
 var opts = require(casper.cli.get('tasks'));
 var tasks = opts.tasks;
 var config = opts.config;
+var store = {};
+
+function replaceHandlebars (string) {
+    for (key in store) {
+        string = string.replace(new RegExp('{{' + key + '}}','g'), store[key]);
+    }
+    return string
+}
+
+function parseTask (task) {
+    var handlebarRegex = new RegExp('{{([^{}]+)}}', 'g');
+
+    for (param in task.params) {
+        var paramValue = task.params[param];
+        if (handlebarRegex.test(paramValue)) {
+            task.params[param] = replaceHandlebars(paramValue);
+        }
+    }
+
+    return task;
+}
 
 actions.navigate(config.url, function () {
     casper.then(function () {
@@ -95,7 +116,12 @@ actions.navigate(config.url, function () {
         if (task.type && actions[task.type]) {
             casper.then(function () {
                 log('starting task', task, 'INFO_BAR');
-                return actions[task.type](task.params);
+                task = parseTask(task);
+                var response = actions[task.type](task.params);
+                if (task.type === "get") {
+                    store[task.params.key] = response;
+                }
+                return response
             });
         }
     });
