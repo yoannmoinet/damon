@@ -42,8 +42,8 @@ function end (code, err) {
     });
 }
 
-function getFiles (file) {
-    var absolutePath = parsePath(file);
+function getFiles (path) {
+    var absolutePath = parsePath(path);
     return glob.sync(absolutePath);
 }
 
