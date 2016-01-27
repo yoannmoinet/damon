@@ -3,6 +3,7 @@ var _ = require('underscore');
 var path = require('path');
 var uuid = require('node-uuid').v1;
 var fs = require('fs');
+var glob = require('glob');
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
@@ -41,9 +42,27 @@ function end (code, err) {
     });
 }
 
-function start (files) {
-    if (files) {
-        _.each(files, function (file) {
+function getFiles (file) {
+    var absolutePath = parsePath(file);
+    return glob.sync(absolutePath);
+}
+
+function parsePath (filePath) {
+    if(path.resolve(filePath) === path.normalize(filePath)) {
+        return filePath;
+    } else {
+        return path.join(process.cwd(), filePath);
+    }
+}
+
+function start (filesPath) {
+    var filesList = [];
+    if (filesPath) {
+        filesPath.forEach(function (path) {
+            filesList = filesList.concat(getFiles(path));
+        });
+
+        filesList.forEach(function (file) {
             addFiles(file);
         });     
         runTask();
