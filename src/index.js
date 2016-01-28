@@ -48,7 +48,7 @@ function getFiles (path) {
 }
 
 function parsePath (filePath) {
-    if(path.resolve(filePath) === path.normalize(filePath)) {
+    if (path.resolve(filePath) === path.normalize(filePath)) {
         return filePath;
     } else {
         return path.join(process.cwd(), filePath);
@@ -81,8 +81,7 @@ function runTask () {
     var file = files.shift();
     if (file) {
         spawnChild(file.tasks);
-    }
-    else {
+    } else {
         end(0);
     }
 }
@@ -91,7 +90,7 @@ function spawnChild(tasks) {
     var child = spawn(
         path.join(__dirname, '../node_modules/casperjs/bin/casperjs'),
         [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks,
-        '--cookies-file=./'+ cookieFile]
+        '--cookies-file=./' + cookieFile]
     );
     console.log('spawned child ' + child.pid + ' with tasks ' + tasks);
     children.push({
@@ -116,8 +115,7 @@ function bindChild(child) {
         console.log('close', arguments);
         if (error) {
             end(1, error);
-        }
-        else {
+        } else {
             runTask();
         }
     });
