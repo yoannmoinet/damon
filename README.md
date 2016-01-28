@@ -10,15 +10,14 @@ It feeds on JSON files that describe what tasks it needs to achieve on specified
 
 ```bash
 Usage:
-  agent [OPTIONS] [ARGS]
+  agent [OPTIONS] [COMMAND]
+
+Commands:
+  run <files...>  Run the list of JSON tasks files. Accept glob.
 
 Options:
-  -f, --file STRING      The JSON file were tasks are.
-
-  -k, --no-color         Omit color from output
-      --debug            Show debug information
-  -v, --version          Display the current version
-  -h, --help             Display help and usage details
+   -h, --help     output usage information
+   -V, --version  output the version number
 ```
 
 ## Installation
@@ -58,7 +57,11 @@ agent.start('./tasks.json');
 ### Globally
 
 ```bash
-> agent -f ./tasks.json
+> agent run tasks.json
+or
+> agent run tasks1.json tasks2.json
+or 
+> agent run *.json
 ```
 
 ## Task File

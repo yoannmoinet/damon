@@ -2,6 +2,8 @@ var spawn = require('child_process').spawn;
 var _ = require('underscore');
 var path = require('path');
 var uuid = require('node-uuid').v1;
+var fs = require('fs');
+var glob = require('glob');
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
@@ -12,30 +14,84 @@ env.PATH += ';' + phantomjsPath;
 
 var mgrUuid = uuid();
 var children = [];
-var tasks = [];
+var files = [];
 var client;
 var started = false;
+var cookieFile = 'cookies.txt';
 
 console.log('spawned mgr ' + process.pid);
-function start (file) {
-    addTasks(file);
+
+function deleteCookies (cb) {
+    console.log('deleting cookies....');
+    fs.unlink(cookieFile, function (err) {
+        if (err) {
+            console.log('Can\'t delete cookie file');
+        }
+        if (typeof cb === 'function') {
+            cb();
+        }
+    });
 }
 
-function addTasks (taskFilename) {
-    if (taskFilename) {
-        tasks.push({
-            id: uuid(),
-            name: path.basename(taskFilename),
-            tasks: taskFilename
-        });
-        spawnChild(taskFilename);
+function end (code, err) {
+    deleteCookies(function () {
+        if (err) {
+            console.log(err);
+        }
+        process.exit(code);
+    });
+}
+
+function getFiles (path) {
+    var absolutePath = parsePath(path);
+    return glob.sync(absolutePath);
+}
+
+function parsePath (filePath) {
+    if(path.resolve(filePath) === path.normalize(filePath)) {
+        return filePath;
+    } else {
+        return path.join(process.cwd(), filePath);
     }
+}
+
+function start (filesPath) {
+    var filesList = [];
+    if (filesPath) {
+        filesPath.forEach(function (path) {
+            filesList = filesList.concat(getFiles(path));
+        });
+
+        filesList.forEach(function (file) {
+            addFiles(file);
+        });     
+        runTask();
+    }
+}
+
+function addFiles (taskFilename) {
+    files.push({
+        id: uuid(),
+        name: path.basename(taskFilename),
+        tasks: taskFilename
+    });
 };
+
+function runTask () {
+    var file = files.shift();
+    if (file) {
+        spawnChild(file.tasks);
+    } 
+    else {
+        end(0);
+    }
+}
 
 function spawnChild(tasks) {
     var child = spawn(
         path.join(__dirname, '../node_modules/casperjs/bin/casperjs'),
-        [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks]
+        [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks,
+        '--cookies-file=./'+ cookieFile]
     );
     console.log('spawned child ' + child.pid + ' with tasks ' + tasks);
     children.push({
@@ -54,12 +110,16 @@ function bindChild(child) {
 
     child.on('exit', function (code, error) {
         console.log('exit', arguments);
-        process.exit(code);
     });
 
     child.on('close', function (code, error) {
         console.log('close', arguments);
-        process.exit(code);
+        if (error) {
+            end(1, error);
+        } 
+        else {
+            runTask();
+        }
     });
 
     child.on('disconnect', function () {
@@ -78,6 +138,10 @@ function bindChild(child) {
         console.log('## ERRROR: ', data.toString());
     });
 }
+
+process.on('SIGINT', function (code, error) {
+    end(0);
+});
 
 module.exports = {
     start: start

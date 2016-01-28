@@ -1,29 +1,18 @@
 #! /usr/bin/env node
 
-var cli = require('cli').enable('status', 'glob', 'version');
+var program = require('commander');
 var agent = require('./src/index');
 var pkg = require('./package.json');
 var path = require('path');
-cli.setApp(pkg.name, pkg.version);
 
-cli.parse({
-    file: [
-        'f',
-        'The JSON file were tasks are.',
-        'string'
-    ]
-});
+program._name = pkg.name.slice(0, -1);
 
-cli.main(function (args, opts) {
-    var log = {
-        debug: cli.debug,
-        error: cli.error,
-        fatal: cli.fatal,
-        info: cli.info,
-        ok: cli.ok
-    };
+program
+    .version(pkg.version)
+    .command('run <files...>')
+    .description('Run the list of JSON tasks files. Accept glob.')
+    .action(function (files) {
+        agent.start(files);
+    });
 
-    if (opts.file) {
-        agent.start(path.join(process.cwd(), opts.file));
-    }
-});
+program.parse(process.argv);
