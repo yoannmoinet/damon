@@ -1,6 +1,16 @@
-<a name="0.0.9"></a>
-## [0.0.9](//compare/v0.0.9...v0.0.9) (2015-12-17)
+<a name="0.1.0"></a>
+# [0.1.0](//compare/v0.1.0...v0.1.0) (2016-01-28)
 
+
+
+
+<a name="0.1.0"></a>
+# [0.1.0](//compare/v0.0.9...v0.1.0) (2016-01-28)
+
+
+### Features
+
+* allow passing multiple files as arguments 1b31ee8
 
 
 
