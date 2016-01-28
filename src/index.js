@@ -64,7 +64,7 @@ function start (filesPath) {
 
         filesList.forEach(function (file) {
             addFiles(file);
-        });     
+        });
         runTask();
     }
 }
@@ -81,7 +81,7 @@ function runTask () {
     var file = files.shift();
     if (file) {
         spawnChild(file.tasks);
-    } 
+    }
     else {
         end(0);
     }
@@ -116,7 +116,7 @@ function bindChild(child) {
         console.log('close', arguments);
         if (error) {
             end(1, error);
-        } 
+        }
         else {
             runTask();
         }

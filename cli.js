@@ -5,7 +5,7 @@ var agent = require('./src/index');
 var pkg = require('./package.json');
 var path = require('path');
 
-program._name = pkg.name.slice(0, -1);
+program._name = pkg.name;
 
 program
     .version(pkg.version)

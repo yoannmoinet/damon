@@ -29,7 +29,7 @@ It can be added manually in your `package.json` as :
 
 ```javascript
 "devDependencies": {
-    "agents": "git://git.autodesk.com/moinety/agents"
+    "agent": "git://git.autodesk.com/CICD/agent"
 }
 ```
 
@@ -38,8 +38,8 @@ It can be added manually in your `package.json` as :
 Or you can install it globally :
 
 ```bash
-> git clone git@git.autodesk.com:moinety/agents.git
-> cd agents
+> git clone git@git.autodesk.com:CICD/agent.git
+> cd agent
 > npm link
 ```
 
