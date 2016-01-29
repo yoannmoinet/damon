@@ -20,7 +20,8 @@
   "scripts": {
     "preversion": "npm test",
     "postversion": "npm run changelog",
-    "test": "npm run format && npm run lint",
+    "pretest": "npm run format && npm run lint",
+    "test": "mocha ./test",
     "format": "jscs ./src/index.js ./test/agent.spec.js",
     "lint": "eslint ./src/index.js ./test/agent.spec.js",
     "changelog": "node ./bin/changelog.js"
