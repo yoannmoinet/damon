@@ -88,7 +88,7 @@ function replaceHandlebars (string) {
     for (key in store) {
         string = string.replace(new RegExp('{{' + key + '}}','g'), store[key]);
     }
-    return string
+    return string;
 }
 
 function parseTask (task) {
@@ -117,10 +117,10 @@ actions.navigate(config.url, function () {
                 log('starting task', task, 'INFO_BAR');
                 task = parseTask(task);
                 response = actions[task.type](task.params);
-                if (task.type === "get") {
+                if (task.type === 'get') {
                     store[task.params.key] = response;
                 }
-                return response
+                return response;
             });
         }
     });

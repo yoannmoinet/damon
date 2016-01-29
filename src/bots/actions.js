@@ -1,3 +1,61 @@
+function stripAccessors (variable) {
+    var accessors = [];
+    var objectRegexp = /[^\[]+/;
+    var propertiesRegexp = /\['(.+?)'\]/g;
+
+    variable.split('.').forEach(function (component) {
+        var object = component.match(objectRegexp);
+        var property = propertiesRegexp.exec(component);
+
+        if (object) {
+            accessors = accessors.concat(object);
+        }
+
+        while (property !== null) {
+            accessors = accessors.concat(property[1]);
+            property = propertiesRegexp.exec(component);
+        }
+
+    });
+    return accessors;
+}
+
+function getVariable (casper, params) {
+    var accessors = stripAccessors(params.variable);
+    var object = accessors.shift();
+    var variableValue = casper.evaluate(function (object) {
+        return window[object];
+    }, object);
+
+    accessors.forEach(function (property) {
+        variableValue = variableValue[property];
+    });
+
+    return variableValue;
+}
+
+function getAttr (casper, params) {
+    var attributeValue;
+    if (params.attribute === '@text') {
+        attributeValue = casper.getElementInfo(params.selector).text;
+    } else {
+        attributeValue = casper.getElementAttribute(params.selector,
+            params.attribute);
+    }
+
+    if (attributeValue && params.modifier) {
+        var regexpModifier = new RegExp(params.modifier);
+        var matchedRegexp = regexpModifier.exec(attributeValue);
+
+        if (matchedRegexp) {
+            attributeValue = matchedRegexp[0];
+        } else {
+            return;
+        }
+    }
+    return attributeValue;
+}
+
 var config = function (casper, pid) {
     var log = require('./log').config(casper);
     return {
@@ -8,28 +66,31 @@ var config = function (casper, pid) {
                 params.name);
         },
         get: function (params) {
-            var attributeValue;
-            if (params.attribute === '@text') {
-                attributeValue = casper.getElementInfo(params.selector).text;
-            } else {
-                attributeValue = casper.getElementAttribute(params.selector, params.attribute);
-            }
+            var returnValue;
+            if (params.attribute) {
 
-            if (attributeValue && params.modifier) {
-                var regexModifier = new RegExp(params.modifier);
-                var matchedRegex = regexModifier.exec(attributeValue);
-                if (matchedRegex) {
-                    attributeValue = matchedRegex[0];
-                } else {
-                    return log('no ' + params.attribute + ' for ' + params.selector + ' satisfying ' + params.modifier, 'ERROR');
+                returnValue = getAttr(casper, params);
+                if (typeof returnValue !== 'undefined') {
+                    log('got', params.attribute + ' of ' + params.selector,
+                        'SUCCESS');
+                    return returnValue;
                 }
-            }
+                return log('no attribute "' + params.attribute +
+                    '" found for selector "' + params.selector +
+                    '" and ' + (params.modifier || 'whithout') +
+                    ' modifier', 'ERROR');
 
-            if (attributeValue) {
-                log('got', params.attribute + ' of ' + params.selector, 'SUCCESS');
-                return attributeValue;
+            } else if (params.variable) {
+
+                returnValue = getVariable(casper, params);
+                if (typeof returnValue !== 'undefined') {
+                    log('got global variable: ' + params.variable, 'SUCCESS');
+                    return returnValue;
+                }
+                return log('no global variable: ' + params.variable, 'ERROR');
+
             }
-            return log('no ' + params.attribute + ' for ' + params.selector, 'ERROR');
+            return log('no action found for ', params, 'ERROR');
         },
         wait: function (params) {
             var vals = ['wait for'];
