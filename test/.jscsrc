@@ -1,0 +1,14 @@
+{
+"preset": "google",
+    "disallowSpacesInAnonymousFunctionExpression": null,
+    "disallowSpacesInFunctionExpression": null,
+    "disallowSpacesInFunctionDeclaration": null,
+    "disallowMultipleVarDecl": "exceptUndefined",
+    "validateQuoteMarks": {
+        "mark": "'",
+        "escape": true
+    },
+    "validateIndentation": 4,
+    "maxErrors": 10,
+    "maximumLineLength": 4000
+}
