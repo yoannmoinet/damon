@@ -28,4 +28,4 @@ function parseTask (task) {
 module.exports = {
     parse: parseTask,
     store: storeKeyValue
-}
+};

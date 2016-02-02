@@ -22,8 +22,8 @@
     "postversion": "npm run changelog",
     "pretest": "npm run format && npm run lint",
     "test": "mocha ./test",
-    "format": "jscs ./src/index.js ./test/agent.spec.js",
-    "lint": "eslint ./src/index.js ./test/agent.spec.js",
+    "format": "jscs ./src/index.js ./test/agent.spec.js ./src/bots",
+    "lint": "eslint ./src/index.js ./test/agent.spec.js ./src/bots",
     "changelog": "node ./bin/changelog.js"
   },
   "dependencies": {

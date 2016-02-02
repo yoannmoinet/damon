@@ -30,7 +30,7 @@ var config = function (casper, pid) {
                     log('got global variable: ' + params.variable, 'SUCCESS');
                     return returnValue;
                 }
-                return log('no global variable: ' + params.variable, 'ERROR');
+                return log('no value found for: ' + params.variable, 'ERROR');
 
             }
             return log('no action found for ', params, 'ERROR');
