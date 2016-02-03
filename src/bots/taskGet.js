@@ -1,7 +1,7 @@
 //This function splits any kind of javascript accessors into a list
 //For example var.attr1['attr2'].attr3 will give the following list
 //['var', 'attr1', 'attr2', 'attr3']
-function splitAccessors (variable, log) {
+function splitAccessors (variable) {
     var accessors = [];
 
     //This RegExp is used to capture the first object of a bracket notation
@@ -26,7 +26,8 @@ function splitAccessors (variable, log) {
         var property = propertiesRegexp.exec(component);
 
         if (!validationRegexp.test(component)) {
-            if (log) {
+            //casper's log doesn't exist when running tests
+            if (typeof log !== 'undefined') {
                 log(variable + ' has an invalid syntax', 'ERROR');
             }
             return;
@@ -54,8 +55,7 @@ function splitAccessors (variable, log) {
 function getVariable (casper, params) {
     var object;
     var variableValue;
-    var log = require('./log').config(casper);
-    var accessors = splitAccessors(params.variable, log);
+    var accessors = splitAccessors(params.variable);
 
     if (accessors) {
         object = accessors.shift();

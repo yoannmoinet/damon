@@ -1,5 +1,4 @@
 var template = require('./template.js');
-var log = require('./log').config(casper);
 var taskGet = require('./taskGet.js');
 
 var actions = {
