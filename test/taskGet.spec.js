@@ -1,6 +1,23 @@
 describe('taskGet', function () {
     var expect = require('expect.js');
     var taskGet = require('../src/bots/taskGet.js');
+    var casperStub = {
+        getElementInfo: function () {
+            return {
+                text: 'value'
+            };
+        },
+        getElementAttribute: function () {
+            return 'random value';
+        },
+        evaluate: function () {
+            return {
+                inside: {
+                    attribute: 'value'
+                }
+            };
+        }
+    };
 
     describe('splitAccessors', function() {
         it('should split var.attr into ["var", "attr"]', function () {
@@ -60,10 +77,36 @@ describe('taskGet', function () {
     });
 
     describe('getVariable', function() {
-        //TODO: Find a way to test casperJS in the context of NodeJS with Mocha
+        it('should return the value hosted inside an defined object', function () {
+            var test = taskGet.getVariable(casperStub, {variable: 'key.inside.attribute'});
+            expect(test).to.be('value');
+        });
+
+        it('should return undefined for an inextant attribute of an object', function () {
+            var test = taskGet.getVariable(casperStub, {variable: 'unknown.object'});
+            expect(test).to.be(undefined);
+        });
     });
 
     describe('getAttribute', function() {
-        //TODO: Find a way to test casperJS in the context of NodeJS with Mocha
+        it('should return the text value of an element', function () {
+            var test = taskGet.getAttribute(casperStub, {attribute: '@text', selector: '#id'});
+            expect(test).to.be('value');
+        });
+
+        it('should return the value of an element\'s attribute', function () {
+            var test = taskGet.getAttribute(casperStub, {attribute: 'key', selector: '#id'});
+            expect(test).to.be('random value');
+        });
+
+        it('should return what the modifier passed along captures', function () {
+            var test = taskGet.getAttribute(casperStub, {attribute: 'key', selector: '#id', modifier: '[^ ]*'});
+            expect(test).to.be('random');
+        });
+
+        it('should return undefined when the modifier doesn\'t capture anything', function () {
+            var test = taskGet.getAttribute(casperStub, {attribute: 'key', selector: '#id', modifier: '[^a-zA-Z ]'});
+            expect(test).to.be(undefined);
+        });
     });
 });
