@@ -82,7 +82,6 @@ if (!casper.cli.has('tasks')) {
 var opts = require(casper.cli.get('tasks'));
 var tasks = opts.tasks;
 var config = opts.config;
-var template = require('./template.js');
 
 actions.navigate(config.url, function () {
     casper.then(function () {
@@ -93,18 +92,9 @@ actions.navigate(config.url, function () {
         return log('no configuration needed', 'INFO');
     });
     tasks.forEach(function (task) {
-        if (task.type && actions[task.type]) {
-            casper.then(function () {
-                var response;
-                log('starting task', task, 'INFO_BAR');
-                task = template.parse(task);
-                response = actions[task.type](task.params);
-                if (task.type === 'get') {
-                    template.store(task.params.key, response);
-                }
-                return response;
-            });
-        }
+        casper.then(function () {
+            return actions.execute(task);
+        });
     });
     casper.then(function () {
         return log('all actions done', 'SUCCESS');
