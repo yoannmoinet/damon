@@ -2,15 +2,24 @@ describe('taskGet', function () {
     var expect = require('expect.js');
     var taskGet = require('../src/bots/taskGet.js');
     var casperStub = {
-        getElementInfo: function () {
+        exists: function (selector) {
+            if (selector == '#id') {
+                return true;
+            }
+            return false;
+        },
+        getElementInfo: function (selector) {
             return {
                 text: 'value'
             };
         },
-        getElementAttribute: function () {
+        getElementAttribute: function (selector, attribute) {
+            if (attribute === 'empty') {
+                return '';
+            }
             return 'random value';
         },
-        evaluate: function () {
+        evaluate: function (selector) {
             return {
                 inside: {
                     attribute: 'value'
@@ -102,6 +111,16 @@ describe('taskGet', function () {
         it('should return what the modifier passed along captures', function () {
             var test = taskGet.getAttribute(casperStub, {attribute: 'key', selector: '#id', modifier: '[^ ]*'});
             expect(test).to.be('random');
+        });
+
+        it('should return undefined when an element doesn\'t exist', function () {
+            var test = taskGet.getAttribute(casperStub, {attribute: 'key', selector: '#notExisting'});
+            expect(test).to.be(undefined);
+        });
+
+        it('should return undefined when an attribute is empty', function () {
+            var test = taskGet.getAttribute(casperStub, {attribute: 'empty', selector: '#id'});
+            expect(test).to.be(undefined);
         });
 
         it('should return undefined when the modifier doesn\'t capture anything', function () {

@@ -210,7 +210,7 @@ An `agent` can perform two different `get` to retrieve a value and store it for 
 }
 ```
 
-The `agent` will get the value of the `attribute`, apply the `modifier` RegExp and store it.
+The `agent` will get the value of the `attribute`, apply the `modifier` RegExp and store it as `key`.
 
 `@text` can be used as an `attribute` to get the text content inside of the `selector`
 

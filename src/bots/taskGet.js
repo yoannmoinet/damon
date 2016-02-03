@@ -1,7 +1,7 @@
 //This function splits any kind of javascript accessors into a list
 //For example var.attr1['attr2'].attr3 will give the following list
 //['var', 'attr1', 'attr2', 'attr3']
-function splitAccessors (variable) {
+function splitAccessors (variable, log) {
     var accessors = [];
 
     //This RegExp is used to capture the first object of a bracket notation
@@ -26,7 +26,9 @@ function splitAccessors (variable) {
         var property = propertiesRegexp.exec(component);
 
         if (!validationRegexp.test(component)) {
-            console.log(variable + ' has an invalid syntax');
+            if (log) {
+                log(variable + ' has an invalid syntax', 'ERROR');
+            }
             return;
         }
 
@@ -52,7 +54,8 @@ function splitAccessors (variable) {
 function getVariable (casper, params) {
     var object;
     var variableValue;
-    var accessors = splitAccessors(params.variable);
+    var log = require('./log').config(casper);
+    var accessors = splitAccessors(params.variable, log);
 
     if (accessors) {
         object = accessors.shift();
@@ -61,7 +64,7 @@ function getVariable (casper, params) {
         }, object);
 
         accessors.forEach(function (property) {
-            if (!variableValue) {
+            if (variableValue == undefined) {
                 return;
             }
             variableValue = variableValue[property];
@@ -75,6 +78,10 @@ function getVariable (casper, params) {
 //Apply the RegExp if there is one
 function getAttribute (casper, params) {
     var attributeValue;
+
+    if (!casper.exists(params.selector)) {
+        return;
+    }
 
     if (params.attribute === '@text') {
         attributeValue = casper.getElementInfo(params.selector).text;
@@ -90,6 +97,11 @@ function getAttribute (casper, params) {
             return;
         }
         attributeValue = matchedRegexp[0];
+    }
+
+    //when getting an HTML attribute, '' is equivalent of not existing, so undefined
+    if (attributeValue === '') {
+        return;
     }
     return attributeValue;
 }
