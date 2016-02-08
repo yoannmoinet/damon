@@ -1,5 +1,6 @@
 var template = require('./template.js');
 var taskGet = require('./taskGet.js');
+var timeoutDuration = 30000;
 
 var actions = {
     capture: function (params) {
@@ -49,7 +50,7 @@ var actions = {
                 log('got', params.url, 'SUCCESS');
             }, function () {
                 log('timeout', 'WARNING');
-            }, 30000);
+            }, timeoutDuration);
 
         } else if (params.selector) {
 
@@ -57,7 +58,7 @@ var actions = {
                 log('got ', params.selector, 'SUCCESS');
             }, function () {
                 log('timeout', 'WARNING');
-            }, 30000);
+            }, timeoutDuration);
 
         } else if (params.visible) {
 
@@ -65,7 +66,7 @@ var actions = {
                 log('got ', params.visible, 'SUCCESS');
             }, function () {
                 log('timeout', 'WARNING');
-            }, 30000);
+            }, timeoutDuration);
 
         } else if (params.hidden) {
 
@@ -73,7 +74,7 @@ var actions = {
                 log('got ', params.hidden, 'SUCCESS');
             }, function () {
                 log('timeout', 'WARNING');
-            }, 30000);
+            }, timeoutDuration);
 
         } else if (params.time) {
 
