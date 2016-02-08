@@ -92,12 +92,9 @@ actions.navigate(config.url, function () {
         return log('no configuration needed', 'INFO');
     });
     tasks.forEach(function (task) {
-        if (task.type && actions[task.type]) {
-            casper.then(function () {
-                log('starting task', task, 'INFO_BAR');
-                return actions[task.type](task.params);
-            });
-        }
+        casper.then(function () {
+            return actions.execute(task);
+        });
     });
     casper.then(function () {
         return log('all actions done', 'SUCCESS');

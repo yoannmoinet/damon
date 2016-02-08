@@ -94,7 +94,7 @@ Then you describe your tasks in a `tasks` entry that is an array of all the task
 ]
 ```
 
-It exists three kinds of tasks that an `agent` can achieve :
+It exists four kinds of tasks that an `agent` can achieve :
 
 #### `capture`
 
@@ -189,3 +189,56 @@ The `agent` will click on the specified selector.
 ```
 
 The `agent` will enter text in the specified field.
+
+#### `get`
+
+##### _store_
+
+An `agent` can perform two different `get` to retrieve a value and store it for subsequent tasks :
+
+- `attribute`
+
+```javascript
+{
+    "type": "get",
+    "params": {
+        "selector": "div#Info",
+        "attribute": "title",
+        "key": "infoTitle",
+        "modifier": "[a-z]+" (optional)
+    }
+}
+```
+
+The `agent` will get the value of the `attribute`, apply the `modifier` RegExp and store it as `infoTitle`.
+
+`@text` can also be used as an `attribute` to get the text content of the `selector`
+
+- `variable`
+
+```javascript
+{
+    "type": "get",
+    "params": {
+        "variable": "var.attr1['attr2']",
+        "key": "varAttr2"
+    }
+}
+```
+
+The `agent` will access to the specified variable with `window` as the root object and store its value as `varAttr2`
+
+##### _access_
+
+The value can then be accessed in any following tasks via its `key` value
+
+```javascript
+{
+    "type": "wait",
+    "params": {
+        "url": "http://www.yahoo.ca/{{key}}"
+    }
+}
+```
+
+To access the stored value, call the `key` in between double brackets `{{key}}`
