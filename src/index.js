@@ -24,8 +24,10 @@ console.log('spawned mgr ' + process.pid);
 function deleteCookies (cb) {
     console.log('deleting cookies....');
     fs.unlink(cookieFile, function (err) {
-        if (err) {
-            console.log('Can\'t delete cookie file');
+        // If we have an error different
+        // from inexistent file log it.
+        if (err && err.code !== 'ENOENT') {
+            console.log('Can\'t delete cookie file', err);
         }
         if (typeof cb === 'function') {
             cb();
