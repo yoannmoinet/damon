@@ -192,11 +192,11 @@ The `agent` will enter text in the specified field.
 
 #### `get`
 
-##### `store`
+##### _store_
 
 An `agent` can perform two different `get` to retrieve a value and store it for subsequent tasks :
 
-- attribute
+- `attribute`
 
 ```javascript
 {
@@ -204,39 +204,39 @@ An `agent` can perform two different `get` to retrieve a value and store it for 
     "params": {
         "selector": "div#Info",
         "attribute": "title",
-        "key": "id",
+        "key": "infoTitle",
         "modifier": "[a-z]+" (optional)
     }
 }
 ```
 
-The `agent` will get the value of the `attribute`, apply the `modifier` RegExp and store it as `key`.
+The `agent` will get the value of the `attribute`, apply the `modifier` RegExp and store it as `infoTitle`.
 
-`@text` can be used as an `attribute` to get the text content inside of the `selector`
+`@text` can also be used as an `attribute` to get the text content of the `selector`
 
-- variable
+- `variable`
 
 ```javascript
 {
     "type": "get",
     "params": {
         "variable": "var.attr1['attr2']",
-        "key": "token"
+        "key": "varAttr2"
     }
 }
 ```
 
-The `agent` will access to the specified variable with `window` as the root object
+The `agent` will access to the specified variable with `window` as the root object and store its value as `varAttr2`
 
-##### `access`
+##### _access_
 
-The value can be accessed after by any tasks
+The value can then be accessed in any following tasks via its `key` value
 
 ```javascript
 {
     "type": "wait",
     "params": {
-        "url": "http://www.yahoo.ca/{{id}}"
+        "url": "http://www.yahoo.ca/{{key}}"
     }
 }
 ```
