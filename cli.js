@@ -3,7 +3,6 @@
 var program = require('commander');
 var agent = require('./src/index');
 var pkg = require('./package.json');
-var path = require('path');
 
 program._name = pkg.name;
 
