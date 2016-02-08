@@ -64,7 +64,7 @@ function getVariable (casper, params) {
         }, object);
 
         accessors.forEach(function (property) {
-            if (variableValue == undefined) {
+            if (variableValue === undefined) {
                 return;
             }
             variableValue = variableValue[property];

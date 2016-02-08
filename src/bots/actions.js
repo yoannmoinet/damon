@@ -13,7 +13,7 @@ var actions = {
         if (params.attribute) {
 
             returnValue = taskGet.getAttribute(casper, params);
-            if (returnValue != undefined) {
+            if (returnValue !== undefined) {
                 log('got', params.attribute + ' of ' + params.selector,
                     'SUCCESS');
                 return returnValue;
@@ -26,7 +26,7 @@ var actions = {
         } else if (params.variable) {
 
             returnValue = taskGet.getVariable(casper, params);
-            if (returnValue != undefined) {
+            if (returnValue !== undefined) {
                 log('got global variable: ' + params.variable, 'SUCCESS');
                 return returnValue;
             }

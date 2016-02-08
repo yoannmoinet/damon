@@ -3,7 +3,7 @@ describe('taskGet', function () {
     var taskGet = require('../src/bots/taskGet.js');
     var casperStub = {
         exists: function (selector) {
-            if (selector == '#id') {
+            if (selector === '#id') {
                 return true;
             }
             return false;
