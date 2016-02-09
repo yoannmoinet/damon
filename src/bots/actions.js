@@ -39,7 +39,7 @@ var actions = {
             returnValue = taskGet.getAttribute(casper, params);
             if (returnValue !== undefined) {
                 log('got', params.attribute + ' of ' + params.selector,
-                    'SUCCESS');
+                    returnValue, 'SUCCESS');
                 return returnValue;
             }
             return log('no attribute "' + params.attribute +
@@ -136,8 +136,8 @@ var config = function (casper, pid) {
         execute: function (task) {
             if (task.type && actions[task.type]) {
                 var response;
-                log('starting task', task, 'INFO_BAR');
                 task = template.parse(task);
+                log('starting task', task, 'INFO_BAR');
                 response = actions[task.type](task.params);
                 if (task.type === 'get') {
                     template.store(task.params.key, response);
