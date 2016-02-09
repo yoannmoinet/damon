@@ -94,7 +94,7 @@ Then you describe your tasks in a `tasks` entry that is an array of all the task
 ]
 ```
 
-It exists five kinds of tasks that an `agent` can achieve :
+It exists several kinds of tasks that an `agent` can achieve :
 
 #### `capture`
 
@@ -253,16 +253,15 @@ An `agent` can perform two different `assert` actions to test a value with an ex
 {
     "type": "assert",
     "params": {
-        "type": "attribute"
         "selector": "div#Info",
         "attribute": "title",
         "modifier": "[a-z]+" (optional),
-        "expected": "expectedValue"
+        "expected": "expectedValue or {{key}}"
     }
 }
 ```
 
-The `agent` will `get` the value of the `attribute` and test it against the `expected` value
+The `agent` will `get` the value of the `attribute` and test it against the `expected` value or the value associated with `{{key}}`
 
 - variable
 
@@ -270,11 +269,10 @@ The `agent` will `get` the value of the `attribute` and test it against the `exp
 {
     "type": "assert",
     "params": {
-        "type": "variable"
         "variable": "var.attr1['attr2']",
-        "expected": "expectedValue"
+        "expected": "expectedValue or {{key}}"
     }
 }
 ```
 
-The `agent` will `get` the value of the `variable` and test it against the `expected` value
+The `agent` will `get` the value of the `variable` and test it against the `expected` value or the value associated with `{{key}}`
