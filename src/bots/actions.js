@@ -14,7 +14,7 @@ var actions = {
                 err.expected + '\' but got \'' + err.actual + '\'';
             return log(output, 'TEST_FAILED');
         }
-        output = 'PASS: ' + params.type + ' - got ' + params.expected;
+        output = 'PASS: ' + params.type + ' - got \'' + params.expected + '\'';
         return log(output, 'TEST_SUCCESS');
     },
     capture: function (params) {
