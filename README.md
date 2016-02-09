@@ -94,7 +94,7 @@ Then you describe your tasks in a `tasks` entry that is an array of all the task
 ]
 ```
 
-It exists four kinds of tasks that an `agent` can achieve :
+It exists five kinds of tasks that an `agent` can achieve :
 
 #### `capture`
 
@@ -242,3 +242,39 @@ The value can then be accessed in any following tasks via its `key` value
 ```
 
 To access the stored value, call the `key` in between double brackets `{{key}}`
+
+#### `assert`
+
+An `agent` can perform two different `assert` actions to test a value with an expected value:
+
+- attribute
+
+```javascript
+{
+    "type": "assert",
+    "params": {
+        "type": "attribute"
+        "selector": "div#Info",
+        "attribute": "title",
+        "modifier": "[a-z]+" (optional),
+        "expected": "expectedValue"
+    }
+}
+```
+
+The `agent` will `get` the value of the `attribute` and test it against the `expected` value
+
+- variable
+
+```javascript
+{
+    "type": "assert",
+    "params": {
+        "type": "variable"
+        "variable": "var.attr1['attr2']",
+        "expected": "expectedValue"
+    }
+}
+```
+
+The `agent` will `get` the value of the `variable` and test it against the `expected` value
