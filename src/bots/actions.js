@@ -7,14 +7,20 @@ var actions = {
     assert: function (params) {
         var output;
         try {
-            assertion[params.type](params);
+            if (params.attribute) {
+                assertion.attribute(params);
+            } else if (params.variable) {
+                assertion.variable(params);
+            } else {
+                log('no assertion found', 'ERROR');
+            }
         }
         catch (err) {
-            output = 'FAILED: ' + params.type + ' - expected \'' +
-                err.expected + '\' but got \'' + err.actual + '\'';
+            output = 'FAILED: expected \'' + err.expected + '\' but got \'' +
+                err.actual + '\'';
             return log(output, 'TEST_FAILED');
         }
-        output = 'PASS: ' + params.type + ' - got \'' + params.expected + '\'';
+        output = 'PASS: got \'' + params.expected + '\'';
         return log(output, 'TEST_SUCCESS');
     },
     capture: function (params) {
@@ -134,6 +140,8 @@ var config = function (casper, pid) {
                     template.store(task.params.key, response);
                 }
                 return response;
+            } else {
+                log('no task found for: ', task, 'ERROR');
             }
         },
         navigate: function (url, next) {
