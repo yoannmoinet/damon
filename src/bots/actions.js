@@ -49,7 +49,7 @@ var actions = {
 
         } else if (params.variable) {
 
-            returnValue = taskGet.getVariable(casper, params);
+            returnValue = taskGet.getVariable(casper, params.variable);
             if (returnValue !== undefined) {
                 log('got global variable: ' + params.variable, 'SUCCESS');
                 return returnValue;
