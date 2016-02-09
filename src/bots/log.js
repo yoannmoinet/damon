@@ -19,7 +19,9 @@ var config = function (casper) {
             'INFO_BAR': {bg: 'cyan', fg: 'white', bold: true},
             'WARN_BAR': {bg: 'yellow', fg: 'white', bold: true},
             'SKIP': {fg: 'magenta', bold: true},
-            'SKIP_BAR':  {bg: 'magenta', fg: 'white', bold: true}
+            'SKIP_BAR':  {bg: 'magenta', fg: 'white', bold: true},
+            'TEST_SUCCESS': {fg: 'green'},
+            'TEST_FAILED': {fg: 'red'}
         };
 
         if (Object.keys(styles).indexOf(args[args.length - 1]) > -1) {
