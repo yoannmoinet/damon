@@ -220,6 +220,22 @@ If you don't pass a `variable` it will store the complete response.
 
 Otherwise, it will try to parse the response as JSON and look for your variable.
 
+#### `download`
+
+Verify that the download resource is correctly received
+
+```javascript
+{
+    "type": "download",
+    "params": {
+        "selector": "div#Download",
+        "filename": "file"
+    }
+}
+```
+
+The `agent` will `click` on the `selector` and wait for a resource that has `filename` (can be a RegExp). The resource will NOT be downloaded.
+
 #### `get`
 
 ##### _store_
