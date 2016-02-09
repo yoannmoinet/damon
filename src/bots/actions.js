@@ -1,5 +1,6 @@
 var template = require('./template.js');
 var taskGet = require('./taskGet.js');
+var request = require('./request.js');
 var timeoutDuration = 30000;
 
 var actions = {
@@ -8,6 +9,28 @@ var actions = {
         return casper.capture('./captures/' +
             pid + '/' +
             params.name);
+    },
+    request: function (params) {
+        // Control what's needed to pursue
+        if (!params || !params.url) {
+            return log('missing `url` params for the request action',
+                params, 'ERROR');
+        }
+
+        // Get the data from the request.
+        var data = casper.evaluate(request.xhr, params);
+
+        // And store it if needed later.
+        if (params.store) {
+            if (!params.store.key) {
+                log('missing params for store', 'ERROR');
+                return;
+            }
+            request.handleStore(template, taskGet, params.store, data);
+        }
+
+        // Return it.
+        return data;
     },
     get: function (params) {
         var returnValue;

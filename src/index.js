@@ -92,7 +92,7 @@ function spawnChild(tasks) {
     var child = spawn(
         path.join(__dirname, '../node_modules/casperjs/bin/casperjs'),
         [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks,
-        '--cookies-file=./' + cookieFile]
+        '--cookies-file=./' + cookieFile, '--web-security=no']
     );
     console.log('spawned child ' + child.pid + ' with tasks ' + tasks);
     children.push({
