@@ -16,12 +16,19 @@ function parseTask (task) {
     //This RegExp detects any Handlebars expression {{value}} in a string
     //It is used to determine if a param has Handlbars that need to be replaced
     var handlebarRegex = new RegExp('{{([^{}]+)}}', 'g');
-    for (param in task.params) {
-        var paramValue = task.params[param];
-        if (handlebarRegex.test(paramValue)) {
-            task.params[param] = replaceHandlebars(paramValue);
+    var loop = function (text) {
+        if (typeof text === 'object') {
+            for (var i in text) {
+                text[i] = loop(text[i]);
+            }
+        } else {
+            if (handlebarRegex.test(text)) {
+                text = replaceHandlebars(text);
+            }
         }
-    }
+        return text;
+    };
+    task.params = loop(task.params);
     return task;
 }
 
