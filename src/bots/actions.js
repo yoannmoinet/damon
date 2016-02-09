@@ -52,6 +52,17 @@ var actions = {
         // Return it.
         return data;
     },
+    download: function (params) {
+
+        casper.click(params.selector);
+
+        casper.waitForResource(params.filename, function () {
+            return log(params.filename + ' has been received', 'SUCCESS');
+        }, function () {
+            log('timeout', 'WARNING');
+        }, timeoutDuration);
+
+    },
     get: function (params) {
         var returnValue;
         if (params.attribute) {
