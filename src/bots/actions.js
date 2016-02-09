@@ -2,8 +2,22 @@ var template = require('./template.js');
 var taskGet = require('./taskGet.js');
 var request = require('./request.js');
 var timeoutDuration = 30000;
+var assertion = require('./assertion.js').assertion(casper);
 
 var actions = {
+    assert: function (params) {
+        var output;
+        try {
+            assertion[params.type](params);
+        }
+        catch (err) {
+            output = 'FAILED: ' + params.type + ' - expected \'' +
+                err.expected + '\' but got \'' + err.actual + '\'';
+            return log(output, 'TEST_FAILED');
+        }
+        output = 'PASS: ' + params.type + ' - got \'' + params.expected + '\'';
+        return log(output, 'TEST_SUCCESS');
+    },
     capture: function (params) {
         log('capture', params.name, 'INFO_BAR');
         return casper.capture('./captures/' +
