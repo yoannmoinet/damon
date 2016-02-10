@@ -15,14 +15,14 @@ function xhr (opts) {
     if (method === 'POST' || method === 'PUT') {
         if (typeof opts.payload === 'object') {
             dataString = JSON.stringify(opts.payload);
-        } else if (typeof opts.payload === "string") {
+        } else if (typeof opts.payload === 'string') {
             dataString = opts.payload;
         }
-        request.setRequestHeader("Content-Type", contentType);
+        request.setRequestHeader('Content-Type', contentType);
     }
 
     // Override headers if needed
-    if (typeof opts.headers === "object") {
+    if (typeof opts.headers === 'object') {
         for (var i in opts.headers) {
             request.setRequestHeader(i, opts.headers[i]);
         }
@@ -46,9 +46,15 @@ function handleStore (template, taskGet, store, data) {
             parsedData = JSON.parse(data);
         } catch (e) {
             // not a json.
-            return log('Couldn\'t parse the data to extract any value', 'ERROR');
+            return log(
+                'Couldn\'t parse the data to extract any value',
+                'ERROR'
+            );
         }
-        template.store(store.key, taskGet.getVariable(null, store.variable, parsedData));
+        template.store(
+            store.key,
+            taskGet.getVariable(null, store.variable, parsedData)
+        );
     } else {
         template.store(store.key, data);
     }
