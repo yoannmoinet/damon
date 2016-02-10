@@ -156,8 +156,6 @@ var actions = {
                 resourceMatcher = encodeURIComponent(params.resource);
             }
 
-            console.log(resourceMatcher);
-
             return casper.waitForResource(resourceMatcher, function () {
                 return log('got', params.resource, 'SUCCESS');
             }, function () {
