@@ -87,12 +87,12 @@ describe('taskGet', function () {
 
     describe('getVariable', function() {
         it('should return the value hosted inside an defined object', function () {
-            var test = taskGet.getVariable(casperStub, {variable: 'key.inside.attribute'});
+            var test = taskGet.getVariable(casperStub, 'key.inside.attribute');
             expect(test).to.be('value');
         });
 
         it('should return undefined for an inextant attribute of an object', function () {
-            var test = taskGet.getVariable(casperStub, {variable: 'unknown.object'});
+            var test = taskGet.getVariable(casperStub, 'unknown.object');
             expect(test).to.be(undefined);
         });
     });
