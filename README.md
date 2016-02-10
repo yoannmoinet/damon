@@ -111,7 +111,7 @@ A simple screen capture :
 
 #### `wait`
 
-An `agent` can wait for 5 different things.
+An `agent` can wait for several different things.
 
 - `url`
 
@@ -156,6 +156,22 @@ Both are the same as `selector` but will wait for these specific states of the e
 ```
 
 The agent will wait for the specified amount of milliseconds.
+
+- `resource`
+
+```javascript
+{
+    "type": "resource",
+    "params": {
+        "resource": "resourceName",
+        "regexp": false
+    }
+}
+```
+
+The agent will wait at this step until something matching the resource is received.
+
+`resource` will be interpreted as a `regexp` if set to `true`. Default value of `regexp` is `false`.
 
 #### `dom`
 
@@ -219,22 +235,6 @@ You can also `store` the response for later use with `{{key}}`.
 If you don't pass a `variable` it will store the complete response. 
 
 Otherwise, it will try to parse the response as JSON and look for your variable.
-
-#### `download`
-
-Verify that the download resource is correctly received
-
-```javascript
-{
-    "type": "download",
-    "params": {
-        "selector": "div#Download",
-        "filename": "file"
-    }
-}
-```
-
-The `agent` will `click` on the `selector` and wait for a resource that has `filename` (can be a RegExp). The resource will NOT be downloaded.
 
 #### `get`
 

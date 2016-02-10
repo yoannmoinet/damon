@@ -51,17 +51,6 @@ var actions = {
             });
         }
     },
-    download: function (params) {
-
-        casper.click(params.selector);
-
-        casper.waitForResource(params.filename, function () {
-            return log(params.filename + ' has been received', 'SUCCESS');
-        }, function () {
-            log('timeout', 'WARNING');
-        }, timeoutDuration);
-
-    },
     get: function (params) {
         var returnValue;
         if (params.attribute) {
@@ -156,6 +145,24 @@ var actions = {
             return casper.wait(params.time, function () {
                 log('waited for ', params.time, 'SUCCESS');
             });
+
+        } else if (params.resource) {
+            var resourceMatcher;
+
+            if (params.regexp === true) {
+                resourceMatcher = new RegExp(params.resource);
+            } else {
+                //The resource will be an url, so URI encoding is needed
+                resourceMatcher = encodeURIComponent(params.resource);
+            }
+
+            console.log(resourceMatcher);
+
+            return casper.waitForResource(resourceMatcher, function () {
+                return log('got', params.resource, 'SUCCESS');
+            }, function () {
+                log('timeout', 'WARNING');
+            }, timeoutDuration);
         }
 
         return log('no action found for ', params, 'ERROR');
