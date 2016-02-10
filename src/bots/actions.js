@@ -1,5 +1,6 @@
 var template = require('./template.js');
 var taskGet = require('./taskGet.js');
+var request = require('./request.js');
 var timeoutDuration = 30000;
 var assertion = require('./assertion.js').assertion(casper);
 
@@ -29,6 +30,28 @@ var actions = {
             pid + '/' +
             params.name);
     },
+    request: function (params) {
+        // Control what's needed to pursue
+        if (!params || !params.url) {
+            return log('missing `url` params for the request action',
+                params, 'ERROR');
+        }
+
+        // Get the data from the request.
+        var data = casper.evaluate(request.xhr, params);
+
+        // And store it if needed later.
+        if (params.store) {
+            if (!params.store.key) {
+                log('missing params for store', 'ERROR');
+                return;
+            }
+            request.handleStore(template, taskGet, params.store, data);
+        }
+
+        // Return it.
+        return data;
+    },
     get: function (params) {
         var returnValue;
         if (params.attribute) {
@@ -36,7 +59,7 @@ var actions = {
             returnValue = taskGet.getAttribute(casper, params);
             if (returnValue !== undefined) {
                 log('got', params.attribute + ' of ' + params.selector,
-                    'SUCCESS');
+                    returnValue, 'SUCCESS');
                 return returnValue;
             }
             return log('no attribute "' + params.attribute +
@@ -46,7 +69,7 @@ var actions = {
 
         } else if (params.variable) {
 
-            returnValue = taskGet.getVariable(casper, params);
+            returnValue = taskGet.getVariable(casper, params.variable);
             if (returnValue !== undefined) {
                 log('got global variable: ' + params.variable, 'SUCCESS');
                 return returnValue;
@@ -133,8 +156,8 @@ var config = function (casper, pid) {
         execute: function (task) {
             if (task.type && actions[task.type]) {
                 var response;
-                log('starting task', task, 'INFO_BAR');
                 task = template.parse(task);
+                log('starting task', task, 'INFO_BAR');
                 response = actions[task.type](task.params);
                 if (task.type === 'get') {
                     template.store(task.params.key, response);

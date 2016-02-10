@@ -9,7 +9,7 @@ program._name = pkg.name;
 program
     .version(pkg.version)
     .command('run <files...>')
-    .description('Run the list of JSON tasks files. Accept glob.')
+    .description('Run the list of JSON tasks files. Accepts glob.')
     .action(function (files) {
         agent.start(files);
     });

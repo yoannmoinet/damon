@@ -52,26 +52,30 @@ function splitAccessors (variable) {
 //Set the first accessor as the main object
 //Get the value of window.object using casper.evaluate()
 //Access continuously to the next property until the end of the list
-function getVariable (casper, params) {
+function getVariable (casper, variable, variableValue) {
     var object;
-    var variableValue;
-    var accessors = splitAccessors(params.variable);
+    var accessors = splitAccessors(variable);
 
-    if (accessors) {
-        object = accessors.shift();
+    if (!accessors) {
+        return;
+    }
+
+    object = accessors.shift();
+    if (variableValue === undefined) {
         variableValue = casper.evaluate(function (object) {
             return window[object];
         }, object);
-
-        accessors.forEach(function (property) {
-            if (variableValue === undefined) {
-                return;
-            }
-            variableValue = variableValue[property];
-        });
-        return variableValue;
+    } else {
+        variableValue = variableValue[object];
     }
-    return;
+
+    accessors.forEach(function (property) {
+        if (variableValue === undefined) {
+            return;
+        }
+        variableValue = variableValue[property];
+    });
+    return variableValue;
 }
 
 //This function retrieves the first attribute or text of the selector

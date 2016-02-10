@@ -190,6 +190,36 @@ The `agent` will click on the specified selector.
 
 The `agent` will enter text in the specified field.
 
+#### `request`
+
+An `agent` can perform an AJAX call from within its workflow.
+
+```javascript
+{
+    "type": "request",
+    "params": {
+        "url": "https://www.google.com",
+        "method": "GET",
+        "payload": {
+            "q": "funny cats"
+        },
+        "headers": {
+            "header": "value"
+        },
+        "store": {
+            "key": "key",
+            "variable": "variable.attr1"
+        }
+    }
+}
+```
+
+You can also `store` the response for later use with `{{key}}`. 
+
+If you don't pass a `variable` it will store the complete response. 
+
+Otherwise, it will try to parse the response as JSON and look for your variable.
+
 #### `get`
 
 ##### _store_

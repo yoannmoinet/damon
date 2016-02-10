@@ -12,11 +12,8 @@ env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.0' +
     (isWin ? '.exe' : '');
 env.PATH += ';' + phantomjsPath;
 
-var mgrUuid = uuid();
 var children = [];
 var files = [];
-var client;
-var started = false;
 var cookieFile = 'cookies.txt';
 
 console.log('spawned mgr ' + process.pid);
@@ -77,7 +74,7 @@ function addFiles (taskFilename) {
         name: path.basename(taskFilename),
         tasks: taskFilename
     });
-};
+}
 
 function runTask () {
     var file = files.shift();
@@ -92,7 +89,7 @@ function spawnChild(tasks) {
     var child = spawn(
         path.join(__dirname, '../node_modules/casperjs/bin/casperjs'),
         [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks,
-        '--cookies-file=./' + cookieFile]
+        '--cookies-file=./' + cookieFile, '--web-security=no']
     );
     console.log('spawned child ' + child.pid + ' with tasks ' + tasks);
     children.push({
@@ -140,6 +137,7 @@ function bindChild(child) {
 }
 
 process.on('SIGINT', function (code, error) {
+    console.log('END', code, error);
     end(0);
 });
 
