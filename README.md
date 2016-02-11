@@ -119,12 +119,15 @@ An `agent` can wait for several different things.
 {
     "type": "wait",
     "params": {
-        "url": "http://www.yahoo.ca"
+        "url": "http://www.yahoo.ca",
+        "regexp": false
     }
 }
 ```
 
-The agent will wait at this step until this url is reached.
+The agent will wait at this step until matching url is reached.
+
+`url` will be interpreted as a `regexp` if set to `true`. Default value of `regexp` is `false`.
 
 - `selector`
 
