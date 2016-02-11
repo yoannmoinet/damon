@@ -30,27 +30,26 @@ var actions = {
             pid + '/' +
             params.name);
     },
-    request: function (params) {
-        // Control what's needed to pursue
-        if (!params || !params.url) {
-            return log('missing `url` params for the request action',
-                params, 'ERROR');
-        }
-
-        // Get the data from the request.
-        var data = casper.evaluate(request.xhr, params);
-
-        // And store it if needed later.
-        if (params.store) {
-            if (!params.store.key) {
-                log('missing params for store', 'ERROR');
-                return;
+    dom: function (params) {
+        log('dom action', params.do, params.selector, 'INFO_BAR');
+        var domActions = {
+            fill: function (opts) {
+                return casper.sendKeys(opts.selector, opts.text);
+            },
+            click: function (opts) {
+                return casper.click(opts.selector);
             }
-            request.handleStore(template, taskGet, params.store, data);
+        };
+        if (params.selector) {
+            log('waiting for', params.selector, 'INFO_BAR');
+            return casper.waitForSelector(params.selector, function () {
+                log('got', params.selector, 'SUCCESS');
+                if (domActions[params.do]) {
+                    return domActions[params.do](params);
+                }
+                return log('no dom action found for ' + params.do, 'ERROR');
+            });
         }
-
-        // Return it.
-        return data;
     },
     get: function (params) {
         var returnValue;
@@ -78,6 +77,28 @@ var actions = {
 
         }
         return log('no action found for ', params, 'ERROR');
+    },
+    request: function (params) {
+        // Control what's needed to pursue
+        if (!params || !params.url) {
+            return log('missing `url` params for the request action',
+                params, 'ERROR');
+        }
+
+        // Get the data from the request.
+        var data = casper.evaluate(request.xhr, params);
+
+        // And store it if needed later.
+        if (params.store) {
+            if (!params.store.key) {
+                log('missing params for store', 'ERROR');
+                return;
+            }
+            request.handleStore(template, taskGet, params.store, data);
+        }
+
+        // Return it.
+        return data;
     },
     wait: function (params) {
         var vals = ['wait for'];
@@ -124,30 +145,25 @@ var actions = {
             return casper.wait(params.time, function () {
                 log('waited for ', params.time, 'SUCCESS');
             });
+
+        } else if (params.resource) {
+
+            var resourceMatcher;
+            if (params.regexp === true) {
+                resourceMatcher = new RegExp(params.resource);
+            } else {
+                //The resource will be an url, so URI encoding is needed
+                resourceMatcher = encodeURI(params.resource);
+            }
+            return casper.waitForResource(resourceMatcher, function () {
+                log('got', params.resource, 'SUCCESS');
+            }, function () {
+                log('timeout', 'WARNING');
+            }, timeoutDuration);
+
         }
 
         return log('no action found for ', params, 'ERROR');
-    },
-    dom: function (params) {
-        log('dom action', params.do, params.selector, 'INFO_BAR');
-        var domActions = {
-            fill: function (opts) {
-                return casper.sendKeys(opts.selector, opts.text);
-            },
-            click: function (opts) {
-                return casper.click(opts.selector);
-            }
-        };
-        if (params.selector) {
-            log('waiting for', params.selector, 'INFO_BAR');
-            return casper.waitForSelector(params.selector, function () {
-                log('got', params.selector, 'SUCCESS');
-                if (domActions[params.do]) {
-                    return domActions[params.do](params);
-                }
-                return log('no dom action found for ' + params.do, 'ERROR');
-            });
-        }
     }
 };
 

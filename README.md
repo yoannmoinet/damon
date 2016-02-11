@@ -111,7 +111,7 @@ A simple screen capture :
 
 #### `wait`
 
-An `agent` can wait for 5 different things.
+An `agent` can wait for several different things.
 
 - `url`
 
@@ -156,6 +156,22 @@ Both are the same as `selector` but will wait for these specific states of the e
 ```
 
 The agent will wait for the specified amount of milliseconds.
+
+- `resource`
+
+```javascript
+{
+    "type": "wait",
+    "params": {
+        "resource": "resourceName",
+        "regexp": false
+    }
+}
+```
+
+The agent will wait at this step until something matching the resource is received.
+
+`resource` will be interpreted as a `regexp` if set to `true`. Default value of `regexp` is `false`.
 
 #### `dom`
 
