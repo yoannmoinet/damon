@@ -110,7 +110,11 @@ var actions = {
 
         if (params.url) {
 
-            return casper.waitForUrl(params.url, function () {
+            var url = params.url;
+            if (params.regexp === true) {
+                url = new RegExp(params.url);
+            }
+            return casper.waitForUrl(url, function () {
                 log('got', params.url, 'SUCCESS');
             }, function () {
                 log('timeout', 'WARNING');
