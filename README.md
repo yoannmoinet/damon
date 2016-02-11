@@ -161,7 +161,7 @@ The agent will wait for the specified amount of milliseconds.
 
 ```javascript
 {
-    "type": "resource",
+    "type": "wait",
     "params": {
         "resource": "resourceName",
         "regexp": false

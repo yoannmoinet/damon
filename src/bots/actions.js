@@ -147,20 +147,20 @@ var actions = {
             });
 
         } else if (params.resource) {
-            var resourceMatcher;
 
+            var resourceMatcher;
             if (params.regexp === true) {
                 resourceMatcher = new RegExp(params.resource);
             } else {
                 //The resource will be an url, so URI encoding is needed
-                resourceMatcher = encodeURIComponent(params.resource);
+                resourceMatcher = encodeURI(params.resource);
             }
-
             return casper.waitForResource(resourceMatcher, function () {
-                return log('got', params.resource, 'SUCCESS');
+                log('got', params.resource, 'SUCCESS');
             }, function () {
                 log('timeout', 'WARNING');
             }, timeoutDuration);
+
         }
 
         return log('no action found for ', params, 'ERROR');
