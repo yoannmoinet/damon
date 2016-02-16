@@ -82,6 +82,7 @@ if (!casper.cli.has('tasks')) {
 var opts = require(casper.cli.get('tasks'));
 var tasks = opts.tasks;
 var config = opts.config;
+var reporter = require(casper.cli.get('reporter') || './reporter.js');
 
 actions.navigate(config.url, function () {
     casper.then(function () {
