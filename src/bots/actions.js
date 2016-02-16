@@ -170,14 +170,36 @@ var actions = {
         } else if (params.resource) {
 
             var resourceMatcher;
+            var responses = casper.resources;
+
             if (params.regexp === true) {
                 resourceMatcher = new RegExp(params.resource);
             } else {
                 //The resource will be an url, so URI encoding is needed
                 resourceMatcher = encodeURI(params.resource);
             }
+
             return casper.waitForResource(resourceMatcher, function () {
-                log('got', params.resource, 'SUCCESS');
+                if (!params.method) {
+                    return log('got', params.resource, 'SUCCESS');
+                }
+
+                for (var i = 0; i < responses.length; i++) {
+                    var res = responses[i];
+                    if (params.regexp === true &&
+                        resourceMatcher.test(res.url) ||
+                        res.url.indexOf(resourceMatcher) !== -1) {
+
+                        var request = casper.options.requests[res.id];
+                        if (params.method === request.method && res.status === 200) {
+                            return log('got', params.resource, 'SUCCESS');
+                        }
+
+                    }
+                }
+
+                return log('no resource found for ', params, 'ERROR');
+
             }, function () {
                 log('timeout resource', params.resource, 'WARNING');
             }, timeout);
