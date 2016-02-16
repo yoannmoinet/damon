@@ -175,7 +175,8 @@ The agent will wait for the specified amount of milliseconds.
     "params": {
         "resource": "resourceName",
         "regexp": false,
-        "timeout": 1000
+        "timeout": 1000,
+        "method": "DELETE" (optional)
     }
 }
 ```
@@ -183,6 +184,8 @@ The agent will wait for the specified amount of milliseconds.
 The agent will wait at this step until something matching the resource is received.
 
 `resource` will be interpreted as a `regexp` if set to `true`. Default value of `regexp` is `false`.
+
+A `method` can be specified to filter the resource. If nothing is specified, any `method` will be accepted.
 
 #### `dom`
 

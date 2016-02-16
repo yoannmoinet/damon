@@ -191,7 +191,8 @@ var actions = {
                         res.url.indexOf(resourceMatcher) !== -1) {
 
                         var request = casper.options.requests[res.id];
-                        if (params.method === request.method && res.status === 200) {
+                        if (params.method === request.method &&
+                            res.status === 200) {
                             return log('got', params.resource, 'SUCCESS');
                         }
 
