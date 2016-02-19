@@ -1,6 +1,12 @@
 var currentFile = require('system').args[3];
 var fs = require('fs');
 var dirname = fs.absolute(currentFile).split('/');
+// Needs to be loaded to be available across the lifecycle.
+var utils = require('utils');
+var system = require('system');
+var pid = system.pid;
+
+var opts, currentTask;
 
 if (dirname.length > 1) {
     dirname.pop();
@@ -40,12 +46,6 @@ var casper = require('casper').create({
     }
 });
 
-var utils = require('utils');
-var system = require('system');
-var pid = system.pid;
-var log = require('./log').config(casper);
-var actions = require('./actions').config(casper, pid);
-
 casper.on('remote.message', function (message) {
     log('console.log : ' + message, 'INFO');
 });
@@ -81,17 +81,23 @@ if (!casper.cli.has('tasks')) {
 
 var opts = require(casper.cli.get('tasks'));
 var tasks = opts.tasks;
+var cwd = casper.cli.has('cwd') ? casper.cli.get('cwd') : dirname;
 var config = opts.config;
-var reporter = require(casper.cli.get('reporter') || './reporter.js');
+var log = require('./log').config(casper, pid, logLevel);
 
-actions.navigate(config.url, function () {
-    casper.then(function () {
-        log('configuring ', config, 'INFO');
-        if (config.size) {
-            return casper.viewport(config.size.width, config.size.height);
-        }
-        return log('no configuration needed', 'INFO');
-    });
+
+var actions = require('./actions').config(casper, cwd);
+
+// Prepare the navigation task.
+var taskNavigate = {
+    type: "navigate",
+    params: {
+        url: config.url
+    }
+};
+
+taskNavigate.logId = logger.write(taskNavigate, 'TASK.START');
+actions.navigate(config.url, function (err) {
     tasks.forEach(function (task) {
         casper.then(function () {
             return actions.execute(task);
