@@ -1,9 +1,7 @@
-var spawn = require('child_process').spawn;
-var _ = require('underscore');
 var path = require('path');
 var uuid = require('node-uuid').v1;
-var fs = require('fs');
 var glob = require('glob');
+var runner = require('./runner.js');
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
@@ -12,34 +10,7 @@ env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.0' +
     (isWin ? '.exe' : '');
 env.PATH += ';' + phantomjsPath;
 
-var children = [];
 var files = [];
-var cookieFile = 'cookies.txt';
-
-console.log('spawned mgr ' + process.pid);
-
-function deleteCookies (cb) {
-    console.log('deleting cookies....');
-    fs.unlink(cookieFile, function (err) {
-        // If we have an error different
-        // from inexistent file log it.
-        if (err && err.code !== 'ENOENT') {
-            console.log('Can\'t delete cookie file', err);
-        }
-        if (typeof cb === 'function') {
-            cb();
-        }
-    });
-}
-
-function end (code, err) {
-    deleteCookies(function () {
-        if (err) {
-            console.log(err);
-        }
-        process.exit(code);
-    });
-}
 
 function getFiles (path) {
     var absolutePath = parsePath(path);
@@ -64,7 +35,9 @@ function start (filesPath) {
         filesList.forEach(function (file) {
             addFiles(file);
         });
-        runTask();
+
+        runner.on('finish', exitHandler.bind(null, {exit: true}));
+        runner.run(files);
     }
 }
 
@@ -76,64 +49,9 @@ function addFiles (taskFilename) {
     });
 }
 
-function runTask () {
-    var file = files.shift();
-    if (file) {
-        spawnChild(file.tasks);
-    } else {
-        end(0);
     }
-}
 
-function spawnChild(tasks) {
-    var child = spawn(
-        path.join(__dirname, '../node_modules/casperjs/bin/casperjs'),
-        [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks,
-        '--cookies-file=./' + cookieFile, '--web-security=no']
-    );
-    console.log('spawned child ' + child.pid + ' with tasks ' + tasks);
-    children.push({
-        id: uuid(),
-        name: child.pid.toString(),
-        child: child
-    });
-    bindChild(child);
-    return child;
-}
 
-function bindChild(child) {
-    child.on('error', function () {
-        console.log('error', arguments);
-    });
-
-    child.on('exit', function (code, error) {
-        console.log('exit', arguments);
-    });
-
-    child.on('close', function (code, error) {
-        console.log('close', arguments);
-        if (error) {
-            end(1, error);
-        } else {
-            runTask();
-        }
-    });
-
-    child.on('disconnect', function () {
-        console.log('disconnect', arguments);
-    });
-
-    child.on('message', function () {
-        console.log('message', arguments);
-    });
-
-    child.stdout.on('data', function (data) {
-        console.log(data.toString());
-    });
-
-    child.stderr.on('data', function (data) {
-        console.log('## ERROR: ', data.toString());
-    });
 }
 
 process.on('SIGINT', function (code, error) {
