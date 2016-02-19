@@ -33,7 +33,8 @@ function start (filesPath, reporterFilePath) {
     try {
         reporter = require(reporterFilePath || defaultReporter)(runner);
     } catch (err) {
-        console.log(chalk.bgRed.bold.white(' No reporter ! ') + ' [' + chalk.dim.red(err) + ']');
+        console.log(chalk.bgRed.bold.white(' No reporter ! ') +
+                ' [' + chalk.dim.red(err) + ']');
     }
 
     if (filesPath) {
@@ -81,11 +82,11 @@ function exitHandler (options, err) {
 // so the program will not close instantly
 process.stdin.resume();
 // do something when app is closing
-process.on('exit', exitHandler.bind(null, { cleanup:true }));
+process.on('exit', exitHandler.bind(null, {cleanup: true}));
 // catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, { exit:true }));
+process.on('SIGINT', exitHandler.bind(null, {exit: true}));
 // catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, { exit:true }));
+process.on('uncaughtException', exitHandler.bind(null, {exit: true}));
 
 module.exports = {
     start: start

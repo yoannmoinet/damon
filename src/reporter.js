@@ -39,7 +39,12 @@ function pending (text, tab) {
     clearInterval(currentPending);
     currentPending = setInterval(function () {
         clear();
-        write(tab + log.pending(chalk.bold(' [ ' + spinner.charAt(index) + ' ] ') + text));
+        write(
+            tab +
+            log.pending(
+                chalk.bold(' [ ' + spinner.charAt(index) + ' ] ') + text
+            )
+        );
         index += 1;
         if (index >= spinner.length) {
             index = 0;
@@ -62,7 +67,7 @@ function buildString (task) {
             param = task.params[i];
 
             if (typeof param === 'object') {
-                param = JSON.stringify (param);
+                param = JSON.stringify(param);
             }
 
             // Cap param string length.
@@ -101,7 +106,7 @@ module.exports = function (runner) {
 
         st += ' ';
 
-        write(log.info(st) + '\n\n');
+        write(log.info(st) + '\n');
     });
 
     runner.on('start', function (taskFile) {
@@ -113,7 +118,7 @@ module.exports = function (runner) {
             // Can't get the file.
         }
 
-        var st = '   start';
+        var st = '\n   ';
         st += ' ' + chalk.blue(path.basename(taskFile, '.json'));
 
         if (tasks) {
@@ -126,7 +131,7 @@ module.exports = function (runner) {
             st += ' ';
 
             config = {
-                type: '  - configuration',
+                type: '   - configuration',
                 // Omit the url because we have it in the first task.
                 params: _.omit(tasks.config, 'url')
             };
@@ -139,7 +144,7 @@ module.exports = function (runner) {
         // Write.
         clearInterval(currentPending);
         clear();
-        write(log.info(st) + '\n\n');
+        write(log.info(st) + '\n');
     });
 
     runner.on('pending', function (task) {
@@ -150,7 +155,10 @@ module.exports = function (runner) {
         clearInterval(currentPending);
         clear();
 
-        write('    ' + log.success(chalk.bold(' [ √ ] ') + buildString(task)) + '\n');
+        write(
+            '    ' +
+            log.success(chalk.bold(' [ √ ] ') + buildString(task)) + '\n'
+        );
     });
 
     runner.on('fail', function (task, err) {

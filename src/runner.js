@@ -103,7 +103,7 @@ Runner.prototype.handleLog = function handleLog (logObject) {
     }
     this.logs[key] = logObject;
 
-    switch(this.logs[key].type) {
+    switch (this.logs[key].type) {
         case 'TASK.START':
             this.pending(logObject);
             break;
@@ -207,7 +207,7 @@ Runner.prototype.spawn = function spawnChild (tasks) {
         ]
     );
     child.uuid = this.uuid + '-' + child.pid;
-    // console.log('spawned child ' + child.uuid + ' with tasks ' + tasks);
+
     this.children[child.uuid] = {
         id: child.uuid,
         name: child.pid.toString(),
@@ -224,23 +224,8 @@ Runner.prototype.clean = function clean () {
 
 // Bind the casper.
 Runner.prototype.bindChild = function bindChild (child) {
-    /*child.on('error', function () {
-        console.log('error', arguments);
-    });
-
-    child.on('exit', function (code, error) {
-        console.log('exit', arguments);
-    });*/
 
     child.on('close', this.end.bind(this));
-
-    /*child.on('disconnect', function () {
-        console.log('disconnect', arguments);
-    });*/
-
-    /*child.on('message', function () {
-        console.log('message', arguments);
-    });*/
 
     child.stdout.on('data', function (data) {
         console.log(data.toString());

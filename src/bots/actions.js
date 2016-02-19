@@ -29,7 +29,10 @@ var actions = {
     },
     capture: function (params, cwd) {
         log('capture', params.name, 'INFO_BAR');
-        return casper.capture(cwd + '/captures/' + params.name, params.selector);
+        return casper.capture(
+            cwd + '/captures/' + params.name,
+            params.selector
+        );
     },
     dom: function (params) {
         log('dom action', params.do, params.selector, 'INFO_BAR');

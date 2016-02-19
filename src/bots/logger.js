@@ -44,10 +44,10 @@ module.exports = function (cwd) {
                 st += ' ';
             });
 
-             st += '\n';
+            st += '\n';
 
             fs.write(cwd + '/log.txt', st, 'a');
             return logId;
         }
-    }
+    };
 };
