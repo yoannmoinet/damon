@@ -1,7 +1,10 @@
 var path = require('path');
 var uuid = require('node-uuid').v1;
 var glob = require('glob');
+var chalk = require('chalk');
 var runner = require('./runner.js');
+var defaultReporter = path.join(__dirname, './reporter.js');
+var reporter;
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
@@ -25,8 +28,15 @@ function parsePath (filePath) {
     }
 }
 
-function start (filesPath) {
+function start (filesPath, reporterFilePath) {
     var filesList = [];
+
+    try {
+        reporter = require(reporterFilePath || defaultReporter)(runner);
+    } catch (err) {
+        console.log(chalk.bgRed.bold.white(' No reporter ! ') + ' [' + chalk.dim.red(err) + ']');
+    }
+
     if (filesPath) {
         filesPath.forEach(function (path) {
             filesList = filesList.concat(getFiles(path));
@@ -44,7 +54,7 @@ function start (filesPath) {
 function addFiles (taskFilename) {
     files.push({
         id: uuid(),
-        name: path.basename(taskFilename),
+        name: path.basename(taskFilename, '.json'),
         tasks: taskFilename
     });
 }

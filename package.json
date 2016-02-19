@@ -30,8 +30,11 @@
   "dependencies": {
     "casperjs": "n1k0/casperjs",
     "commander": "^2.9.0",
+    "fs-extra": "^0.26.5",
     "glob": "^6.0.4",
     "node-uuid": "^1.4.3",
+    "slice-ansi": "0.0.4",
+    "strip-ansi": "^3.0.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
