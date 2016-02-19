@@ -16,10 +16,6 @@ if (dirname.length > 1) {
 
 var casper = require('casper').create({
     clientScripts: ['./includes/start.js'],
-    viewportSize: {
-        width: 1024,
-        height: 720
-    },
     pageSettings: {
         loadImages: true,
         loadPlugins: true,
@@ -28,8 +24,6 @@ var casper = require('casper').create({
             '(KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
     },
     verbose: false,
-    waitTimeout: 60000,
-    logLevel: 'debug',
     exitOnError: false,
     // Overwrite logs to avoid having them in the console.
     onDie: function (casp, message, status) {
@@ -72,8 +66,19 @@ try {
 var tasks = opts.tasks;
 var cwd = casper.cli.has('cwd') ? casper.cli.get('cwd') : dirname;
 var config = opts.config;
+var logLevel = config.logLevel !== undefined ?
+    config.logLevel : 'none';
 var log = require('./log').config(casper, pid, logLevel);
+var logger = require('./logger')(cwd);
 
+casper.options.waitTimeout = opts.config.timeout !== undefined ?
+    opts.config.timeout : 30000;
+casper.options.logLevel = logLevel;
+casper.options.viewportSize = opts.config.size ?
+    opts.config.size : {
+        width: 1024,
+        height: 720
+    };
 
 var actions = require('./actions').config(casper, cwd);
 
