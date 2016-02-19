@@ -7,6 +7,7 @@ var assertion = require('./assertion.js').assertion(casper);
 var actions = {
     assert: function (params) {
         var output;
+        log('assert', params.variable || params.attribute, 'INFO_BAR');
         try {
             if (params.attribute) {
                 assertion.attribute(params);
@@ -14,12 +15,14 @@ var actions = {
                 assertion.variable(params);
             } else {
                 log('no assertion found', 'ERROR');
+                throw new Error('no assertion found');
             }
         }
         catch (err) {
             output = 'FAILED: expected \'' + err.expected + '\' but got \'' +
                 err.actual + '\'';
-            return log(output, 'TEST_FAILED');
+            log(output, 'TEST_FAILED');
+            throw new Error('assert failed');
         }
         output = 'PASS: got \'' + params.expected + '\'';
         return log(output, 'TEST_SUCCESS');
@@ -40,16 +43,18 @@ var actions = {
                 return casper.click(opts.selector);
             }
         };
-        if (params.selector) {
+        if (params.selector && params.do) {
             log('waiting for', params.selector, 'INFO_BAR');
             return casper.waitForSelector(params.selector, function () {
                 log('got', params.selector, 'SUCCESS');
                 if (domActions[params.do]) {
                     return domActions[params.do](params);
                 }
-                return log('no dom action found for ' + params.do, 'ERROR');
-            });
+                log('no dom action found for ' + params.do, 'ERROR');
+                throw new Error('no dom action');
+            }, params.timeout);
         }
+        throw new Error('missing params');
     },
     get: function (params) {
         var returnValue;
@@ -61,10 +66,11 @@ var actions = {
                     returnValue, 'SUCCESS');
                 return returnValue;
             }
-            return log('no attribute "' + params.attribute +
+            log('no attribute "' + params.attribute +
                 '" found for selector "' + params.selector +
                 '" and ' + (params.modifier || 'whithout') +
                 ' modifier', 'ERROR');
+            throw new Error('no attribute found');
 
         } else if (params.variable) {
 
@@ -73,16 +79,19 @@ var actions = {
                 log('got global variable: ' + params.variable, 'SUCCESS');
                 return returnValue;
             }
-            return log('no value found for: ' + params.variable, 'ERROR');
+            log('no value found for: ' + params.variable, 'ERROR');
+            throw new Error('no value found');
 
         }
-        return log('no action found for ', params, 'ERROR');
+        log('no action found for ', params, 'ERROR');
+        throw new Error('no action found');
     },
     request: function (params) {
         // Control what's needed to pursue
         if (!params || !params.url) {
-            return log('missing `url` params for the request action',
+            log('missing `url` params for the request action',
                 params, 'ERROR');
+            throw new Error('missing `url` params');
         }
 
         // Get the data from the request.
@@ -92,7 +101,7 @@ var actions = {
         if (params.store) {
             if (!params.store.key) {
                 log('missing params for store', 'ERROR');
-                return;
+                throw new Error('missing params');
             }
             request.handleStore(template, taskGet, params.store, data);
         }
@@ -107,6 +116,8 @@ var actions = {
         });
         vals.push('INFO_BAR');
         log.apply(this, vals);
+        var timeout = params.timeout !== undefined ?
+            params.timeout : timeoutDuration;
 
         if (params.url) {
 
@@ -116,33 +127,25 @@ var actions = {
             }
             return casper.waitForUrl(url, function () {
                 log('got', params.url, 'SUCCESS');
-            }, function () {
-                log('timeout', 'WARNING');
-            }, timeoutDuration);
+            }, timeout);
 
         } else if (params.selector) {
 
             return casper.waitForSelector(params.selector, function () {
                 log('got ', params.selector, 'SUCCESS');
-            }, function () {
-                log('timeout', 'WARNING');
-            }, timeoutDuration);
+            }, timeout);
 
         } else if (params.visible) {
 
             return casper.waitUntilVisible(params.visible, function () {
                 log('got ', params.visible, 'SUCCESS');
-            }, function () {
-                log('timeout', 'WARNING');
-            }, timeoutDuration);
+            }, timeout);
 
         } else if (params.hidden) {
 
             return casper.waitWhileVisible(params.hidden, function () {
                 log('got ', params.hidden, 'SUCCESS');
-            }, function () {
-                log('timeout', 'WARNING');
-            }, timeoutDuration);
+            }, timeout);
 
         } else if (params.time) {
 
@@ -161,13 +164,11 @@ var actions = {
             }
             return casper.waitForResource(resourceMatcher, function () {
                 log('got', params.resource, 'SUCCESS');
-            }, function () {
-                log('timeout', 'WARNING');
-            }, timeoutDuration);
+            }, timeout);
 
         }
-
-        return log('no action found for ', params, 'ERROR');
+        log('no action found for ', params, 'ERROR');
+        throw new Error('no action found');
     }
 };
 
@@ -177,7 +178,6 @@ var config = function (casper, pid) {
             if (task.type && actions[task.type]) {
                 var response;
                 task = template.parse(task);
-                log('starting task', task, 'INFO_BAR');
                 response = actions[task.type](task.params);
                 if (task.type === 'get') {
                     template.store(task.params.key, response);
@@ -185,12 +185,12 @@ var config = function (casper, pid) {
                 return response;
             } else {
                 log('no task found for: ', task, 'ERROR');
+                throw new Error('no task found');
             }
         },
         navigate: function (url, next) {
             log('navigate to', url, 'INFO_BAR');
             var loadSuccess = function (status) {
-                log('load success', url, 'SUCCESS');
                 casper.removeListener('load.failed', loadFailed);
                 casper.removeListener('load.finished', loadSuccess);
                 if (status === 'fail') {
@@ -200,7 +200,6 @@ var config = function (casper, pid) {
                 }
             };
             var loadFailed = function (err) {
-                log('load failed', url, 'ERROR');
                 casper.removeListener('load.failed', loadFailed);
                 casper.removeListener('load.finished', loadSuccess);
                 next(err);

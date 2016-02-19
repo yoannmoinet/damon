@@ -49,15 +49,34 @@ function addFiles (taskFilename) {
     });
 }
 
+var timeoutExit;
+function exitHandler (options, err) {
+    if (options.cleanup) {
+        runner.clean();
     }
 
+    if (err) {
+        console.log(err.stack);
+    }
 
+    if (options.exit) {
+        clearTimeout(timeoutExit);
+        // Delay the exit to let async task to finish.
+        // Runner's logging for example.
+        timeoutExit = setTimeout(function () {
+            process.exit();
+        }, 100);
+    }
 }
 
-process.on('SIGINT', function (code, error) {
-    console.log('END', code, error);
-    end(0);
-});
+// so the program will not close instantly
+process.stdin.resume();
+// do something when app is closing
+process.on('exit', exitHandler.bind(null, { cleanup:true }));
+// catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, { exit:true }));
+// catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, { exit:true }));
 
 module.exports = {
     start: start
