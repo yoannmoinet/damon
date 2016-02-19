@@ -94,15 +94,24 @@ taskNavigate.logId = logger.write(taskNavigate, 'TASK.START');
 actions.navigate(config.url, function (err) {
     if (err) {
         log('Error Loading', err, 'FATAL');
+        logger.write({ error: 'load error : ' + err.status }, 'TASK.ERROR');
+        logger.write(taskNavigate, 'TASK.FAIL');
     }
+    logger.write(taskNavigate, 'TASK.END');
     tasks.forEach(function (task) {
         casper.then(function () {
-            return actions.execute(task);
+            currentTask = task;
+            currentTask.logId = logger.write(currentTask, 'TASK.START');
             try {
                 return actions.execute(task);
             } catch (e) {
                 log('Catched', e, 'FATAL');
+                logger.write({ error: 'thrown error : ' + e.message }, 'TASK.ERROR');
+                logger.write(currentTask, 'TASK.FAIL');
             }
+        }).then(function () {
+            // Close the current task.
+            logger.write(currentTask, 'TASK.END');
         });
     });
 });
