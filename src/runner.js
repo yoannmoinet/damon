@@ -1,4 +1,4 @@
-var Emitter = require('events');
+var Emitter = require('events').EventEmitter;
 var util = require('util');
 var spawn = require('child_process').spawn;
 var fs = require('fs-extra');
@@ -63,7 +63,8 @@ Runner.prototype.parseLog = function parseLog (logFile) {
 
 Runner.prototype.doParseLog = function doParseLog (logFile) {
     var reader = readline.createInterface({
-        input: fs.createReadStream(logFile)
+        input: fs.createReadStream(logFile),
+        terminal: false
     });
 
     reader.on('line', function (line) {
