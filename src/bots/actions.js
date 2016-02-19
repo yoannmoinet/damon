@@ -27,11 +27,9 @@ var actions = {
         output = 'PASS: got \'' + params.expected + '\'';
         return log(output, 'TEST_SUCCESS');
     },
-    capture: function (params) {
+    capture: function (params, cwd) {
         log('capture', params.name, 'INFO_BAR');
-        return casper.capture('./captures/' +
-            pid + '/' +
-            params.name);
+        return casper.capture(cwd + '/captures/' + params.name, params.selector);
     },
     dom: function (params) {
         log('dom action', params.do, params.selector, 'INFO_BAR');
@@ -172,13 +170,13 @@ var actions = {
     }
 };
 
-var config = function (casper, pid) {
+var config = function (casper, cwd) {
     return {
         execute: function (task) {
             if (task.type && actions[task.type]) {
                 var response;
                 task = template.parse(task);
-                response = actions[task.type](task.params);
+                response = actions[task.type](task.params, cwd);
                 if (task.type === 'get') {
                     template.store(task.params.key, response);
                 }
