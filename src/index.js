@@ -16,8 +16,7 @@ env.PATH += ';' + phantomjsPath;
 var files = [];
 
 function getFiles (path) {
-    var absolutePath = parsePath(path);
-    return glob.sync(absolutePath);
+    return glob.sync(parsePath(path));
 }
 
 function parsePath (filePath) {
@@ -43,7 +42,7 @@ function start (filesPath, reporterFilePath) {
         });
 
         filesList.forEach(function (file) {
-            addFiles(file);
+            addFile(file);
         });
 
         runner.on('finish', exitHandler.bind(null, {exit: true}));
@@ -51,7 +50,7 @@ function start (filesPath, reporterFilePath) {
     }
 }
 
-function addFiles (taskFilename) {
+function addFile (taskFilename) {
     files.push({
         id: uuid(),
         name: path.basename(taskFilename, '.json'),
