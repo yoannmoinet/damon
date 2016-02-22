@@ -28,7 +28,7 @@
     "changelog": "node ./bin/changelog.js"
   },
   "dependencies": {
-    "casperjs": "n1k0/casperjs#1.1-beta4",
+    "casperjs": "yoannmoinet/casperjs#a45c64d",
     "commander": "^2.9.0",
     "fs-extra": "^0.26.5",
     "glob": "^6.0.4",
