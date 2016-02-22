@@ -21,7 +21,6 @@
     "preversion": "npm test",
     "postversion": "npm run changelog",
     "pretest": "npm run format && npm run lint",
-    "postinstall": "node ./bin/move_casper_bin.js",
     "test": "mocha ./test",
     "format": "jscs ./src/ ./src/bots && npm run formatTests",
     "formatTests": "jscs -c ./test/.jscsrc ./test/",
