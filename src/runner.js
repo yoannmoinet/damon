@@ -202,7 +202,7 @@ Runner.prototype.spawn = function spawnChild (tasks) {
             path.join(__dirname, './bots/worker.js'),
             '--tasks=' + tasks,
             '--cwd=' + this.folder,
-            '--cookies-file=./' + this.cookie,
+            '--cookies-file=' + this.cookie,
             '--web-security=no',
             '--log-file=' + this.log
         ]

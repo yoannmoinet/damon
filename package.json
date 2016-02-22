@@ -21,6 +21,7 @@
     "preversion": "npm test",
     "postversion": "npm run changelog",
     "pretest": "npm run format && npm run lint",
+    "postinstall": "node ./bin/move_casper_bin.js",
     "test": "mocha ./test",
     "format": "jscs ./src/ ./src/bots && npm run formatTests",
     "formatTests": "jscs -c ./test/.jscsrc ./test/",
@@ -28,7 +29,7 @@
     "changelog": "node ./bin/changelog.js"
   },
   "dependencies": {
-    "casperjs": "n1k0/casperjs",
+    "casperjs": "n1k0/casperjs#1.1-beta4",
     "commander": "^2.9.0",
     "fs-extra": "^0.26.5",
     "glob": "^6.0.4",
