@@ -1,7 +1,7 @@
 var template = require('./template.js');
 var taskGet = require('./taskGet.js');
 var request = require('./request.js');
-var timeoutDuration = 30000;
+var timeoutDuration = 10000;
 var assertion = require('./assertion.js').assertion(casper);
 
 var actions = {

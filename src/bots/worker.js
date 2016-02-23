@@ -75,7 +75,7 @@ var log = require('./log').config(casper, pid, logLevel);
 var logger = require('./logger')(cwd);
 
 casper.options.waitTimeout = opts.config.timeout !== undefined ?
-    opts.config.timeout : 30000;
+    opts.config.timeout : 10000;
 casper.options.logLevel = logLevel;
 casper.options.viewportSize = opts.config.size ?
     opts.config.size : {
