@@ -145,6 +145,14 @@ Runner.prototype.runTask = function runTask () {
     }
 };
 
+// Update the stored task to be sure to have all updated infos.
+Runner.prototype.updateTest = function (test) {
+    this.tasks[test.logId].test = _.extend(
+        this.tasks[test.logId].test,
+        test
+    );
+};
+
 // When a new suite begins
 Runner.prototype.start = function start (tasks) {
     this.emit('start', tasks);
@@ -162,36 +170,66 @@ Runner.prototype.finish = function finish () {
 };
 
 // A task is pending.
-Runner.prototype.pending = function pending (task) {
-    this.tasks[task.logId] = task.message;
-    this.emit('pending', this.tasks[task.logId]);
+Runner.prototype.pending = function pending (log) {
+    var test = log.message;
+    if (!this.tasks[test.logId]) {
+        this.tasks[test.logId] = {
+            errors: [],
+            failed: false,
+            logs: []
+        };
+    }
+    this.tasks[test.logId].test = test;
+    this.tasks[test.logId].logs.push(log);
+    this.emit('pending', this.tasks[test.logId].test);
 };
 
 // A task got an error
-Runner.prototype.error = function error (task) {
-    if (!this.tasks[task.logId]) {
-        this.pending(task);
+Runner.prototype.error = function error (log) {
+    var test = log.message;
+    if (!this.tasks[test.logId]) {
+        this.pending(log);
+    } else {
+        this.tasks[test.logId].logs.push(log);
     }
-    this.tasks[task.logId].error = task.message.error;
+    this.tasks[test.logId].errors.push({
+        message: test.error,
+        details: test.details
+    });
 };
 
 // A task failed
-Runner.prototype.fail = function fail (task) {
-    if (!this.tasks[task.logId]) {
-        this.pending(task);
+Runner.prototype.fail = function fail (log) {
+    var test = log.message;
+    if (!this.tasks[test.logId]) {
+        this.pending(log);
+    } else {
+        this.tasks[test.logId].logs.push(log);
     }
-    this.tasks[task.logId].failed = true;
-    this.emit('fail', this.tasks[task.logId], this.tasks[task.logId].error);
+    this.updateTest(test);
+    this.tasks[test.logId].failed = true;
+    var lastError = this.tasks[test.logId].errors.slice(-1)[0];
+    this.emit(
+        'fail',
+        this.tasks[test.logId].test,
+        lastError ? lastError.message : null
+    );
 };
 
-// A task succeed
-Runner.prototype.test = function test (task) {
-    if (!this.tasks[task.logId]) {
-        this.pending(task);
+// A task succeeded
+Runner.prototype.test = function test (log) {
+    var test = log.message;
+    if (!this.tasks[test.logId]) {
+        this.pending(log);
+    } else {
+        this.tasks[test.logId].logs.push(log);
     }
-    this.emit('test', this.tasks[task.logId]);
-    if (!this.tasks[task.logId].failed) {
-        this.emit('pass', this.tasks[task.logId]);
+    this.updateTest(test);
+    this.emit('test', this.tasks[test.logId].test);
+
+    // If it hasn't failed yet, it's succeeded
+    if (!this.tasks[test.logId].failed) {
+        this.emit('pass', this.tasks[test.logId].test);
     }
 };
 
