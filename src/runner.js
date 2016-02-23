@@ -110,12 +110,13 @@ Runner.prototype.handleLog = function handleLog (logObject) {
             break;
         case 'TASK.FAIL':
             this.fail(logObject);
+            this.test(logObject);
             break;
         case 'TASK.ERROR':
             this.error(logObject);
             break;
         case 'TASK.END':
-            this.success(logObject);
+            this.test(logObject);
             break;
         default:
             console.log(chalk.bgRed('Log not taken into account'));
@@ -184,12 +185,13 @@ Runner.prototype.fail = function fail (task) {
 };
 
 // A task succeed
-Runner.prototype.success = function success (task) {
+Runner.prototype.test = function test (task) {
     if (!this.tasks[task.logId]) {
         this.pending(task);
     }
+    this.emit('test', this.tasks[task.logId]);
     if (!this.tasks[task.logId].failed) {
-        this.emit('test', this.tasks[task.logId]);
+        this.emit('pass', this.tasks[task.logId]);
     }
 };
 

@@ -151,7 +151,7 @@ module.exports = function (runner) {
         pending(buildString(task), '    ');
     });
 
-    runner.on('test', function (task) {
+    runner.on('pass', function (task) {
         clearInterval(currentPending);
         clear();
 
