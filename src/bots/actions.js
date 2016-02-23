@@ -157,7 +157,7 @@ var actions = {
                 log('timeout hidden', params.hidden, 'WARNING');
             }, timeout);
 
-        } else if (params.time) {
+        } else if (params.time !== undefined) {
 
             return casper.wait(params.time, function () {
                 log('waited for ', params.time, 'SUCCESS');
