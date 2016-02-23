@@ -117,6 +117,7 @@ var actions = {
         });
         vals.push('INFO_BAR');
         log.apply(this, vals);
+
         var timeout = params.timeout !== undefined ?
             params.timeout : timeoutDuration;
 
@@ -128,24 +129,32 @@ var actions = {
             }
             return casper.waitForUrl(url, function () {
                 log('got', params.url, 'SUCCESS');
+            }, function () {
+                log('timeout url', params.url, 'WARNING');
             }, timeout);
 
         } else if (params.selector) {
 
             return casper.waitForSelector(params.selector, function () {
                 log('got ', params.selector, 'SUCCESS');
+            }, function () {
+                log('timeout selector', params.selector, 'WARNING');
             }, timeout);
 
         } else if (params.visible) {
 
             return casper.waitUntilVisible(params.visible, function () {
                 log('got ', params.visible, 'SUCCESS');
+            }, function () {
+                log('timeout visible', params.visible, 'WARNING');
             }, timeout);
 
         } else if (params.hidden) {
 
             return casper.waitWhileVisible(params.hidden, function () {
                 log('got ', params.hidden, 'SUCCESS');
+            }, function () {
+                log('timeout hidden', params.hidden, 'WARNING');
             }, timeout);
 
         } else if (params.time) {
@@ -165,6 +174,8 @@ var actions = {
             }
             return casper.waitForResource(resourceMatcher, function () {
                 log('got', params.resource, 'SUCCESS');
+            }, function () {
+                log('timeout resource', params.resource, 'WARNING');
             }, timeout);
 
         }
