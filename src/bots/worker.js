@@ -48,6 +48,7 @@ var casper = require('casper').create({
     onWaitTimeout: function _onWaitTimeout(timeout) {
         log('Wait timeout of ' + timeout + ' expired, exiting.', 'ERROR');
     },
+    // Store all requests sent by casper into the casper object
     onResourceRequested: function (casp, requestData, networkRequest) {
         casper.options.requests[requestData.id] = requestData;
     }

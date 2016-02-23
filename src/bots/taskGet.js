@@ -110,8 +110,53 @@ function getAttribute (casper, params) {
     return attributeValue;
 }
 
+function encodeResource (resource, regexp) {
+    if (regexp === true) {
+        return new RegExp(resource);
+    } else {
+        //The resource will be an url, so URI encoding is needed
+        return encodeURI(resource);
+    }
+}
+
+function getRequest (casper, resourceMatcher, method, variable) {
+    var responses = casper.resources;
+    for (var i = 0; i < responses.length; i++) {
+        var request;
+        var parsedData;
+        var res = responses[i];
+
+        if (resourceMatcher instanceof RegExp &&
+            resourceMatcher.test(res.url) ||
+            res.url.indexOf(resourceMatcher) !== -1) {
+
+            request = casper.options.requests[res.id];
+
+            // Get the resource with corresponding method or first resource if no method
+            if ((!method || method === request.method) && res.status === 200) {
+
+                if (!variable) {
+                    return request;
+                }
+
+                //Parse postData as an object and save it as payload
+                if (request.postData !== undefined) {
+                    try {
+                        request.payload = JSON.parse(request.postData);
+                    } catch (e) {
+                        request.payload = request.postData;
+                    }
+                }
+                return getVariable(null, variable, request);
+            }
+        }
+    }
+}
+
 module.exports = {
     getAttribute: getAttribute,
     getVariable: getVariable,
-    splitAccessors: splitAccessors
+    splitAccessors: splitAccessors,
+    getRequest: getRequest,
+    encodeResource: encodeResource
 };

@@ -14,6 +14,9 @@ var actions = {
             } else if (params.variable) {
                 log('assert variable', params.variable, 'INFO_BAR');
                 assertion.variable(params);
+            } else if (params.key) {
+                log('assert variable', params.key, 'INFO_BAR');
+                assertion.key(params);
             } else {
                 log('no assertion found', 'ERROR');
                 throw new Error('no assertion found');
@@ -39,7 +42,7 @@ var actions = {
         log('dom action', params.do, params.selector, 'INFO_BAR');
         var domActions = {
             fill: function (opts) {
-                return casper.sendKeys(opts.selector, opts.text);
+                return casper.sendKeys(opts.selector, opts.text, {reset: true});
             },
             click: function (opts) {
                 return casper.click(opts.selector);
@@ -52,11 +55,16 @@ var actions = {
             log('waiting for', params.selector, 'INFO_BAR');
             return casper.waitForSelector(params.selector, function () {
                 log('got', params.selector, 'SUCCESS');
-                if (domActions[params.do]) {
-                    return domActions[params.do](params);
-                }
-                log('no dom action found for ' + params.do, 'ERROR');
-                throw new Error('no dom action');
+
+                //Sometime, selector isn't ready to be modified even if it has been loaded
+                return casper.wait(1000, function () {
+                    if (domActions[params.do]) {
+                        return domActions[params.do](params);
+                    }
+                    log('no dom action found for ' + params.do, 'ERROR');
+                    throw new Error('no dom action');
+                });
+
             }, timeout);
         }
         throw new Error('missing params');
@@ -73,9 +81,23 @@ var actions = {
             }
             log('no attribute "' + params.attribute +
                 '" found for selector "' + params.selector +
-                '" and ' + (params.modifier || 'whithout') +
+                '" and ' + (params.modifier || 'without') +
                 ' modifier', 'ERROR');
             throw new Error('no attribute found');
+
+        } else if (params.request) {
+
+            var resourceMatcher = taskGet.encodeResource(params.request,
+                params.regexp);
+
+            returnValue = taskGet.getRequest(casper, resourceMatcher,
+                params.method, params.variable);
+            if (returnValue !== undefined) {
+                log('got global variable: ' + params.request, 'SUCCESS');
+                return returnValue;
+            }
+            log('no value found for: ' + params.request, 'ERROR');
+            throw new Error('no request found');
 
         } else if (params.variable) {
 
@@ -169,37 +191,22 @@ var actions = {
 
         } else if (params.resource) {
 
-            var resourceMatcher;
-            var responses = casper.resources;
-
-            if (params.regexp === true) {
-                resourceMatcher = new RegExp(params.resource);
-            } else {
-                //The resource will be an url, so URI encoding is needed
-                resourceMatcher = encodeURI(params.resource);
-            }
-
+            var matchingRequest;
+            var resourceMatcher = taskGet.encodeResource(params.resource,
+                params.regexp);
             return casper.waitForResource(resourceMatcher, function () {
                 if (!params.method) {
                     return log('got', params.resource, 'SUCCESS');
                 }
 
-                for (var i = 0; i < responses.length; i++) {
-                    var res = responses[i];
-                    if (params.regexp === true &&
-                        resourceMatcher.test(res.url) ||
-                        res.url.indexOf(resourceMatcher) !== -1) {
+                matchingRequest = taskGet.getRequest(casper,
+                    resourceMatcher, params.method);
 
-                        var request = casper.options.requests[res.id];
-                        if (params.method === request.method &&
-                            res.status === 200) {
-                            return log('got', params.resource, 'SUCCESS');
-                        }
-
-                    }
+                if (matchingRequest) {
+                    return log('got', params.resource, 'SUCCESS');
                 }
-
-                return log('no resource found for ', params, 'ERROR');
+                log('no resource found for ', params, 'ERROR');
+                throw new Error('no resource found');
 
             }, function () {
                 log('timeout resource', params.resource, 'WARNING');

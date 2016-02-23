@@ -1,5 +1,6 @@
 var expect = require('expect.js');
 var taskGet = require('./taskGet.js');
+var template = require('./template.js');
 
 var assertion = function (casper) {
     var testValue;
@@ -10,6 +11,10 @@ var assertion = function (casper) {
         },
         attribute: function (params) {
             testValue = taskGet.getAttribute(casper, params);
+            return expect(params.expected).to.be.eql(testValue);
+        },
+        key: function (params) {
+            testValue = template.get(params.key);
             return expect(params.expected).to.be.eql(testValue);
         }
     };

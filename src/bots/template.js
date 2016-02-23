@@ -32,7 +32,12 @@ function parseTask (task) {
     return task;
 }
 
+function getKeyValue (key) {
+    return store[key];
+}
+
 module.exports = {
     parse: parseTask,
-    store: storeKeyValue
+    store: storeKeyValue,
+    get: getKeyValue
 };
