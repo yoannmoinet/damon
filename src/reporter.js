@@ -1,4 +1,3 @@
-var selectedSpinner = 0;
 var chalk = require('chalk');
 var readline = require('readline');
 var _ = require('underscore');
@@ -10,6 +9,7 @@ var spinners = [
     '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏',
     '┤┘┴└├┌┬┐'
 ];
+var selectedSpinner = 1;
 var index;
 var currentPending;
 var log = {
