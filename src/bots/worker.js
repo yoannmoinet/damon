@@ -38,14 +38,14 @@ var casper = require('casper').create({
     onStepTimeout: function _onStepTimeout(timeout, stepNum) {
         log(
             'Maximum step execution timeout exceeded for step ' + stepNum,
-            'FATAL'
+            'ERROR'
         );
     },
     onTimeout: function _onTimeout(timeout) {
-        log('Script timeout of ' + timeout + ' reached, exiting.', 'FATAL');
+        log('Script timeout of ' + timeout + ' reached, exiting.', 'ERROR');
     },
     onWaitTimeout: function _onWaitTimeout(timeout) {
-        log('Wait timeout of ' + timeout + ' expired, exiting.', 'FATAL');
+        log('Wait timeout of ' + timeout + ' expired, exiting.', 'ERROR');
     }
 });
 
@@ -96,12 +96,12 @@ var taskNavigate = {
 taskNavigate.logId = logger.write(taskNavigate, 'TASK.START');
 actions.navigate(config.url, function (err) {
     if (err) {
-        log('Error Loading', err, 'FATAL');
         logger.write({
             error: 'load error : ' + err.status,
             details: err
         }, 'TASK.ERROR');
         logger.write(taskNavigate, 'TASK.FAIL');
+        log('Error Loading', err, 'ERROR');
     }
     logger.write(taskNavigate, 'TASK.END');
     tasks.forEach(function (task) {
@@ -111,12 +111,12 @@ actions.navigate(config.url, function (err) {
             try {
                 return actions.execute(task);
             } catch (e) {
-                log('Catched', e, 'FATAL');
                 logger.write(
                     {error: 'thrown error : ' + e.message, details: e},
                     'TASK.ERROR'
                 );
                 logger.write(currentTask, 'TASK.FAIL');
+                log('Catched', e.message, e, 'ERROR');
             }
         }).then(function () {
             // Close the current task.
@@ -126,29 +126,28 @@ actions.navigate(config.url, function (err) {
 });
 
 casper.on('error', function(msg, backtrace) {
-    log('error', arguments, 'FATAL');
     logger.write(currentTask, 'TASK.FAIL');
+    log('error', arguments, 'ERROR');
 });
 casper.on('step.error', function(err) {
-    log('step.error', arguments, 'FATAL');
     logger.write({error: 'step error', details: err}, 'TASK.ERROR');
     logger.write(currentTask, 'TASK.FAIL');
+    log('step.error', arguments, 'ERROR');
 });
 casper.on('step.timeout', function(step, timeout) {
-    log('step.timeout', arguments, 'FATAL');
     logger.write({
         error: 'timeout step',
         details: {step: step, timeout: timeout}
     }, 'TASK.ERROR');
     logger.write(currentTask, 'TASK.FAIL');
+    log('step.timeout', arguments, 'ERROR');
 });
 casper.on('timeout', function() {
-    log('timeout', arguments, 'FATAL');
     logger.write({error: 'timeout'}, 'TASK.ERROR');
     logger.write(currentTask, 'TASK.FAIL');
+    log('timeout', arguments, 'ERROR');
 });
 casper.on('waitFor.timeout', function(timeout, params) {
-    log('waitFor.timeout', arguments, 'FATAL');
     logger.write({
             error: 'timeout waitFor',
             details: {
@@ -157,6 +156,7 @@ casper.on('waitFor.timeout', function(timeout, params) {
             }
         }, 'TASK.ERROR');
     logger.write(currentTask, 'TASK.FAIL');
+    log('waitFor.timeout', arguments, 'ERROR');
 });
 
 casper.run();
