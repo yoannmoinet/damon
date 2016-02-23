@@ -85,6 +85,33 @@ casper.options.viewportSize = opts.config.size ?
 
 var actions = require('./actions').config(casper, cwd);
 
+function startTask (task) {
+    task.start = +new Date();
+    task.logId = logger.write(task, 'TASK.START');
+}
+
+function configEndTask (task) {
+    task.end = +new Date();
+    task.duration = task.end - task.start;
+    return task;
+}
+
+function errorTask (task, message, details) {
+    logger.write({
+        error: message,
+        details: details,
+        logId: task.logId
+    }, 'TASK.ERROR');
+}
+
+function failTask (task) {
+    logger.write(configEndTask(task), 'TASK.FAIL');
+}
+
+function endTask (task) {
+    logger.write(configEndTask(task), 'TASK.END');
+}
+
 // Prepare the navigation task.
 var taskNavigate = {
     type: 'navigate',
@@ -92,71 +119,60 @@ var taskNavigate = {
         url: config.url
     }
 };
+startTask(taskNavigate);
 
-taskNavigate.logId = logger.write(taskNavigate, 'TASK.START');
 actions.navigate(config.url, function (err) {
     if (err) {
-        logger.write({
-            error: 'load error : ' + err.status,
-            details: err
-        }, 'TASK.ERROR');
-        logger.write(taskNavigate, 'TASK.FAIL');
         log('Error Loading', err, 'ERROR');
+        errorTask(taskNavigate, 'load error : ' + err.status, err);
+        failTask(taskNavigate);
+    } else {
+        endTask(taskNavigate);
     }
-    logger.write(taskNavigate, 'TASK.END');
     tasks.forEach(function (task) {
         casper.then(function () {
             currentTask = task;
-            currentTask.logId = logger.write(currentTask, 'TASK.START');
+            startTask(currentTask);
             try {
                 return actions.execute(task);
             } catch (e) {
-                logger.write(
-                    {error: 'thrown error : ' + e.message, details: e},
-                    'TASK.ERROR'
-                );
-                logger.write(currentTask, 'TASK.FAIL');
                 log('Catched', e.message, e, 'ERROR');
+                errorTask(currentTask, 'thrown error : ' + e.message, e);
+                failTask(currentTask);
             }
         }).then(function () {
             // Close the current task.
-            logger.write(currentTask, 'TASK.END');
+            endTask(currentTask);
         });
     });
 });
 
 casper.on('error', function(msg, backtrace) {
-    logger.write(currentTask, 'TASK.FAIL');
     log('error', arguments, 'ERROR');
+    failTask(currentTask);
 });
 casper.on('step.error', function(err) {
-    logger.write({error: 'step error', details: err}, 'TASK.ERROR');
-    logger.write(currentTask, 'TASK.FAIL');
     log('step.error', arguments, 'ERROR');
+    errorTask(currentTask, 'step error : ' + err.message, err);
+    failTask(currentTask);
 });
 casper.on('step.timeout', function(step, timeout) {
-    logger.write({
-        error: 'timeout step',
-        details: {step: step, timeout: timeout}
-    }, 'TASK.ERROR');
-    logger.write(currentTask, 'TASK.FAIL');
     log('step.timeout', arguments, 'ERROR');
+    errorTask(currentTask, 'timeout step', {step: step, timeout: timeout});
+    failTask(currentTask);
 });
 casper.on('timeout', function() {
-    logger.write({error: 'timeout'}, 'TASK.ERROR');
-    logger.write(currentTask, 'TASK.FAIL');
     log('timeout', arguments, 'ERROR');
+    errorTask(currentTask, 'timeout');
+    failTask(currentTask);
 });
 casper.on('waitFor.timeout', function(timeout, params) {
-    logger.write({
-            error: 'timeout waitFor',
-            details: {
-                timeout : timeout,
-                params : params
-            }
-        }, 'TASK.ERROR');
-    logger.write(currentTask, 'TASK.FAIL');
     log('waitFor.timeout', arguments, 'ERROR');
+    errorTask(currentTask, 'timeout waitFor', {
+        timeout : timeout,
+        params : params
+    });
+    failTask(currentTask);
 });
 
 casper.run();
