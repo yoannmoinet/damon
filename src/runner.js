@@ -165,7 +165,7 @@ Runner.prototype.end = function end (code, err) {
 
 // When everything is done.
 Runner.prototype.finish = function finish () {
-    this.emit('finish');
+    this.emit('finish', this.tasks);
 };
 
 // A task is pending.
