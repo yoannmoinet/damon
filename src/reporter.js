@@ -58,7 +58,7 @@ function clear () {
 }
 
 function buildString (task) {
-    var st = ' ';
+    var st = ' ', duration = '';
     // The longest a param can be.
     var maxLength = 20;
     var param;
@@ -80,7 +80,13 @@ function buildString (task) {
         }
     }
 
-    return chalk.bold(task.type) + ' ' + chalk.bgWhite(st);
+    if (task.duration) {
+        duration = chalk.bold.magenta(' [' + task.duration + 'ms] ');
+    }
+
+    return chalk.bold(task.type) + ' ' +
+        chalk.bgWhite(st) + ' ' +
+        chalk.bold.bgWhite(duration);
 }
 
 module.exports = function (runner) {
