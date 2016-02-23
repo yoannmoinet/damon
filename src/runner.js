@@ -268,7 +268,7 @@ Runner.prototype.bindChild = function bindChild (child) {
     child.on('close', this.end.bind(this));
 
     child.stdout.on('data', function (data) {
-        console.log(data.toString());
+        console.log(chalk.blue(' -[ child ]- '), data.toString());
     });
 
     child.stderr.on('data', function (data) {

@@ -66,7 +66,7 @@ function exitHandler (options, err) {
     }
 
     if (err) {
-        console.log(err.stack);
+        console.log(chalk.bgRed(' -[ ERROR ]- '), err);
     }
 
     if (options.exit) {
