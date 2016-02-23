@@ -96,9 +96,9 @@ var config = function (casper, pid, level) {
         });
         casper.echo(out);
         dumps.forEach(function (dump) {
-            out += color(' - dump : ', styles[type]);
+            casper.echo(color(' - dump : ', styles[type]));
             utils.dump(dump);
-            out += '\n';
+            casper.echo('\n');
         });
     };
 };
