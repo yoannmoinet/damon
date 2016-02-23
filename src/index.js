@@ -46,7 +46,7 @@ function start (filesPath, reporterFilePath) {
             addFile(file);
         });
 
-        runner.on('finish', exitHandler.bind(null, {exit: true}));
+        runner.on('finish', exitHandler.bind(null, {exit: true}, null));
         runner.run(files);
     }
 }
