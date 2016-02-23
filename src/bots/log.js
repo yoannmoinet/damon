@@ -88,9 +88,9 @@ var config = function (casper, pid, level) {
         out += '\n';
 
         args.forEach(function (message) {
-            if (typeof message === 'string') {
+            if (typeof message !== 'object') {
                 out += color(' ' + message + ' ', styles[type]) + '\n';
-            } else if (typeof message === 'object') {
+            } else {
                 dumps.push(message);
             }
         });
