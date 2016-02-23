@@ -37,6 +37,7 @@ module.exports = function (cwd) {
             args.forEach(function (text) {
                 if (typeof text === 'object') {
                     text.logId = text.logId || logId;
+                    logId = text.logId;
                     st += escapeLines(JSON.stringify(text, null, 2));
                 } else {
                     st += text;
