@@ -6,7 +6,7 @@ var assertion = function (casper) {
     var testValue;
     return {
         variable: function (params) {
-            testValue = taskGet.getVariable(casper, params);
+            testValue = taskGet.getVariable(casper, params.variable);
             return expect(params.expected).to.be.eql(testValue);
         },
         attribute: function (params) {
