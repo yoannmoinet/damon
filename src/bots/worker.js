@@ -169,8 +169,8 @@ casper.on('timeout', function() {
 casper.on('waitFor.timeout', function(timeout, params) {
     log('waitFor.timeout', arguments, 'ERROR');
     errorTask(currentTask, 'timeout waitFor', {
-        timeout : timeout,
-        params : params
+        timeout: timeout,
+        params: params
     });
     failTask(currentTask);
 });

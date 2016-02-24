@@ -58,7 +58,8 @@ function clear () {
 }
 
 function buildString (task) {
-    var st = ' ', duration = '';
+    var st = ' ';
+    var duration = '';
     // The longest a param can be.
     var maxLength = 20;
     var param;
