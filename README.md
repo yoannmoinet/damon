@@ -76,12 +76,16 @@ Your task file must have a `config` entry with a `size` and a `url`.
         "width": 1024,
         "height": 768
     },
-    "url": "http://www.google.ca"
+    "url": "http://www.google.ca",
+    "timeout": 1000,
+    "logLevel": "fatal"
 }
 ```
 
 - `size` is for the viewport's size.
 - `url` is the starting point of your agent.
+- `timeout` overwrite the general timeout used accross the test suite.
+- `logLevel` control at which level agents will log. Can be `none`, `fatal`, `error`, `warn`, `info`, `debug` or `trace`
 
 ### `tasks`
 
@@ -112,6 +116,7 @@ A simple screen capture :
 #### `wait`
 
 An `agent` can wait for several different things.
+For each one, except `time`, you can overwrite the `timeout`.
 
 - `url`
 
@@ -120,7 +125,8 @@ An `agent` can wait for several different things.
     "type": "wait",
     "params": {
         "url": "http://www.yahoo.ca",
-        "regexp": false
+        "regexp": false,
+        "timeout": 1000
     }
 }
 ```
@@ -135,7 +141,8 @@ The agent will wait at this step until matching url is reached.
 {
     "type": "wait",
     "params": {
-        "selector": "#content"
+        "selector": "#content",
+        "timeout": 1000
     }
 }
 ```
@@ -167,7 +174,8 @@ The agent will wait for the specified amount of milliseconds.
     "type": "wait",
     "params": {
         "resource": "resourceName",
-        "regexp": false
+        "regexp": false,
+        "timeout": 1000
     }
 }
 ```
