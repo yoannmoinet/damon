@@ -1,6 +1,12 @@
 var currentFile = require('system').args[3];
 var fs = require('fs');
 var dirname = fs.absolute(currentFile).split('/');
+// Needs to be loaded to be available across the lifecycle.
+var utils = require('utils');
+var system = require('system');
+var pid = system.pid;
+
+var opts, currentTask;
 
 if (dirname.length > 1) {
     dirname.pop();
@@ -10,10 +16,6 @@ if (dirname.length > 1) {
 
 var casper = require('casper').create({
     clientScripts: ['./includes/start.js'],
-    viewportSize: {
-        width: 1024,
-        height: 720
-    },
     pageSettings: {
         loadImages: true,
         loadPlugins: true,
@@ -22,52 +24,30 @@ var casper = require('casper').create({
             '(KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
     },
     verbose: false,
-    exitOnError: true,
-    waitTimeout: 60000,
-    logLevel: 'debug',
+    exitOnError: false,
+    // Overwrite logs to avoid having them in the console.
     onDie: function (casp, message, status) {
         log('casper died', message, status, 'ERROR');
     },
     onError: function (err, stack) {
         log('casper error', err, stack, 'ERROR');
-        this.exit();
     },
     onAlert: function (message) {
         log('casper alert', message, 'WARNING');
     },
-    onLoadError: function (casp, url, status) {
-        log('load error', url, status, 'ERROR');
+    onStepTimeout: function _onStepTimeout(timeout, stepNum) {
+        log(
+            'Maximum step execution timeout exceeded for step ' + stepNum,
+            'ERROR'
+        );
+    },
+    onTimeout: function _onTimeout(timeout) {
+        log('Script timeout of ' + timeout + ' reached, exiting.', 'ERROR');
+    },
+    onWaitTimeout: function _onWaitTimeout(timeout) {
+        log('Wait timeout of ' + timeout + ' expired, exiting.', 'ERROR');
     }
 });
-
-var utils = require('utils');
-var system = require('system');
-var pid = system.pid;
-var log = require('./log').config(casper);
-var actions = require('./actions').config(casper, pid);
-
-casper.on('remote.message', function (message) {
-    log('console.log : ' + message, 'INFO');
-});
-casper.on('page.resource.received', function(resource) {
-    var status = resource.status;
-    if (status >= 400) {
-        log('resource ' + resource.url +
-            ' failed to load (' + status + ')', 'error');
-    }
-});
-/*casper.on('complete.error', function(err) {
-    log('complete callback has failed: ' + err, 'ERROR');
-});
-casper.on('load.failed', function(err) {
-    log('load failed', err, 'ERROR');
-});
-casper.on('page.error', function (err, other) {
-    log('page error', err, other[0], other[1], 'ERROR');
-});
-casper.on('resource.error', function (err) {
-    log('resource error', err, 'ERROR');
-});*/
 
 // removing default options passed by the Python executable
 casper.cli.drop('cli');
@@ -79,26 +59,120 @@ if (!casper.cli.has('tasks')) {
         .exit();
 }
 
-var opts = require(casper.cli.get('tasks'));
-var tasks = opts.tasks;
-var config = opts.config;
+try {
+    opts = require(casper.cli.get('tasks'));
+} catch (err) {
+    console.log('No tasks found', err);
+    casper.exit();
+}
 
-actions.navigate(config.url, function () {
-    casper.then(function () {
-        log('configuring ', config, 'INFO');
-        if (config.size) {
-            return casper.viewport(config.size.width, config.size.height);
-        }
-        return log('no configuration needed', 'INFO');
-    });
+var tasks = opts.tasks;
+var cwd = casper.cli.has('cwd') ? casper.cli.get('cwd') : dirname;
+var config = opts.config;
+var logLevel = config.logLevel !== undefined ?
+    config.logLevel : 'none';
+var log = require('./log').config(casper, pid, logLevel);
+var logger = require('./logger')(cwd);
+
+casper.options.waitTimeout = opts.config.timeout !== undefined ?
+    opts.config.timeout : 10000;
+casper.options.logLevel = logLevel;
+casper.options.viewportSize = opts.config.size ?
+    opts.config.size : {
+        width: 1024,
+        height: 720
+    };
+
+var actions = require('./actions').config(casper, cwd);
+
+function startTask (task) {
+    task.start = +new Date();
+    task.logId = logger.write(task, 'TASK.START');
+}
+
+function configEndTask (task) {
+    task.end = +new Date();
+    task.duration = task.end - task.start;
+    return task;
+}
+
+function errorTask (task, message, details) {
+    logger.write({
+        error: message,
+        details: details,
+        logId: task.logId
+    }, 'TASK.ERROR');
+}
+
+function failTask (task) {
+    logger.write(configEndTask(task), 'TASK.FAIL');
+}
+
+function endTask (task) {
+    logger.write(configEndTask(task), 'TASK.END');
+}
+
+// Prepare the navigation task.
+var taskNavigate = {
+    type: 'navigate',
+    params: {
+        url: config.url
+    }
+};
+startTask(taskNavigate);
+
+actions.navigate(config.url, function (err) {
+    if (err) {
+        log('Error Loading', err, 'ERROR');
+        errorTask(taskNavigate, 'load error : ' + err.status, err);
+        failTask(taskNavigate);
+    } else {
+        endTask(taskNavigate);
+    }
     tasks.forEach(function (task) {
         casper.then(function () {
-            return actions.execute(task);
+            currentTask = task;
+            startTask(currentTask);
+            try {
+                return actions.execute(task);
+            } catch (e) {
+                log('Catched', e.message, e, 'ERROR');
+                errorTask(currentTask, 'thrown error : ' + e.message, e);
+                failTask(currentTask);
+            }
+        }).then(function () {
+            // Close the current task.
+            endTask(currentTask);
         });
     });
-    casper.then(function () {
-        return log('all actions done', 'SUCCESS');
+});
+
+casper.on('error', function(msg, backtrace) {
+    log('error', arguments, 'ERROR');
+    failTask(currentTask);
+});
+casper.on('step.error', function(err) {
+    log('step.error', arguments, 'ERROR');
+    errorTask(currentTask, 'step error : ' + err.message, err);
+    failTask(currentTask);
+});
+casper.on('step.timeout', function(step, timeout) {
+    log('step.timeout', arguments, 'ERROR');
+    errorTask(currentTask, 'timeout step', {step: step, timeout: timeout});
+    failTask(currentTask);
+});
+casper.on('timeout', function() {
+    log('timeout', arguments, 'ERROR');
+    errorTask(currentTask, 'timeout');
+    failTask(currentTask);
+});
+casper.on('waitFor.timeout', function(timeout, params) {
+    log('waitFor.timeout', arguments, 'ERROR');
+    errorTask(currentTask, 'timeout waitFor', {
+        timeout: timeout,
+        params: params
     });
+    failTask(currentTask);
 });
 
 casper.run();

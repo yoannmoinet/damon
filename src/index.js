@@ -1,9 +1,10 @@
-var spawn = require('child_process').spawn;
-var _ = require('underscore');
 var path = require('path');
 var uuid = require('node-uuid').v1;
-var fs = require('fs');
 var glob = require('glob');
+var chalk = require('chalk');
+var runner = require('./runner.js');
+var defaultReporter = path.join(__dirname, './reporter.js');
+var reporter;
 
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
@@ -12,38 +13,10 @@ env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.0' +
     (isWin ? '.exe' : '');
 env.PATH += ';' + phantomjsPath;
 
-var children = [];
 var files = [];
-var cookieFile = 'cookies.txt';
-
-console.log('spawned mgr ' + process.pid);
-
-function deleteCookies (cb) {
-    console.log('deleting cookies....');
-    fs.unlink(cookieFile, function (err) {
-        // If we have an error different
-        // from inexistent file log it.
-        if (err && err.code !== 'ENOENT') {
-            console.log('Can\'t delete cookie file', err);
-        }
-        if (typeof cb === 'function') {
-            cb();
-        }
-    });
-}
-
-function end (code, err) {
-    deleteCookies(function () {
-        if (err) {
-            console.log(err);
-        }
-        process.exit(code);
-    });
-}
 
 function getFiles (path) {
-    var absolutePath = parsePath(path);
-    return glob.sync(absolutePath);
+    return glob.sync(parsePath(path));
 }
 
 function parsePath (filePath) {
@@ -54,92 +27,66 @@ function parsePath (filePath) {
     }
 }
 
-function start (filesPath) {
+function start (filesPath, reporterFilePath) {
     var filesList = [];
+
+    try {
+        reporter = require(reporterFilePath || defaultReporter)(runner);
+    } catch (err) {
+        console.log(chalk.bgRed.bold.white(' No reporter ! ') +
+                ' [' + chalk.dim.red(err) + ']');
+    }
+
     if (filesPath) {
         filesPath.forEach(function (path) {
             filesList = filesList.concat(getFiles(path));
         });
 
         filesList.forEach(function (file) {
-            addFiles(file);
+            addFile(file);
         });
-        runTask();
+
+        runner.on('finish', exitHandler.bind(null, {exit: true}, null));
+        runner.run(files);
     }
 }
 
-function addFiles (taskFilename) {
+function addFile (taskFilename) {
     files.push({
         id: uuid(),
-        name: path.basename(taskFilename),
+        name: path.basename(taskFilename, '.json'),
         tasks: taskFilename
     });
 }
 
-function runTask () {
-    var file = files.shift();
-    if (file) {
-        spawnChild(file.tasks);
-    } else {
-        end(0);
+var timeoutExit;
+function exitHandler (options, err) {
+    if (options.cleanup) {
+        runner.clean();
+    }
+
+    if (err) {
+        console.log(chalk.bgRed(' -[ ERROR ]- '), err);
+    }
+
+    if (options.exit) {
+        clearTimeout(timeoutExit);
+        // Delay the exit to let async task to finish.
+        // Runner's logging for example.
+        timeoutExit = setTimeout(function () {
+            process.exit();
+        }, 100);
     }
 }
 
-function spawnChild(tasks) {
-    var child = spawn(
-        path.join(__dirname, '../node_modules/casperjs/bin/casperjs'),
-        [path.join(__dirname, './bots/worker.js'), '--tasks=' + tasks,
-        '--cookies-file=./' + cookieFile, '--web-security=no']
-    );
-    console.log('spawned child ' + child.pid + ' with tasks ' + tasks);
-    children.push({
-        id: uuid(),
-        name: child.pid.toString(),
-        child: child
-    });
-    bindChild(child);
-    return child;
-}
-
-function bindChild(child) {
-    child.on('error', function () {
-        console.log('error', arguments);
-    });
-
-    child.on('exit', function (code, error) {
-        console.log('exit', arguments);
-    });
-
-    child.on('close', function (code, error) {
-        console.log('close', arguments);
-        if (error) {
-            end(1, error);
-        } else {
-            runTask();
-        }
-    });
-
-    child.on('disconnect', function () {
-        console.log('disconnect', arguments);
-    });
-
-    child.on('message', function () {
-        console.log('message', arguments);
-    });
-
-    child.stdout.on('data', function (data) {
-        console.log(data.toString());
-    });
-
-    child.stderr.on('data', function (data) {
-        console.log('## ERROR: ', data.toString());
-    });
-}
-
-process.on('SIGINT', function (code, error) {
-    console.log('END', code, error);
-    end(0);
-});
+// so the program will not close instantly
+process.stdin.resume();
+// do something when app is closing
+process.on('exit', exitHandler.bind(null, {cleanup: true}));
+// catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit: true}));
+// catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit: true}));
 
 module.exports = {
     start: start
