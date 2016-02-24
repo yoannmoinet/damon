@@ -7,11 +7,12 @@ var assertion = require('./assertion.js').assertion(casper);
 var actions = {
     assert: function (params) {
         var output;
-        log('assert', params.variable || params.attribute, 'INFO_BAR');
         try {
             if (params.attribute) {
+                log('assert attribute', params.attribute, 'INFO_BAR');
                 assertion.attribute(params);
             } else if (params.variable) {
+                log('assert variable', params.variable, 'INFO_BAR');
                 assertion.variable(params);
             } else {
                 log('no assertion found', 'ERROR');
