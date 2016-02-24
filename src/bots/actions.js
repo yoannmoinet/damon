@@ -45,6 +45,9 @@ var actions = {
             }
         };
         if (params.selector && params.do) {
+            var timeout = params.timeout !== undefined ?
+                params.timeout : timeoutDuration;
+
             log('waiting for', params.selector, 'INFO_BAR');
             return casper.waitForSelector(params.selector, function () {
                 log('got', params.selector, 'SUCCESS');
@@ -53,7 +56,7 @@ var actions = {
                 }
                 log('no dom action found for ' + params.do, 'ERROR');
                 throw new Error('no dom action');
-            }, params.timeout);
+            }, timeout);
         }
         throw new Error('missing params');
     },
