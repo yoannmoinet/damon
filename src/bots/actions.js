@@ -101,7 +101,7 @@ var actions = {
         } else if (params.variable) {
 
             returnValue = taskGet.getVariable(casper, params.variable);
-            if (returnValue !== undefined) {
+            if (returnValue !== undefined && returnValue !== null) {
                 log('got global variable: ' + params.variable, 'SUCCESS');
                 return returnValue;
             }
