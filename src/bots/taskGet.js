@@ -119,11 +119,12 @@ function encodeResource (resource, regexp) {
     }
 }
 
-function getResource (casper, resourceMatcher, method, variable) {
+function getResource (casper, resourceMatcher, method, variable, status) {
     var responses = casper.resources;
     var request;
     var parsedData;
     var res;
+    status = status || 200;
 
     for (var i = 0; i < responses.length; i++) {
         res = responses[i];
@@ -135,7 +136,8 @@ function getResource (casper, resourceMatcher, method, variable) {
             request = casper.options.requests[res.id];
 
             // Get the resource with corresponding method or first resource if no method
-            if ((!method || method === request.method) && res.status === 200) {
+            if ((!method || method === request.method) &&
+                res.status == status) {
 
                 if (!variable) {
                     return request;
