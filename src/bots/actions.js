@@ -15,7 +15,7 @@ var actions = {
                 log('assert variable', params.variable, 'INFO_BAR');
                 assertion.variable(params);
             } else if (params.key) {
-                log('assert variable', params.key, 'INFO_BAR');
+                log('assert key', params.key, 'INFO_BAR');
                 assertion.key(params);
             } else {
                 log('no assertion found', 'ERROR');
@@ -85,19 +85,19 @@ var actions = {
                 ' modifier', 'ERROR');
             throw new Error('no attribute found');
 
-        } else if (params.request) {
+        } else if (params.resource) {
 
-            var resourceMatcher = taskGet.encodeResource(params.request,
+            var resourceMatcher = taskGet.encodeResource(params.resource,
                 params.regexp);
 
-            returnValue = taskGet.getRequest(casper, resourceMatcher,
+            returnValue = taskGet.getResource(casper, resourceMatcher,
                 params.method, params.variable);
             if (returnValue !== undefined) {
-                log('got global variable: ' + params.request, 'SUCCESS');
+                log('got resource: ' + params.resource, 'SUCCESS');
                 return returnValue;
             }
-            log('no value found for: ' + params.request, 'ERROR');
-            throw new Error('no request found');
+            log('no resource found for: ' + params.resource, 'ERROR');
+            throw new Error('no resource found');
 
         } else if (params.variable) {
 
@@ -106,7 +106,7 @@ var actions = {
                 log('got global variable: ' + params.variable, 'SUCCESS');
                 return returnValue;
             }
-            log('no value found for: ' + params.variable, 'ERROR');
+            log('no variable found for: ' + params.variable, 'ERROR');
             throw new Error('no value found');
 
         }
@@ -199,7 +199,7 @@ var actions = {
                     return log('got', params.resource, 'SUCCESS');
                 }
 
-                matchingRequest = taskGet.getRequest(casper,
+                matchingRequest = taskGet.getResource(casper,
                     resourceMatcher, params.method);
 
                 if (matchingRequest) {

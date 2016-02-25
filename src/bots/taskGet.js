@@ -119,12 +119,14 @@ function encodeResource (resource, regexp) {
     }
 }
 
-function getRequest (casper, resourceMatcher, method, variable) {
+function getResource (casper, resourceMatcher, method, variable) {
     var responses = casper.resources;
+    var request;
+    var parsedData;
+    var res;
+
     for (var i = 0; i < responses.length; i++) {
-        var request;
-        var parsedData;
-        var res = responses[i];
+        res = responses[i];
 
         if (resourceMatcher instanceof RegExp &&
             resourceMatcher.test(res.url) ||
@@ -157,6 +159,6 @@ module.exports = {
     getAttribute: getAttribute,
     getVariable: getVariable,
     splitAccessors: splitAccessors,
-    getRequest: getRequest,
+    getResource: getResource,
     encodeResource: encodeResource
 };
