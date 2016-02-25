@@ -277,7 +277,7 @@ The `agent` will access to the specified variable of the matching `resource` and
 
 A `method` can be specified to filter the resource. If nothing is specified, any `method` will be accepted.
 
-To access to a variable in the payload of a resource, write `payload.variableName` for `variable` field.
+To access to a variable in the payload of a resource, write `payload.variableName` for `variable` field. Resource also contains the `headers`, `method`, `time` and `url`.
 
 ##### _access_
 
