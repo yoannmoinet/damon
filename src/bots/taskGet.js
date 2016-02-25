@@ -124,7 +124,7 @@ function getResource (casper, resourceMatcher, method, variable, status) {
     var request;
     var parsedData;
     var res;
-    status = status || 200;
+    status = +status || 200;
 
     for (var i = 0; i < responses.length; i++) {
         res = responses[i];
@@ -137,7 +137,7 @@ function getResource (casper, resourceMatcher, method, variable, status) {
 
             // Get the resource with corresponding method or first resource if no method
             if ((!method || method === request.method) &&
-                res.status == status) {
+                res.status === status) {
 
                 if (!variable) {
                     return request;
