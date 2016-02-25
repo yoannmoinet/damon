@@ -53,17 +53,14 @@ var actions = {
                 params.timeout : timeoutDuration;
 
             log('waiting for', params.selector, 'INFO_BAR');
-            return casper.waitForSelector(params.selector, function () {
+            return casper.waitUntilVisible(params.selector, function () {
                 log('got', params.selector, 'SUCCESS');
 
-                //Sometime, selector isn't ready to be modified even if it has been loaded
-                return casper.wait(1000, function () {
-                    if (domActions[params.do]) {
-                        return domActions[params.do](params);
-                    }
-                    log('no dom action found for ' + params.do, 'ERROR');
-                    throw new Error('no dom action');
-                });
+                if (domActions[params.do]) {
+                    return domActions[params.do](params);
+                }
+                log('no dom action found for ' + params.do, 'ERROR');
+                throw new Error('no dom action');
 
             }, timeout);
         }
