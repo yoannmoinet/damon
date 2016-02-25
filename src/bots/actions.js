@@ -62,7 +62,9 @@ var actions = {
                 log('no dom action found for ' + params.do, 'ERROR');
                 throw new Error('no dom action');
 
-            }, timeout);
+            }, function () {
+                log('timeout, can\'t load dom', params.selector, 'WARNING');
+            },timeout);
         }
         throw new Error('missing params');
     },
