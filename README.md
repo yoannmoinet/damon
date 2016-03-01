@@ -175,7 +175,8 @@ The agent will wait for the specified amount of milliseconds.
     "params": {
         "resource": "resourceName",
         "regexp": false,
-        "timeout": 1000
+        "timeout": 1000,
+        "method": "DELETE"
     }
 }
 ```
@@ -183,6 +184,8 @@ The agent will wait for the specified amount of milliseconds.
 The agent will wait at this step until something matching the resource is received.
 
 `resource` will be interpreted as a `regexp` if set to `true`. Default value of `regexp` is `false`.
+
+A `method` can be specified to filter the resource. If nothing is specified, any `method` will be accepted.
 
 #### `dom`
 
@@ -221,7 +224,7 @@ The `agent` will enter text in the specified field.
 
 ##### _store_
 
-An `agent` can perform two different `get` to retrieve a value and store it for subsequent tasks :
+An `agent` can perform different `get` to retrieve a value and store it for subsequent tasks :
 
 - `attribute`
 
@@ -254,6 +257,27 @@ The `agent` will get the value of the `attribute`, apply the `modifier` RegExp a
 ```
 
 The `agent` will access to the specified variable with `window` as the root object and store its value as `varAttr2`
+
+- `resource`
+
+```javascript
+{
+    "type": "get",
+    "params": {
+        "resource": "resourceLink",
+        "regexp": false,
+        "variable": "payload.title",
+        "key": "title",
+        "method": "POST"
+    }
+}
+```
+
+The `agent` will access to the specified variable of the matching `resource` and store it.
+
+A `method` can be specified to filter the resource. If nothing is specified, any `method` will be accepted.
+
+To access to a variable in the payload of a resource, write `payload.variableName` for `variable` field. Resource also contains the `headers`, `method`, `time` and `url`.
 
 ##### _access_
 
@@ -302,7 +326,7 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
 
 #### `assert`
 
-An `agent` can perform two different `assert` actions to test a value with an expected value:
+An `agent` can perform different `assert` actions to test a value with an expected value:
 
 - attribute
 
@@ -333,3 +357,17 @@ The `agent` will `get` the value of the `attribute` and test it against the `exp
 ```
 
 The `agent` will `get` the value of the `variable` and test it against the `expected` value or the value associated with `{{key}}`
+
+- key
+
+```javascript
+{
+    "type": "assert",
+    "params": {
+        "key": "title",
+        "expected": "Expected Title"
+    }
+}
+```
+
+The `agent` will `get` the value of the `key` and test it against the `expected` value.

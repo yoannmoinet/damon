@@ -23,6 +23,7 @@ var casper = require('casper').create({
         userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 ' +
             '(KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
     },
+    requests: {},
     verbose: false,
     exitOnError: false,
     // Overwrite logs to avoid having them in the console.
@@ -46,6 +47,10 @@ var casper = require('casper').create({
     },
     onWaitTimeout: function _onWaitTimeout(timeout) {
         log('Wait timeout of ' + timeout + ' expired, exiting.', 'ERROR');
+    },
+    // Store all requests sent by casper into the casper object
+    onResourceRequested: function (casp, requestData, networkRequest) {
+        casper.options.requests[requestData.id] = requestData;
     }
 });
 
