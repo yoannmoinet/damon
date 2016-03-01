@@ -235,7 +235,7 @@ An `agent` can perform different `get` to retrieve a value and store it for subs
         "selector": "div#Info",
         "attribute": "title",
         "key": "infoTitle",
-        "modifier": "[a-z]+" (optional)
+        "modifier": "[a-z]+"
     }
 }
 ```
@@ -336,7 +336,7 @@ An `agent` can perform different `assert` actions to test a value with an expect
     "params": {
         "selector": "div#Info",
         "attribute": "title",
-        "modifier": "[a-z]+" (optional),
+        "modifier": "[a-z]+",
         "expected": "expectedValue or {{key}}"
     }
 }
