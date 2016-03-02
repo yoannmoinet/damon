@@ -1,5 +1,5 @@
 module.exports = function (params) {
-    var assertion = casper.helpers.assertion.assertion(casper);
+    var assertion = casper.helpers.assertion;
     var output;
     try {
         if (params.attribute) {
