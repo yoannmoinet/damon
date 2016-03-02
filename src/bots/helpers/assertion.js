@@ -1,8 +1,9 @@
 var expect = require('expect.js');
-var get = require('./get.js');
-var template = require('./template.js');
 
 var assertion = function (casper) {
+    var get = casper.helpers.get;
+    var template = casper.helpers.template;
+
     var testValue;
     return {
         variable: function (params) {

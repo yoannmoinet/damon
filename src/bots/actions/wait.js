@@ -1,5 +1,3 @@
-var get = require('../helpers/get.js');
-
 module.exports = function (params, timeoutDuration) {
     var vals = ['wait for'];
     Object.keys(params).forEach(function (key) {
@@ -56,15 +54,20 @@ module.exports = function (params, timeoutDuration) {
     } else if (params.resource) {
 
         var matchingRequest;
-        var resourceMatcher = get.encodeResource(params.resource,
-            params.regexp);
+        var resourceMatcher = casper.helpers.get.encodeResource(
+            params.resource,
+            params.regexp
+        );
         return casper.waitForResource(resourceMatcher, function () {
             if (!params.method) {
                 return log('got', params.resource, 'SUCCESS');
             }
 
-            matchingRequest = get.getResource(casper,
-                resourceMatcher, params.method);
+            matchingRequest = casper.helpers.get.getResource(
+                casper,
+                resourceMatcher,
+                params.method
+            );
 
             if (matchingRequest) {
                 return log('got', params.resource, 'SUCCESS');

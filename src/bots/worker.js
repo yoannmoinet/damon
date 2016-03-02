@@ -79,6 +79,14 @@ var logLevel = config.logLevel !== undefined ?
 var log = require('./log').config(casper, pid, logLevel);
 var logger = require('./logger')(cwd);
 
+//Extend Casper with helper modules
+casper.helpers = {
+    request: require('./helpers/request.js'),
+    template: require('./helpers/template.js'),
+    get: require('./helpers/get.js'),
+    assertion: require('./helpers/assertion.js')
+};
+
 casper.options.waitTimeout = opts.config.timeout !== undefined ?
     opts.config.timeout : 10000;
 casper.options.logLevel = logLevel;

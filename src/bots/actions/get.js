@@ -1,6 +1,5 @@
-var get = require('../helpers/get.js');
-
 module.exports = function (params) {
+    var get = casper.helpers.get;
     var returnValue;
     if (params.attribute) {
 

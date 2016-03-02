@@ -1,7 +1,3 @@
-var request = require('../helpers/request.js');
-var template = require('../helpers/template.js');
-var get = require('../helpers/get.js');
-
 module.exports = function (params) {
     // Control what's needed to pursue
     if (!params || !params.url) {
@@ -11,7 +7,10 @@ module.exports = function (params) {
     }
 
     // Get the data from the request.
-    var data = casper.evaluate(request.xhr, params);
+    var data = casper.evaluate(
+        casper.helpers.request.xhr,
+        params
+    );
 
     // And store it if needed later.
     if (params.store) {
@@ -19,7 +18,12 @@ module.exports = function (params) {
             log('missing params for store', 'ERROR');
             throw new Error('missing params');
         }
-        request.handleStore(template, get, params.store, data);
+        casper.helpers.request.handleStore(
+            casper.helpers.template,
+            casper.helpers.get,
+            params.store,
+            data
+        );
     }
 
     // Return it.
