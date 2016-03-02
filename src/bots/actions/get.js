@@ -1,6 +1,6 @@
 var getHelper = require('../helpers/getHelper.js');
 
-var get = function (casper, params) {
+module.exports = function (casper, params) {
     var returnValue;
     if (params.attribute) {
 
@@ -43,8 +43,4 @@ var get = function (casper, params) {
     }
     log('no action found for ', params, 'ERROR');
     throw new Error('no action found');
-};
-
-module.exports = {
-    get: get
 };

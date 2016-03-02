@@ -1,6 +1,6 @@
 var assertion = require('../helpers/assertion.js').assertion(casper);
 
-var assert = function (casper, params) {
+module.exports = function (casper, params) {
     var output;
     try {
         if (params.attribute) {
@@ -25,8 +25,4 @@ var assert = function (casper, params) {
     }
     output = 'PASS: got \'' + params.expected + '\'';
     return log(output, 'TEST_SUCCESS');
-};
-
-module.exports = {
-    assert: assert
 };

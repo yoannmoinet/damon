@@ -1,9 +1,9 @@
-var assert = require('./actions/assert.js').assert;
-var capture = require('./actions/capture.js').capture;
-var dom = require('./actions/dom.js').dom;
-var get = require('./actions/get.js').get;
-var request = require('./actions/request.js').request;
-var wait = require('./actions/wait.js').wait;
+var assert = require('./actions/assert.js');
+var capture = require('./actions/capture.js');
+var dom = require('./actions/dom.js');
+var get = require('./actions/get.js');
+var request = require('./actions/request.js');
+var wait = require('./actions/wait.js');
 
 var template = require('./helpers/template.js');
 

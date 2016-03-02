@@ -1,6 +1,6 @@
 var getHelper = require('../helpers/getHelper.js');
 
-var wait = function (casper, params, timeoutDuration) {
+module.exports = function (casper, params, timeoutDuration) {
     var vals = ['wait for'];
     Object.keys(params).forEach(function (key) {
         vals.push(key + ': ' + params[key]);
@@ -79,8 +79,4 @@ var wait = function (casper, params, timeoutDuration) {
     }
     log('no action found for ', params, 'ERROR');
     throw new Error('no action found');
-};
-
-module.exports = {
-    wait: wait
 };

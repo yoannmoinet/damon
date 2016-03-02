@@ -1,4 +1,4 @@
-var dom = function (casper, params, timeoutDuration) {
+module.exports = function (casper, params, timeoutDuration) {
     log('dom action', params.do, params.selector, 'INFO_BAR');
     var domActions = {
         fill: function (opts) {
@@ -27,8 +27,4 @@ var dom = function (casper, params, timeoutDuration) {
         },timeout);
     }
     throw new Error('missing params');
-};
-
-module.exports = {
-    dom: dom
 };
