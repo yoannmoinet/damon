@@ -1,6 +1,6 @@
 var assertion = require('../helpers/assertion.js').assertion(casper);
 
-module.exports = function (casper, params) {
+module.exports = function (params) {
     var output;
     try {
         if (params.attribute) {

@@ -2,7 +2,7 @@ var requestHelper = require('../helpers/requestHelper.js');
 var template = require('../helpers/template.js');
 var getHelper = require('../helpers/getHelper.js');
 
-module.exports = function (casper, params) {
+module.exports = function (params) {
     // Control what's needed to pursue
     if (!params || !params.url) {
         log('missing `url` params for the request action',

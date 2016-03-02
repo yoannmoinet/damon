@@ -1,6 +1,6 @@
 var getHelper = require('../helpers/getHelper.js');
 
-module.exports = function (casper, params) {
+module.exports = function (params) {
     var returnValue;
     if (params.attribute) {
 

@@ -1,4 +1,4 @@
-module.exports = function (casper, params, timeoutDuration) {
+module.exports = function (params, timeoutDuration) {
     log('dom action', params.do, params.selector, 'INFO_BAR');
     var domActions = {
         fill: function (opts) {

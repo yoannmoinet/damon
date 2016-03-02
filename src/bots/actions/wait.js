@@ -1,6 +1,6 @@
 var getHelper = require('../helpers/getHelper.js');
 
-module.exports = function (casper, params, timeoutDuration) {
+module.exports = function (params, timeoutDuration) {
     var vals = ['wait for'];
     Object.keys(params).forEach(function (key) {
         vals.push(key + ': ' + params[key]);

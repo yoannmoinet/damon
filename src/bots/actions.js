@@ -1,33 +1,14 @@
-var assert = require('./actions/assert.js');
-var capture = require('./actions/capture.js');
-var dom = require('./actions/dom.js');
-var get = require('./actions/get.js');
-var request = require('./actions/request.js');
-var wait = require('./actions/wait.js');
-
 var template = require('./helpers/template.js');
 
 var timeoutDuration = 10000;
 
 var actions = {
-    assert: function (params) {
-        return assert(casper, params);
-    },
-    capture: function (params, cwd) {
-        return capture(casper, params, cwd);
-    },
-    dom: function (params) {
-        return dom(casper, params, timeoutDuration);
-    },
-    get: function (params) {
-        return get(casper, params);
-    },
-    request: function (params) {
-        return request(casper, params);
-    },
-    wait: function (params) {
-        return wait(casper, params, timeoutDuration);
-    }
+    assert: require('./actions/assert.js').bind(casper),
+    capture: require('./actions/capture.js').bind(casper),
+    dom: require('./actions/dom.js').bind(casper),
+    get: require('./actions/get.js').bind(casper),
+    request: require('./actions/request.js').bind(casper),
+    wait: require('./actions/wait.js').bind(casper)
 };
 
 var config = function (casper, cwd) {
@@ -36,7 +17,11 @@ var config = function (casper, cwd) {
             if (task.type && actions[task.type]) {
                 var response;
                 task = template.parse(task);
-                response = actions[task.type](task.params, cwd);
+                response = actions[task.type](
+                    task.params,
+                    timeoutDuration,
+                    cwd);
+
                 if (task.type === 'get') {
                     template.store(task.params.key, response);
                 }
