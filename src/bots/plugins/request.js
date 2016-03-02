@@ -39,6 +39,37 @@ function xhr (opts) {
     return request.responseText;
 }
 
+function testXHR(opts) {
+    var xhr = new XMLHttpRequest();
+    var status;
+
+    if (opts.https === false) {
+        opts.url = opts.url.replace('https', 'http');
+    }
+
+    try {
+        xhr.open('GET', opts.url, true);
+    } catch (e) {
+        log('xhr creation error:', e, 'ERROR');
+        throw new Error('xhr creation error');
+    }
+
+    xhr.responseType = 'arraybuffer';
+    xhr.addEventListener('progress', function () {
+        if (xhr.status) {
+            window.__STATUS__ = window.__STATUS__ || xhr.status;
+            xhr.abort();
+        }
+    });
+    xhr.addEventListener('error', function () {
+        window.__STATUS__ = window.__STATUS__ || xhr.status;
+    });
+    xhr.addEventListener('load', function () {
+        window.__STATUS__ = window.__STATUS__ || xhr.status;
+    });
+    xhr.send(null);
+}
+
 function handleStore (store, data) {
     if (store.variable) {
         var parsedData;
@@ -63,6 +94,7 @@ function handleStore (store, data) {
 module.exports = function () {
     return {
         xhr: xhr,
-        handleStore: handleStore.bind(this)
+        handleStore: handleStore.bind(this),
+        testXHR: testXHR
     };
 };

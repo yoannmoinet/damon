@@ -10,6 +10,9 @@ module.exports = function (params) {
         } else if (params.key) {
             log('assert key', params.key, 'INFO_BAR');
             this.plugins.assertion.key(params);
+        } else if (params.url) {
+            log('assert url', params.url, 'INFO_BAR');
+            return this.plugins.assertion.url(params);
         } else {
             log('no assertion found', 'ERROR');
             throw new Error('no assertion found');
