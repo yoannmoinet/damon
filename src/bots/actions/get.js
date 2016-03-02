@@ -1,10 +1,10 @@
-var getHelper = require('../helpers/getHelper.js');
+var get = require('../helpers/get.js');
 
 module.exports = function (params) {
     var returnValue;
     if (params.attribute) {
 
-        returnValue = getHelper.getAttribute(casper, params);
+        returnValue = get.getAttribute(casper, params);
         if (returnValue !== undefined) {
             log('got', params.attribute + ' of ' + params.selector,
                 returnValue, 'SUCCESS');
@@ -18,10 +18,10 @@ module.exports = function (params) {
 
     } else if (params.resource) {
 
-        var resourceMatcher = getHelper.encodeResource(params.resource,
+        var resourceMatcher = get.encodeResource(params.resource,
             params.regexp);
 
-        returnValue = getHelper.getResource(casper, resourceMatcher,
+        returnValue = get.getResource(casper, resourceMatcher,
             params.method, params.variable);
         if (returnValue !== undefined) {
             log('got resource: ' + params.resource, 'SUCCESS');
@@ -32,7 +32,7 @@ module.exports = function (params) {
 
     } else if (params.variable) {
 
-        returnValue = getHelper.getVariable(casper, params.variable);
+        returnValue = get.getVariable(casper, params.variable);
         if (returnValue !== undefined && returnValue !== null) {
             log('got global variable: ' + params.variable, 'SUCCESS');
             return returnValue;

@@ -1,4 +1,4 @@
-var getHelper = require('../helpers/getHelper.js');
+var get = require('../helpers/get.js');
 
 module.exports = function (params, timeoutDuration) {
     var vals = ['wait for'];
@@ -56,14 +56,14 @@ module.exports = function (params, timeoutDuration) {
     } else if (params.resource) {
 
         var matchingRequest;
-        var resourceMatcher = getHelper.encodeResource(params.resource,
+        var resourceMatcher = get.encodeResource(params.resource,
             params.regexp);
         return casper.waitForResource(resourceMatcher, function () {
             if (!params.method) {
                 return log('got', params.resource, 'SUCCESS');
             }
 
-            matchingRequest = getHelper.getResource(casper,
+            matchingRequest = get.getResource(casper,
                 resourceMatcher, params.method);
 
             if (matchingRequest) {
