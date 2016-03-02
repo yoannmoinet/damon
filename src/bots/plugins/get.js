@@ -100,7 +100,8 @@ function getAttribute (params) {
         if (!matchedRegexp) {
             return;
         }
-        attributeValue = matchedRegexp[0];
+        // Try to get a captured group, return the matched string if there is no capture group
+        attributeValue = matchedRegexp[1] || matchedRegexp[0];
     }
 
     //when getting an HTML attribute, '' is equivalent of not existing, so undefined
