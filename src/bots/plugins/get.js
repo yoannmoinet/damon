@@ -158,12 +158,20 @@ function getResource (resourceMatcher, method, variable, status) {
     }
 }
 
+function getNumberElements (selector) {
+    var n = this.evaluate(function (selector) {
+        return __utils__.findAll(selector).length;
+    }, selector);
+    return n;
+}
+
 module.exports = function () {
     return {
         getAttribute: getAttribute.bind(this),
         getVariable: getVariable.bind(this),
         splitAccessors: splitAccessors,
         getResource: getResource.bind(this),
-        encodeResource: encodeResource
+        encodeResource: encodeResource,
+        getNumberElements: getNumberElements.bind(this)
     };
 };

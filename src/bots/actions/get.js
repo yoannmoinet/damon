@@ -42,6 +42,17 @@ function getVariable (params) {
     throw new Error('no value found');
 }
 
+function countSelectors (params) {
+    var returnValue = this.plugins.get.getNumberElements(params.selector);
+    if (returnValue) {
+        log('got ' + returnValue + ' ' +
+        params.selector, 'SUCCESS');
+        return returnValue;
+    }
+    log('no element found for: ' + params.selector, 'ERROR');
+    throw new Error('no element found');
+}
+
 module.exports = function (params) {
     if (params.attribute) {
         return getAttribute.call(this, params);
@@ -49,6 +60,8 @@ module.exports = function (params) {
         return getResource.call(this, params);
     } else if (params.variable) {
         return getVariable.call(this, params);
+    } else if (params.selector) {
+        return countSelectors.call(this, params);
     }
     log('no action found for ', params, 'ERROR');
     throw new Error('no action found');
