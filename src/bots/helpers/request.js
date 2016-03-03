@@ -39,7 +39,7 @@ function xhr (opts) {
     return request.responseText;
 }
 
-function handleStore (template, get, store, data) {
+function handleStore (store, data) {
     if (store.variable) {
         var parsedData;
         try {
@@ -51,12 +51,12 @@ function handleStore (template, get, store, data) {
                 'ERROR'
             );
         }
-        template.store(
+        casper.helpers.template.store(
             store.key,
-            get.getVariable(store.variable, parsedData)
+            casper.helpers.get.getVariable(store.variable, parsedData)
         );
     } else {
-        template.store(store.key, data);
+        casper.helpers.template.store(store.key, data);
     }
 }
 

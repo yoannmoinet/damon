@@ -7,10 +7,7 @@ module.exports = function (params) {
     }
 
     // Get the data from the request.
-    var data = casper.evaluate(
-        casper.helpers.request.xhr,
-        params
-    );
+    var data = casper.evaluate(casper.helpers.request.xhr, params);
 
     // And store it if needed later.
     if (params.store) {
@@ -18,12 +15,7 @@ module.exports = function (params) {
             log('missing params for store', 'ERROR');
             throw new Error('missing params');
         }
-        casper.helpers.request.handleStore(
-            casper.helpers.template,
-            casper.helpers.get,
-            params.store,
-            data
-        );
+        casper.helpers.request.handleStore(params.store, data);
     }
 
     // Return it.
