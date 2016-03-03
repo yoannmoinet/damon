@@ -1,5 +1,5 @@
 function getAttribute (params) {
-    var returnValue = casper.helpers.get.getAttribute(casper, params);
+    var returnValue = casper.helpers.get.getAttribute(params);
     if (returnValue !== undefined) {
         log('got', params.attribute + ' of ' + params.selector,
             returnValue, 'SUCCESS');
@@ -19,7 +19,6 @@ function getResource (params) {
     );
 
     var returnValue = casper.helpers.get.getResource(
-        casper,
         resourceMatcher,
         params.method,
         params.variable
@@ -34,7 +33,7 @@ function getResource (params) {
 }
 
 function getVariable (params) {
-    var returnValue = casper.helpers.get.getVariable(casper, params.variable);
+    var returnValue = casper.helpers.get.getVariable(params.variable);
     if (returnValue !== undefined && returnValue !== null) {
         log('got global variable: ' + params.variable, 'SUCCESS');
         return returnValue;

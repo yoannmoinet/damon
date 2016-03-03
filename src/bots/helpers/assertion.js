@@ -2,13 +2,13 @@ var expect = require('expect.js');
 
 function variable (params) {
     var get = casper.helpers.get;
-    testValue = get.getVariable(casper, params.variable);
+    testValue = get.getVariable(params.variable);
     return expect(params.expected).to.be.eql(testValue);
 };
 
 function attribute (params) {
     var get = casper.helpers.get;
-    testValue = get.getAttribute(casper, params);
+    testValue = get.getAttribute(params);
     return expect(params.expected).to.be.eql(testValue);
 };
 

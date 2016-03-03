@@ -52,7 +52,6 @@ function waitResource (params, timeout) {
         }
 
         matchingRequest = casper.helpers.get.getResource(
-            casper,
             resourceMatcher,
             params.method
         );

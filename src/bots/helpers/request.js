@@ -39,7 +39,7 @@ function xhr (opts) {
     return request.responseText;
 }
 
-function handleStore (template, taskGet, store, data) {
+function handleStore (template, get, store, data) {
     if (store.variable) {
         var parsedData;
         try {
@@ -53,7 +53,7 @@ function handleStore (template, taskGet, store, data) {
         }
         template.store(
             store.key,
-            taskGet.getVariable(null, store.variable, parsedData)
+            get.getVariable(store.variable, parsedData)
         );
     } else {
         template.store(store.key, data);

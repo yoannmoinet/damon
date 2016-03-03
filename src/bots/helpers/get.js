@@ -52,7 +52,7 @@ function splitAccessors (variable) {
 //Set the first accessor as the main object
 //Get the value of window.object using casper.evaluate()
 //Access continuously to the next property until the end of the list
-function getVariable (casper, variable, variableValue) {
+function getVariable (variable, variableValue) {
     var object;
     var accessors = splitAccessors(variable);
 
@@ -80,7 +80,7 @@ function getVariable (casper, variable, variableValue) {
 
 //This function retrieves the first attribute or text of the selector
 //Apply the RegExp if there is one
-function getAttribute (casper, params) {
+function getAttribute (params) {
     var attributeValue;
 
     if (!casper.exists(params.selector)) {
@@ -119,7 +119,7 @@ function encodeResource (resource, regexp) {
     }
 }
 
-function getResource (casper, resourceMatcher, method, variable, status) {
+function getResource (resourceMatcher, method, variable, status) {
     var responses = casper.resources;
     var request;
     var parsedData;
@@ -151,7 +151,7 @@ function getResource (casper, resourceMatcher, method, variable, status) {
                         request.payload = request.postData;
                     }
                 }
-                return getVariable(null, variable, request);
+                return getVariable(variable, request);
             }
         }
     }
