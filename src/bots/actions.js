@@ -20,7 +20,8 @@ var config = function (casper, cwd) {
                 response = actions[task.type](
                     task.params,
                     timeoutDuration,
-                    cwd);
+                    cwd
+                );
 
                 if (task.type === 'get') {
                     template.store(task.params.key, response);

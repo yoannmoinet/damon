@@ -17,11 +17,18 @@ module.exports = function (params) {
 
     } else if (params.resource) {
 
-        var resourceMatcher = get.encodeResource(params.resource,
-            params.regexp);
+        var resourceMatcher = get.encodeResource(
+            params.resource,
+            params.regexp
+        );
 
-        returnValue = get.getResource(casper, resourceMatcher,
-            params.method, params.variable);
+        returnValue = get.getResource(
+            casper,
+            resourceMatcher,
+            params.method,
+            params.variable
+        );
+
         if (returnValue !== undefined) {
             log('got resource: ' + params.resource, 'SUCCESS');
             return returnValue;
