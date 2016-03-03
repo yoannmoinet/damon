@@ -1,13 +1,14 @@
+var domActions = {
+    fill: function (opts) {
+        return casper.sendKeys(opts.selector, opts.text, {reset: true});
+    },
+    click: function (opts) {
+        return casper.click(opts.selector);
+    }
+};
+
 module.exports = function (params, timeoutDuration) {
     log('dom action', params.do, params.selector, 'INFO_BAR');
-    var domActions = {
-        fill: function (opts) {
-            return casper.sendKeys(opts.selector, opts.text, {reset: true});
-        },
-        click: function (opts) {
-            return casper.click(opts.selector);
-        }
-    };
     if (params.selector && params.do) {
         var timeout = params.timeout !== undefined ?
             params.timeout : timeoutDuration;
