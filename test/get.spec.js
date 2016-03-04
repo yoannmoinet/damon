@@ -1,6 +1,5 @@
 describe('get', function () {
     var expect = require('expect.js');
-    var get = require('../src/bots/helpers/get.js');
     var casperStub = {
         exists: function (selector) {
             if (selector === '#id') {
@@ -27,6 +26,8 @@ describe('get', function () {
             };
         }
     };
+
+    var get = require('../src/bots/plugins/get.js').bind(casperStub)();
 
     describe('splitAccessors', function() {
         it('should split var.attr into ["var", "attr"]', function () {
@@ -87,44 +88,44 @@ describe('get', function () {
 
     describe('getVariable', function() {
         it('should return the value hosted inside an defined object', function () {
-            var test = get.getVariable(casperStub, 'key.inside.attribute');
+            var test = get.getVariable('key.inside.attribute');
             expect(test).to.be('value');
         });
 
         it('should return undefined for an inextant attribute of an object', function () {
-            var test = get.getVariable(casperStub, 'unknown.object');
+            var test = get.getVariable('unknown.object');
             expect(test).to.be(undefined);
         });
     });
 
     describe('getAttribute', function() {
         it('should return the text value of an element', function () {
-            var test = get.getAttribute(casperStub, {attribute: '@text', selector: '#id'});
+            var test = get.getAttribute({attribute: '@text', selector: '#id'});
             expect(test).to.be('value');
         });
 
         it('should return the value of an element\'s attribute', function () {
-            var test = get.getAttribute(casperStub, {attribute: 'key', selector: '#id'});
+            var test = get.getAttribute({attribute: 'key', selector: '#id'});
             expect(test).to.be('random value');
         });
 
         it('should return what the modifier passed along captures', function () {
-            var test = get.getAttribute(casperStub, {attribute: 'key', selector: '#id', modifier: '[^ ]*'});
+            var test = get.getAttribute({attribute: 'key', selector: '#id', modifier: '[^ ]*'});
             expect(test).to.be('random');
         });
 
         it('should return undefined when an element doesn\'t exist', function () {
-            var test = get.getAttribute(casperStub, {attribute: 'key', selector: '#notExisting'});
+            var test = get.getAttribute({attribute: 'key', selector: '#notExisting'});
             expect(test).to.be(undefined);
         });
 
         it('should return undefined when an attribute is empty', function () {
-            var test = get.getAttribute(casperStub, {attribute: 'empty', selector: '#id'});
+            var test = get.getAttribute({attribute: 'empty', selector: '#id'});
             expect(test).to.be(undefined);
         });
 
         it('should return undefined when the modifier doesn\'t capture anything', function () {
-            var test = get.getAttribute(casperStub, {attribute: 'key', selector: '#id', modifier: '[^a-zA-Z ]'});
+            var test = get.getAttribute({attribute: 'key', selector: '#id', modifier: '[^a-zA-Z ]'});
             expect(test).to.be(undefined);
         });
     });
