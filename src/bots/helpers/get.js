@@ -62,7 +62,7 @@ function getVariable (variable, variableValue) {
 
     object = accessors.shift();
     if (variableValue === undefined) {
-        variableValue = casper.evaluate(function (object) {
+        variableValue = this.evaluate(function (object) {
             return window[object];
         }, object);
     } else {
@@ -83,14 +83,14 @@ function getVariable (variable, variableValue) {
 function getAttribute (params) {
     var attributeValue;
 
-    if (!casper.exists(params.selector)) {
+    if (!this.exists(params.selector)) {
         return;
     }
 
     if (params.attribute === '@text') {
-        attributeValue = casper.getElementInfo(params.selector).text;
+        attributeValue = this.getElementInfo(params.selector).text;
     } else {
-        attributeValue = casper.getElementAttribute(params.selector,
+        attributeValue = this.getElementAttribute(params.selector,
             params.attribute);
     }
 
@@ -120,7 +120,7 @@ function encodeResource (resource, regexp) {
 }
 
 function getResource (resourceMatcher, method, variable, status) {
-    var responses = casper.resources;
+    var responses = this.resources;
     var request;
     var parsedData;
     var res;
@@ -133,7 +133,7 @@ function getResource (resourceMatcher, method, variable, status) {
             resourceMatcher.test(res.url) ||
             res.url.indexOf(resourceMatcher) !== -1) {
 
-            request = casper.options.requests[res.id];
+            request = this.options.requests[res.id];
 
             // Get the resource with corresponding method or first resource if no method
             if ((!method || method === request.method) &&
@@ -157,10 +157,12 @@ function getResource (resourceMatcher, method, variable, status) {
     }
 }
 
-module.exports = {
-    getAttribute: getAttribute,
-    getVariable: getVariable,
-    splitAccessors: splitAccessors,
-    getResource: getResource,
-    encodeResource: encodeResource
+module.exports = function () {
+    return {
+        getAttribute: getAttribute.bind(this),
+        getVariable: getVariable.bind(this),
+        splitAccessors: splitAccessors,
+        getResource: getResource.bind(this),
+        encodeResource: encodeResource
+    };
 };

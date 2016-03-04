@@ -1,16 +1,15 @@
 module.exports = function (params) {
-    var assertion = casper.helpers.assertion;
     var output;
     try {
         if (params.attribute) {
             log('assert attribute', params.attribute, 'INFO_BAR');
-            assertion.attribute(params);
+            this.helpers.assertion.attribute(params);
         } else if (params.variable) {
             log('assert variable', params.variable, 'INFO_BAR');
-            assertion.variable(params);
+            this.helpers.assertion.variable(params);
         } else if (params.key) {
             log('assert key', params.key, 'INFO_BAR');
-            assertion.key(params);
+            this.helpers.assertion.key(params);
         } else {
             log('no assertion found', 'ERROR');
             throw new Error('no assertion found');

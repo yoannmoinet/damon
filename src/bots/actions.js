@@ -1,17 +1,16 @@
-var template = require('./helpers/template.js');
-
 var timeoutDuration = 10000;
 
 var actions = {
-    assert: require('./actions/assert.js'),
-    capture: require('./actions/capture.js'),
-    dom: require('./actions/dom.js'),
-    get: require('./actions/get.js'),
-    request: require('./actions/request.js'),
-    wait: require('./actions/wait.js')
+    assert: require('./actions/assert.js').bind(casper),
+    capture: require('./actions/capture.js').bind(casper),
+    dom: require('./actions/dom.js').bind(casper),
+    get: require('./actions/get.js').bind(casper),
+    request: require('./actions/request.js').bind(casper),
+    wait: require('./actions/wait.js').bind(casper)
 };
 
 var config = function (casper, cwd) {
+    var template = casper.helpers.template;
     return {
         execute: function (task) {
             if (task.type && actions[task.type]) {

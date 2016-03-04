@@ -51,16 +51,18 @@ function handleStore (store, data) {
                 'ERROR'
             );
         }
-        casper.helpers.template.store(
+        this.helpers.template.store(
             store.key,
-            casper.helpers.get.getVariable(store.variable, parsedData)
+            this.helpers.get.getVariable(store.variable, parsedData)
         );
     } else {
-        casper.helpers.template.store(store.key, data);
+        this.helpers.template.store(store.key, data);
     }
 }
 
-module.exports = {
-    xhr: xhr,
-    handleStore: handleStore
+module.exports = function () {
+    return {
+        xhr: xhr,
+        handleStore: handleStore.bind(this)
+    };
 };

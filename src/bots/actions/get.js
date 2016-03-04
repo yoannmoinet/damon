@@ -1,5 +1,5 @@
 function getAttribute (params) {
-    var returnValue = casper.helpers.get.getAttribute(params);
+    var returnValue = this.helpers.get.getAttribute(params);
     if (returnValue !== undefined) {
         log('got', params.attribute + ' of ' + params.selector,
             returnValue, 'SUCCESS');
@@ -13,12 +13,12 @@ function getAttribute (params) {
 }
 
 function getResource (params) {
-    var resourceMatcher = casper.helpers.get.encodeResource(
+    var resourceMatcher = this.helpers.get.encodeResource(
         params.resource,
         params.regexp
     );
 
-    var returnValue = casper.helpers.get.getResource(
+    var returnValue = this.helpers.get.getResource(
         resourceMatcher,
         params.method,
         params.variable
@@ -33,7 +33,7 @@ function getResource (params) {
 }
 
 function getVariable (params) {
-    var returnValue = casper.helpers.get.getVariable(params.variable);
+    var returnValue = this.helpers.get.getVariable(params.variable);
     if (returnValue !== undefined && returnValue !== null) {
         log('got global variable: ' + params.variable, 'SUCCESS');
         return returnValue;
@@ -44,11 +44,11 @@ function getVariable (params) {
 
 module.exports = function (params) {
     if (params.attribute) {
-        return getAttribute(params);
+        return getAttribute.call(this, params);
     } else if (params.resource) {
-        return getResource(params);
+        return getResource.call(this, params);
     } else if (params.variable) {
-        return getVariable(params);
+        return getVariable.call(this, params);
     }
     log('no action found for ', params, 'ERROR');
     throw new Error('no action found');

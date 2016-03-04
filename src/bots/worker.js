@@ -81,10 +81,10 @@ var logger = require('./logger')(cwd);
 
 //Extend Casper with helper modules
 casper.helpers = {
-    request: require('./helpers/request.js'),
-    template: require('./helpers/template.js'),
-    get: require('./helpers/get.js'),
-    assertion: require('./helpers/assertion.js')
+    request: require('./helpers/request.js').bind(casper)(),
+    template: require('./helpers/template.js').bind(casper)(),
+    get: require('./helpers/get.js').bind(casper)(),
+    assertion: require('./helpers/assertion.js').bind(casper)()
 };
 
 casper.options.waitTimeout = opts.config.timeout !== undefined ?

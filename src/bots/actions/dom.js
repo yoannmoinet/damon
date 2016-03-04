@@ -1,9 +1,9 @@
 var domActions = {
     fill: function (opts) {
-        return casper.sendKeys(opts.selector, opts.text, {reset: true});
+        return this.sendKeys(opts.selector, opts.text, {reset: true});
     },
     click: function (opts) {
-        return casper.click(opts.selector);
+        return this.click(opts.selector);
     }
 };
 
@@ -14,11 +14,11 @@ module.exports = function (params, timeoutDuration) {
             params.timeout : timeoutDuration;
 
         log('waiting for', params.selector, 'INFO_BAR');
-        return casper.waitUntilVisible(params.selector, function () {
+        return this.waitUntilVisible(params.selector, function () {
             log('got', params.selector, 'SUCCESS');
 
             if (domActions[params.do]) {
-                return domActions[params.do](params);
+                return domActions[params.do].call(this, params);
             }
             log('no dom action found for ' + params.do, 'ERROR');
             throw new Error('no dom action');
