@@ -10,7 +10,7 @@ var actions = {
 };
 
 var config = function (casper, cwd) {
-    var template = casper.helpers.template;
+    var template = casper.plugins.template;
     return {
         execute: function (task) {
             if (task.type && actions[task.type]) {

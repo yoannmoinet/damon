@@ -1,5 +1,5 @@
 function getAttribute (params) {
-    var returnValue = this.helpers.get.getAttribute(params);
+    var returnValue = this.plugins.get.getAttribute(params);
     if (returnValue !== undefined) {
         log('got', params.attribute + ' of ' + params.selector,
             returnValue, 'SUCCESS');
@@ -13,12 +13,12 @@ function getAttribute (params) {
 }
 
 function getResource (params) {
-    var resourceMatcher = this.helpers.get.encodeResource(
+    var resourceMatcher = this.plugins.get.encodeResource(
         params.resource,
         params.regexp
     );
 
-    var returnValue = this.helpers.get.getResource(
+    var returnValue = this.plugins.get.getResource(
         resourceMatcher,
         params.method,
         params.variable
@@ -33,7 +33,7 @@ function getResource (params) {
 }
 
 function getVariable (params) {
-    var returnValue = this.helpers.get.getVariable(params.variable);
+    var returnValue = this.plugins.get.getVariable(params.variable);
     if (returnValue !== undefined && returnValue !== null) {
         log('got global variable: ' + params.variable, 'SUCCESS');
         return returnValue;

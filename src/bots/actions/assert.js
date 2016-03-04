@@ -3,13 +3,13 @@ module.exports = function (params) {
     try {
         if (params.attribute) {
             log('assert attribute', params.attribute, 'INFO_BAR');
-            this.helpers.assertion.attribute(params);
+            this.plugins.assertion.attribute(params);
         } else if (params.variable) {
             log('assert variable', params.variable, 'INFO_BAR');
-            this.helpers.assertion.variable(params);
+            this.plugins.assertion.variable(params);
         } else if (params.key) {
             log('assert key', params.key, 'INFO_BAR');
-            this.helpers.assertion.key(params);
+            this.plugins.assertion.key(params);
         } else {
             log('no assertion found', 'ERROR');
             throw new Error('no assertion found');

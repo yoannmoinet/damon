@@ -42,7 +42,7 @@ function waitTime (params, timeout) {
 
 function waitResource (params, timeout) {
     var matchingRequest;
-    var resourceMatcher = this.helpers.get.encodeResource(
+    var resourceMatcher = this.plugins.get.encodeResource(
         params.resource,
         params.regexp
     );
@@ -51,7 +51,7 @@ function waitResource (params, timeout) {
             return log('got', params.resource, 'SUCCESS');
         }
 
-        matchingRequest = this.helpers.get.getResource(
+        matchingRequest = this.plugins.get.getResource(
             resourceMatcher,
             params.method
         );

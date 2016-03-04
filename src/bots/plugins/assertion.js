@@ -1,17 +1,17 @@
 var expect = require('expect.js');
 
 function variable (params) {
-    testValue = this.helpers.get.getVariable(params.variable);
+    testValue = this.plugins.get.getVariable(params.variable);
     return expect(params.expected).to.be.eql(testValue);
 };
 
 function attribute (params) {
-    testValue = this.helpers.get.getAttribute(params);
+    testValue = this.plugins.get.getAttribute(params);
     return expect(params.expected).to.be.eql(testValue);
 };
 
 function key (params) {
-    testValue = this.helpers.template.get(params.key);
+    testValue = this.plugins.template.get(params.key);
     return expect(params.expected).to.be.eql(testValue);
 };
 

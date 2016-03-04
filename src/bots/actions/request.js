@@ -7,7 +7,7 @@ module.exports = function (params) {
     }
 
     // Get the data from the request.
-    var data = this.evaluate(this.helpers.request.xhr, params);
+    var data = this.evaluate(this.plugins.request.xhr, params);
 
     // And store it if needed later.
     if (params.store) {
@@ -15,7 +15,7 @@ module.exports = function (params) {
             log('missing params for store', 'ERROR');
             throw new Error('missing params');
         }
-        this.helpers.request.handleStore(params.store, data);
+        this.plugins.request.handleStore(params.store, data);
     }
 
     // Return it.

@@ -51,12 +51,12 @@ function handleStore (store, data) {
                 'ERROR'
             );
         }
-        this.helpers.template.store(
+        this.plugins.template.store(
             store.key,
-            this.helpers.get.getVariable(store.variable, parsedData)
+            this.plugins.get.getVariable(store.variable, parsedData)
         );
     } else {
-        this.helpers.template.store(store.key, data);
+        this.plugins.template.store(store.key, data);
     }
 }
 
