@@ -279,6 +279,20 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 
 To access to a variable in the payload of a resource, write `payload.variableName` for `variable` field. Resource also contains the `headers`, `method`, `time` and `url`.
 
+- `number of elements`
+
+```javascript
+{
+    "type": "get",
+    "params": {
+        "selector": "ul#list li",
+        "key": "liNumber"
+    }
+}
+```
+
+`damon` will store the number of elements that satisfy the `selector`
+
 ##### _access_
 
 The value can then be accessed in any following tasks via its `key` value
@@ -371,6 +385,23 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
 ```
 
 `damon` will `get` the value of the `key` and test it against the `expected` value.
+
+- status
+
+```javascript
+{
+    "type": "assert",
+    "params": {
+        "url": "url",
+        "https": false,
+        "expected": 200
+    }
+}
+```
+
+`damon` will try to make a `GET` request on the `url` and test the request status against the `expected` status. Same-origin policy applies.
+
+`https` flag can be set to `false` to replace `https` in the `url` by `http`.
 
 ## Contribute
 

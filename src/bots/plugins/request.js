@@ -33,7 +33,8 @@ function xhr (opts) {
 
     // If we don't have success, error
     if (request.readyState !== 4 && request.status !== '200') {
-        return log('Request errored', 'ERROR');
+        log('Request errored', 'ERROR');
+        throw new Error('Request errored');
     }
 
     return request.responseText;
@@ -41,7 +42,6 @@ function xhr (opts) {
 
 function testXHR(opts) {
     var xhr = new XMLHttpRequest();
-    var status;
 
     if (opts.https === false) {
         opts.url = opts.url.replace('https', 'http');
