@@ -142,12 +142,15 @@ For each one, except `time`, you can overwrite the `timeout`.
     "type": "wait",
     "params": {
         "selector": "#content",
-        "timeout": 1000
+        "timeout": 1000,
+        "xpath": false
     }
 }
 ```
 
 `damon` will wait at this step until the `selector` is available on the page.
+
+`xpath` can be used to select an element by setting it to true. Default value is false.
 
 - `visible`
 - `hidden`
@@ -198,7 +201,8 @@ A `method` can be specified to filter the resource. If nothing is specified, any
     "type": "dom",
     "params": {
         "selector": "button#btnSubmit",
-        "do": "click"
+        "xpath": false,
+        "do": "click",
     }
 }
 ```
@@ -212,6 +216,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
     "type": "dom",
     "params": {
         "selector": "input#userName",
+        "xpath": false,
         "do": "fill",
         "text": "yoann.dev"
     }
@@ -219,6 +224,8 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 ```
 
 `damon` will enter text in the specified field.
+
+`xpath` cannot be used when filling a file field due to PhantomJS limitation.
 
 #### `get`
 
@@ -233,6 +240,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
     "type": "get",
     "params": {
         "selector": "div#Info",
+        "xpath": false,
         "attribute": "title",
         "key": "infoTitle",
         "modifier": "[a-z]+"
@@ -286,6 +294,7 @@ To access to a variable in the payload of a resource, write `payload.variableNam
     "type": "get",
     "params": {
         "selector": "ul#list li",
+        "xpath": false,
         "key": "liNumber"
     }
 }
@@ -349,6 +358,7 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
     "type": "assert",
     "params": {
         "selector": "div#Info",
+        "xpath": false,
         "attribute": "title",
         "modifier": "[a-z]+",
         "expected": "expectedValue or {{key}}"
