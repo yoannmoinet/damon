@@ -2,6 +2,7 @@ var timeoutDuration = 10000;
 
 var config = function (cwd) {
     var template = this.plugins.template;
+    var xpath = casper.plugins.xpath;
     var actions = {
         assert: require('./actions/assert.js').bind(this),
         capture: require('./actions/capture.js').bind(this),
@@ -16,6 +17,8 @@ var config = function (cwd) {
             if (task.type && actions[task.type]) {
                 var response;
                 task = template.parse(task);
+                task.params = xpath.parse(task.params);
+
                 response = actions[task.type](
                     task.params,
                     timeoutDuration,
