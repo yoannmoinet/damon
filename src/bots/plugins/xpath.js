@@ -1,4 +1,4 @@
-function parseTask (params) {
+function parseSelector (params) {
     var selectorType = ['selector', 'visible', 'hidden'];
     if (params.xpath !== true) {
         return params;
@@ -16,6 +16,6 @@ function parseTask (params) {
 
 module.exports = function () {
     return {
-        parse: parseTask
+        parse: parseSelector
     };
 };

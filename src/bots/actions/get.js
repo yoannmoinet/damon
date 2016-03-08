@@ -42,8 +42,8 @@ function getVariable (params) {
     throw new Error('no value found');
 }
 
-function countSelectors (params) {
-    var returnValue = this.plugins.get.getNumberElements(params.selector);
+function getElementsCount (params) {
+    var returnValue = this.plugins.get.getElementsCount(params.selector);
     if (returnValue) {
         log('got ' + returnValue + ' ' +
         params.selector, 'SUCCESS');
@@ -61,7 +61,7 @@ module.exports = function (params) {
     } else if (params.variable) {
         return getVariable.call(this, params);
     } else if (params.selector) {
-        return countSelectors.call(this, params);
+        return getElementsCount.call(this, params);
     }
     log('no action found for ', params, 'ERROR');
     throw new Error('no action found');

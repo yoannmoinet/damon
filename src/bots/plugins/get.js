@@ -158,7 +158,7 @@ function getResource (resourceMatcher, method, variable, status) {
     }
 }
 
-function getNumberElements (selector) {
+function getElementsCount (selector) {
     var n = this.evaluate(function (selector) {
         return __utils__.findAll(selector).length;
     }, selector);
@@ -172,6 +172,6 @@ module.exports = function () {
         splitAccessors: splitAccessors,
         getResource: getResource.bind(this),
         encodeResource: encodeResource,
-        getNumberElements: getNumberElements.bind(this)
+        getElementsCount: getElementsCount.bind(this)
     };
 };
