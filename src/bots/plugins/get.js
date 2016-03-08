@@ -16,8 +16,8 @@ function splitAccessors (variable) {
 
     //This RegExp is a combination of the two RegExp above
     //Make sure that each component follows the correct bracket notation
-    //[a-zA-Z_$][0-9a-zA-Z_$]* is to make sure that the captured variable has a valid variable name
-    var validationRegexp = /^[a-zA-Z_$][0-9a-zA-Z_$]*(\['[a-zA-Z_$][0-9a-zA-Z_$]*'\]|\["[a-zA-Z_$][0-9a-zA-Z_$]*"\])*$/;
+    //[0-9a-zA-Z_$]+ is to make sure that the captured variable has a valid variable name or key value
+    var validationRegexp = /^[a-zA-Z_$][0-9a-zA-Z_$]*(\['[0-9a-zA-Z_$]+'\]|\["[0-9a-zA-Z_$]+"\])*$/;
     var components = variable.split('.');
 
     for (var n = 0; n < components.length; n++) {
