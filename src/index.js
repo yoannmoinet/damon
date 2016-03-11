@@ -46,7 +46,6 @@ function start (filesPath, reporterFilePath) {
             addFile(file);
         });
 
-        runner.on('finish', exitHandler.bind(null, {exit: true}, null));
         runner.run(files);
     }
 }
@@ -58,35 +57,6 @@ function addFile (taskFilename) {
         tasks: taskFilename
     });
 }
-
-var timeoutExit;
-function exitHandler (options, err) {
-    if (options.cleanup) {
-        runner.clean();
-    }
-
-    if (err) {
-        console.log(chalk.bgRed(' -[ ERROR ]- '), err);
-    }
-
-    if (options.exit) {
-        clearTimeout(timeoutExit);
-        // Delay the exit to let async task to finish.
-        // Runner's logging for example.
-        timeoutExit = setTimeout(function () {
-            process.exit();
-        }, 100);
-    }
-}
-
-// so the program will not close instantly
-process.stdin.resume();
-// do something when app is closing
-process.on('exit', exitHandler.bind(null, {cleanup: true}));
-// catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, {exit: true}));
-// catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, {exit: true}));
 
 module.exports = {
     start: start
