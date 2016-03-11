@@ -135,8 +135,12 @@ Runner.prototype.handleLog = function handleLog (logObject) {
 
 // Run all the tasks.
 Runner.prototype.run = function run (files) {
-    this.emit('begin', files);
+    if (this.started) {
+        return;
+    }
+    this.started = true;
     this.files = files;
+    this.emit('begin', this.files);
     this.runTask();
 };
 
@@ -174,6 +178,7 @@ Runner.prototype.end = function end (code, err) {
 
 // When everything is done.
 Runner.prototype.finish = function finish () {
+    this.started = false;
     this.emit('finish', this.tasks);
 };
 
