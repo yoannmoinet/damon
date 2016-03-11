@@ -138,12 +138,20 @@ Runner.prototype.run = function run (files) {
     if (this.started) {
         return;
     }
+    this.clear();
     this.started = true;
     this.files = files;
     this.emit('begin', this.files);
     this.runTask();
 };
 
+// Clear sored data.
+Runner.prototype.clear = function clear () {
+    this.logs = {};
+    this.tasks = {};
+    this.currentFile = -1;
+    this.started = false;
+};
 // Run the next task.
 Runner.prototype.runTask = function runTask () {
     var file = this.files.shift();
