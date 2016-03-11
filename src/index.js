@@ -45,6 +45,11 @@ function start (filesPath) {
     var filesList = [];
 
     if (filesPath) {
+        // Allow strings
+        if (typeof filesPath === 'string') {
+            filesPath = [filesPath];
+        }
+
         filesPath.forEach(function (path) {
             filesList = filesList.concat(getFiles(path));
         });
