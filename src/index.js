@@ -30,7 +30,11 @@ function parsePath (filePath) {
 function attachReporter (reporterFilePath) {
     // Assign the reporter if it's directly passed as an argument
     try {
-        reporter = require(reporterFilePath || defaultReporter)(runner);
+        if (reporterFilePath && typeof reporterFilePath !== 'string') {
+            reporter = reporterFilePath(runner);
+        } else {
+            reporter = require(reporterFilePath || defaultReporter)(runner);
+        }
     } catch (err) {
         console.log(chalk.bgRed.bold.white(' No reporter ! ') +
                 ' [' + chalk.dim.red(err) + ']');
