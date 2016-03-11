@@ -16,23 +16,24 @@ var regexLog = /^\[([^\]]*)\]\(([^\)]*) ([^\)]*)\):([^\n]*)/gm;
 
 function Runner () {
     Emitter.call(this);
+    this.initialize();
+}
 
+// Extend Event.Emitter.
+util.inherits(Runner, Emitter);
+
+Runner.prototype.initialize = function () {
     this.uuid = uuid();
 
     this.folder = path.join(__dirname, './bots/files/', this.uuid);
     this.captures = path.join(this.folder, 'captures');
     this.log = path.join(this.folder, 'log.txt');
     this.cookie = path.join(this.folder, 'cookies.txt');
-    this.logs = {};
-    this.tasks = {};
     this.children = {};
 
     this.createFiles();
     this.bindings();
-}
-
-// Extend Event.Emitter.
-util.inherits(Runner, Emitter);
+};
 
 Runner.prototype.createFiles = function createFiles () {
     // Create its captures folder.
