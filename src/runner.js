@@ -45,13 +45,21 @@ Runner.prototype.createFiles = function createFiles () {
 };
 
 Runner.prototype.bindings = function bindings () {
+    // To avoid multiple watchers we unbind before.
+    this.unbindings();
     // Listen for the agent's files.
-    fs.watch(this.folder, function (evt, filename) {
+    this.watcher = fs.watch(this.folder, function (evt, filename) {
         // If it's a new log.
         if (evt === 'change' && filename === 'log.txt') {
             this.parseLog(path.join(this.folder, filename));
         }
     }.bind(this));
+};
+
+Runner.prototype.unbindings = function unbindings () {
+    if (this.watcher) {
+        this.watcher.close();
+    }
 };
 
 // Throttle the call.
