@@ -29,6 +29,8 @@ Runner.prototype.initialize = function () {
     this.captures = path.join(this.folder, 'captures');
     this.log = path.join(this.folder, 'log.txt');
     this.cookie = path.join(this.folder, 'cookies.txt');
+
+    this.cancelled = false;
     this.children = {};
 
     this.createFiles();
@@ -152,13 +154,56 @@ Runner.prototype.clear = function clear () {
     this.currentFile = -1;
     this.started = false;
 };
+
+// Kill all subprocesses
+Runner.prototype.killAll = function killAll () {
+    this.cancelled = true;
+    for (var i in this.children) {
+        if (this.children.hasOwnProperty(i)) {
+            this.killChild(i);
+        }
+    }
+};
+
+// Kill a specific subprocesses
+Runner.prototype.killChild = function killChild (uuid) {
+    if (!this.children[uuid]) {
+        return;
+    }
+
+    var child = this.children[uuid].child;
+
+    if (typeof child.disconnect === 'function') {
+        child.disconnect();
+    }
+
+    if (typeof child.kill === 'function') {
+        child.kill('SIGTERM');
+    }
+
+    this.cleanChild(uuid);
+};
+
+// Clean instance of child
+Runner.prototype.cleanChild = function cleanChild (uuid) {
+    delete this.children[uuid];
+};
+
 // Run the next task.
 Runner.prototype.runTask = function runTask () {
-    var file = this.files.shift();
+    this.currentFile += 1;
+    var file = this.files[this.currentFile];
     if (file) {
         // When the runner ends its suite.
-        // Do the next one.
-        this.once('end', this.runTask.bind(this));
+        // Clean the previous child and do the next one.
+        this.once('end', function (child, code, signal) {
+            if (child) {
+                this.killChild(child.uuid);
+            }
+            // Do the next one.
+            this.runTask();
+        }.bind(this));
+
         this.start(file.tasks);
     } else {
         this.finish();
@@ -176,17 +221,22 @@ Runner.prototype.updateTest = function (test) {
 // When a new suite begins
 Runner.prototype.start = function start (tasks) {
     this.emit('start', tasks);
+    if (this.cancelled) {
+        this.end(null, null, 'SIGTERM');
+        return;
+    }
     this.spawn(tasks);
 };
 
 // When a suite ends
-Runner.prototype.end = function end (code, err) {
-    this.emit('end', code, err);
+Runner.prototype.end = function end (child, code, signal) {
+    this.emit('end', child, code, signal);
 };
 
 // When everything is done.
 Runner.prototype.finish = function finish () {
     this.started = false;
+    this.cancelled = false;
     this.emit('finish', this.tasks);
 };
 
@@ -287,7 +337,7 @@ Runner.prototype.clean = function clean () {
 // Bind the casper.
 Runner.prototype.bindChild = function bindChild (child) {
 
-    child.on('close', this.end.bind(this));
+    child.on('close', this.end.bind(this, child));
 
     child.stdout.on('data', function (data) {
         console.log(chalk.blue(' -[ child ]- '), data.toString());
