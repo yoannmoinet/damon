@@ -27,15 +27,18 @@ function parsePath (filePath) {
     }
 }
 
-function start (filesPath, reporterFilePath) {
-    var filesList = [];
-
+function attachReporter (reporterFilePath) {
+    // Assign the reporter if it's directly passed as an argument
     try {
         reporter = require(reporterFilePath || defaultReporter)(runner);
     } catch (err) {
         console.log(chalk.bgRed.bold.white(' No reporter ! ') +
                 ' [' + chalk.dim.red(err) + ']');
     }
+}
+
+function start (filesPath) {
+    var filesList = [];
 
     if (filesPath) {
         filesPath.forEach(function (path) {
@@ -59,5 +62,6 @@ function addFile (taskFilename) {
 }
 
 module.exports = {
-    start: start
+    start: start,
+    attachReporter: attachReporter,
 };

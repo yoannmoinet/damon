@@ -32,7 +32,8 @@ program
     .command('run <files...>')
     .description('Run the list of JSON tasks files. Accepts glob.')
     .action(function (files) {
-        agent.start(files, program.reporter);
+        agent.attachReporter(program.reporter);
+        agent.start(files);
         agent.runner.on('finish', exitHandler.bind(null, {exit: true}, null));
     });
 
