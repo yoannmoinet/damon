@@ -62,6 +62,16 @@ function start (filesPath) {
     }
 }
 
+function clear () {
+    files = [];
+    runner.clear();
+    runner.initialize();
+}
+
+function kill () {
+    return runner.killAll();
+}
+
 function addFile (taskFilename) {
     files.push({
         id: uuid(),
@@ -72,5 +82,8 @@ function addFile (taskFilename) {
 
 module.exports = {
     start: start,
+    clear: clear,
+    kill: kill,
     attachReporter: attachReporter,
+    runner: runner
 };
