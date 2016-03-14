@@ -4,7 +4,7 @@
   "private": true,
   "description": "Bot navigating urls and doing tasks.",
   "author": "Yoann Moinet <yoann.moinet@autodesk.com>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://git.autodesk.com/CICD/damon.git"
