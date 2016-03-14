@@ -25,7 +25,7 @@ module.exports = function (params, timeoutDuration) {
 
         }, function () {
             log('timeout, can\'t load dom', params.selector, 'WARNING');
-        },timeout);
+        }, timeout);
     }
     throw new Error('missing params');
 };
