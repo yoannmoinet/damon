@@ -15,7 +15,7 @@ function replaceHandlebars (string) {
 function parseTask (task) {
     //This RegExp detects any Handlebars expression {{value}} in a string
     //It is used to determine if a param has Handlbars that need to be replaced
-    var handlebarRegex = new RegExp('{{([^{}]+)}}', 'g');
+    var handlebarRegex = new RegExp('{{([^{}]+)}}');
     var loop = function (text) {
         if (typeof text === 'object') {
             for (var i in text) {
