@@ -134,7 +134,7 @@ var taskNavigate = {
 };
 startTask(taskNavigate);
 
-actions.navigate.call(casper, config.url, function (err) {
+actions.navigate(config.url, function (err) {
     if (err) {
         log('Error Loading', err, 'ERROR');
         errorTask(taskNavigate, 'load error : ' + err.status, err);

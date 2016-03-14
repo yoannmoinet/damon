@@ -30,7 +30,7 @@ var config = function (cwd) {
                 log('no task found for: ', task, 'ERROR');
                 throw new Error('no task found');
             }
-        },
+        }.bind(this),
         navigate: function (url, next) {
             log('navigate to', url, 'INFO_BAR');
             var loadSuccess = function (status) {
@@ -50,7 +50,7 @@ var config = function (cwd) {
             this.on('load.failed', loadFailed);
             this.on('load.finished', loadSuccess);
             return this.start(url);
-        }
+        }.bind(this)
     };
 };
 
