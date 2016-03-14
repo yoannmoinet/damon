@@ -1,4 +1,4 @@
-var timeoutDuration = 10000;
+var timeoutDuration = 20000;
 
 var config = function (cwd) {
     var template = this.plugins.template;
