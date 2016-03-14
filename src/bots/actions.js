@@ -1,16 +1,16 @@
 var timeoutDuration = 10000;
 
-var actions = {
-    assert: require('./actions/assert.js').bind(casper),
-    capture: require('./actions/capture.js').bind(casper),
-    dom: require('./actions/dom.js').bind(casper),
-    get: require('./actions/get.js').bind(casper),
-    request: require('./actions/request.js').bind(casper),
-    wait: require('./actions/wait.js').bind(casper)
-};
+var config = function (cwd) {
+    var template = this.plugins.template;
+    var actions = {
+        assert: require('./actions/assert.js').bind(this),
+        capture: require('./actions/capture.js').bind(this),
+        dom: require('./actions/dom.js').bind(this),
+        get: require('./actions/get.js').bind(this),
+        request: require('./actions/request.js').bind(this),
+        wait: require('./actions/wait.js').bind(this)
+    };
 
-var config = function (casper, cwd) {
-    var template = casper.plugins.template;
     return {
         execute: function (task) {
             if (task.type && actions[task.type]) {
@@ -34,8 +34,8 @@ var config = function (casper, cwd) {
         navigate: function (url, next) {
             log('navigate to', url, 'INFO_BAR');
             var loadSuccess = function (status) {
-                casper.removeListener('load.failed', loadFailed);
-                casper.removeListener('load.finished', loadSuccess);
+                this.removeListener('load.failed', loadFailed);
+                this.removeListener('load.finished', loadSuccess);
                 if (status === 'fail') {
                     next('fail');
                 } else {
@@ -43,13 +43,13 @@ var config = function (casper, cwd) {
                 }
             };
             var loadFailed = function (err) {
-                casper.removeListener('load.failed', loadFailed);
-                casper.removeListener('load.finished', loadSuccess);
+                this.removeListener('load.failed', loadFailed);
+                this.removeListener('load.finished', loadSuccess);
                 next(err);
             };
-            casper.on('load.failed', loadFailed);
-            casper.on('load.finished', loadSuccess);
-            return casper.start(url);
+            this.on('load.failed', loadFailed);
+            this.on('load.finished', loadSuccess);
+            return this.start(url);
         }
     };
 };

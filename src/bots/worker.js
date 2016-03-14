@@ -96,7 +96,7 @@ casper.options.viewportSize = opts.config.size ?
         height: 720
     };
 
-var actions = require('./actions').config(casper, cwd);
+var actions = require('./actions').config.bind(casper)(cwd);
 
 function startTask (task) {
     task.start = +new Date();
@@ -134,7 +134,7 @@ var taskNavigate = {
 };
 startTask(taskNavigate);
 
-actions.navigate(config.url, function (err) {
+actions.navigate.call(casper, config.url, function (err) {
     if (err) {
         log('Error Loading', err, 'ERROR');
         errorTask(taskNavigate, 'load error : ' + err.status, err);
