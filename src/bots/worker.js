@@ -76,7 +76,7 @@ var cwd = casper.cli.has('cwd') ? casper.cli.get('cwd') : dirname;
 var config = opts.config;
 var logLevel = config.logLevel !== undefined ?
     config.logLevel : 'none';
-var log = require('./log').config.call(casper, pid, logLevel);
+var log = require('./log').config.bind(casper)(pid, logLevel);
 var logger = require('./logger')(cwd);
 
 //Extend Casper with helper modules
