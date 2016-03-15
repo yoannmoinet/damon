@@ -16,23 +16,26 @@ var regexLog = /^\[([^\]]*)\]\(([^\)]*) ([^\)]*)\):([^\n]*)/gm;
 
 function Runner () {
     Emitter.call(this);
+    this.initialize();
+}
 
+// Extend Event.Emitter.
+util.inherits(Runner, Emitter);
+
+Runner.prototype.initialize = function () {
     this.uuid = uuid();
 
     this.folder = path.join(__dirname, './bots/files/', this.uuid);
     this.captures = path.join(this.folder, 'captures');
     this.log = path.join(this.folder, 'log.txt');
     this.cookie = path.join(this.folder, 'cookies.txt');
-    this.logs = {};
-    this.tasks = {};
+
+    this.cancelled = false;
     this.children = {};
 
     this.createFiles();
     this.bindings();
-}
-
-// Extend Event.Emitter.
-util.inherits(Runner, Emitter);
+};
 
 Runner.prototype.createFiles = function createFiles () {
     // Create its captures folder.
@@ -44,13 +47,21 @@ Runner.prototype.createFiles = function createFiles () {
 };
 
 Runner.prototype.bindings = function bindings () {
+    // To avoid multiple watchers we unbind before.
+    this.unbindings();
     // Listen for the agent's files.
-    fs.watch(this.folder, function (evt, filename) {
+    this.watcher = fs.watch(this.folder, function (evt, filename) {
         // If it's a new log.
         if (evt === 'change' && filename === 'log.txt') {
             this.parseLog(path.join(this.folder, filename));
         }
     }.bind(this));
+};
+
+Runner.prototype.unbindings = function unbindings () {
+    if (this.watcher) {
+        this.watcher.close();
+    }
 };
 
 // Throttle the call.
@@ -126,18 +137,73 @@ Runner.prototype.handleLog = function handleLog (logObject) {
 
 // Run all the tasks.
 Runner.prototype.run = function run (files) {
-    this.emit('begin', files);
+    if (this.started) {
+        return;
+    }
+    this.clear();
+    this.started = true;
     this.files = files;
+    this.emit('begin', this.files);
     this.runTask();
+};
+
+// Clear sored data.
+Runner.prototype.clear = function clear () {
+    this.logs = {};
+    this.tasks = {};
+    this.currentFile = -1;
+    this.started = false;
+};
+
+// Kill all subprocesses
+Runner.prototype.killAll = function killAll () {
+    this.cancelled = true;
+    for (var i in this.children) {
+        if (this.children.hasOwnProperty(i)) {
+            this.killChild(i);
+        }
+    }
+};
+
+// Kill a specific subprocesses
+Runner.prototype.killChild = function killChild (uuid) {
+    if (!this.children[uuid]) {
+        return;
+    }
+
+    var child = this.children[uuid].child;
+
+    if (typeof child.disconnect === 'function') {
+        child.disconnect();
+    }
+
+    if (typeof child.kill === 'function') {
+        child.kill('SIGTERM');
+    }
+
+    this.cleanChild(uuid);
+};
+
+// Clean instance of child
+Runner.prototype.cleanChild = function cleanChild (uuid) {
+    delete this.children[uuid];
 };
 
 // Run the next task.
 Runner.prototype.runTask = function runTask () {
-    var file = this.files.shift();
+    this.currentFile += 1;
+    var file = this.files[this.currentFile];
     if (file) {
         // When the runner ends its suite.
-        // Do the next one.
-        this.once('end', this.runTask.bind(this));
+        // Clean the previous child and do the next one.
+        this.once('end', function (child, code, signal) {
+            if (child) {
+                this.killChild(child.uuid);
+            }
+            // Do the next one.
+            this.runTask();
+        }.bind(this));
+
         this.start(file.tasks);
     } else {
         this.finish();
@@ -155,16 +221,22 @@ Runner.prototype.updateTest = function (test) {
 // When a new suite begins
 Runner.prototype.start = function start (tasks) {
     this.emit('start', tasks);
+    if (this.cancelled) {
+        this.end(null, null, 'SIGTERM');
+        return;
+    }
     this.spawn(tasks);
 };
 
 // When a suite ends
-Runner.prototype.end = function end (code, err) {
-    this.emit('end', code, err);
+Runner.prototype.end = function end (child, code, signal) {
+    this.emit('end', child, code, signal);
 };
 
 // When everything is done.
 Runner.prototype.finish = function finish () {
+    this.started = false;
+    this.cancelled = false;
     this.emit('finish', this.tasks);
 };
 
@@ -265,7 +337,7 @@ Runner.prototype.clean = function clean () {
 // Bind the casper.
 Runner.prototype.bindChild = function bindChild (child) {
 
-    child.on('close', this.end.bind(this));
+    child.on('close', this.end.bind(this, child));
 
     child.stdout.on('data', function (data) {
         console.log(chalk.blue(' -[ child ]- '), data.toString());

@@ -13,7 +13,7 @@
     "url": "https://git.autodesk.com/CICD/agent/issues"
   },
   "homepage": "https://git.autodesk.com/CICD/agent",
-  "main": "cli.js",
+  "main": "src/index.js",
   "bin": {
     "agent": "cli.js"
   },
