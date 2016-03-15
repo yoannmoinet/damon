@@ -1,21 +1,21 @@
 {
   "version": "0.1.0",
-  "name": "agent",
+  "name": "damon",
   "private": true,
-  "description": "Agent navigating urls and doing tasks.",
+  "description": "Bot navigating urls and doing tasks.",
   "author": "Yoann Moinet <yoann.moinet@autodesk.com>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://git.autodesk.com/CICD/agent.git"
+    "url": "https://git.autodesk.com/CICD/damon.git"
   },
   "bugs": {
-    "url": "https://git.autodesk.com/CICD/agent/issues"
+    "url": "https://git.autodesk.com/CICD/damon/issues"
   },
-  "homepage": "https://git.autodesk.com/CICD/agent",
+  "homepage": "https://git.autodesk.com/CICD/damon",
   "main": "src/index.js",
   "bin": {
-    "agent": "cli.js"
+    "damon": "cli.js"
   },
   "scripts": {
     "preversion": "npm test",

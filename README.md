@@ -1,16 +1,16 @@
-# agent
+# damon
 
 > Bots navigating urls and doing tasks.
 
 ![logo](./media/demo.gif)
 
-`agent` is a CLI that runs on [CasperJS](http://casperjs.org/) which runs on [PhantomJS](http://phantomjs.org/).
+`damon` is a CLI that runs on [CasperJS](http://casperjs.org/) which runs on [PhantomJS](http://phantomjs.org/).
 
-It feeds on JSON files that describe what tasks it needs to achieve on specified starting URL.
+He feeds on JSON files that describe what tasks he needs to achieve on specified starting URL.
 
 ```bash
 Usage:
-  agent [OPTIONS] [COMMAND]
+  damon [OPTIONS] [COMMAND]
 
 Commands:
   run <files...>  Run the list of JSON tasks files. Accept glob.
@@ -29,7 +29,7 @@ It can be added manually in your `package.json` as :
 
 ```javascript
 "devDependencies": {
-    "agent": "git://git.autodesk.com/CICD/agent"
+    "damon": "git://git.autodesk.com/CICD/damon"
 }
 ```
 
@@ -38,8 +38,8 @@ It can be added manually in your `package.json` as :
 Or you can install it globally :
 
 ```bash
-> git clone git@git.autodesk.com:CICD/agent.git
-> cd agent
+> git clone git@git.autodesk.com:CICD/damon.git
+> cd damon
 > npm link
 ```
 
@@ -50,18 +50,18 @@ Because it's not yet available on `npm`.
 ### Locally
 
 ```node
-var agent = require('agent');
-agent.start('./tasks.json');
+var damon = require('damon');
+damon.start('./tasks.json');
 ```
 
 ### Globally
 
 ```bash
-> agent run tasks.json
+> damon run tasks.json
 or
-> agent run tasks1.json tasks2.json
+> damon run tasks1.json tasks2.json
 or 
-> agent run *.json
+> damon run *.json
 ```
 
 ## Task File
@@ -83,9 +83,9 @@ Your task file must have a `config` entry with a `size` and a `url`.
 ```
 
 - `size` is for the viewport's size.
-- `url` is the starting point of your agent.
+- `url` is the starting point of `damon`.
 - `timeout` overwrite the general timeout used accross the test suite.
-- `logLevel` control at which level agents will log. Can be `none`, `fatal`, `error`, `warn`, `info`, `debug` or `trace`
+- `logLevel` control at which level `damon` will log. Can be `none`, `fatal`, `error`, `warn`, `info`, `debug` or `trace`
 
 ### `tasks`
 
@@ -98,7 +98,7 @@ Then you describe your tasks in a `tasks` entry that is an array of all the task
 ]
 ```
 
-It exists several kinds of tasks that an `agent` can achieve :
+It exists several kinds of tasks that `damon` can achieve :
 
 #### `capture`
 
@@ -115,7 +115,7 @@ A simple screen capture :
 
 #### `wait`
 
-An `agent` can wait for several different things.
+`damon` can wait for several different things.
 For each one, except `time`, you can overwrite the `timeout`.
 
 - `url`
@@ -131,7 +131,7 @@ For each one, except `time`, you can overwrite the `timeout`.
 }
 ```
 
-The agent will wait at this step until matching url is reached.
+`damon` will wait at this step until matching url is reached.
 
 `url` will be interpreted as a `regexp` if set to `true`. Default value of `regexp` is `false`.
 
@@ -147,7 +147,7 @@ The agent will wait at this step until matching url is reached.
 }
 ```
 
-The agent will wait at this step until the `selector` is available on the page.
+`damon` will wait at this step until the `selector` is available on the page.
 
 - `visible`
 - `hidden`
@@ -165,7 +165,7 @@ Both are the same as `selector` but will wait for these specific states of the e
 }
 ```
 
-The agent will wait for the specified amount of milliseconds.
+`damon` will wait for the specified amount of milliseconds.
 
 - `resource`
 
@@ -181,7 +181,7 @@ The agent will wait for the specified amount of milliseconds.
 }
 ```
 
-The agent will wait at this step until something matching the resource is received.
+`damon` will wait at this step until something matching the resource is received.
 
 `resource` will be interpreted as a `regexp` if set to `true`. Default value of `regexp` is `false`.
 
@@ -189,7 +189,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 
 #### `dom`
 
-An `agent` can perform two different actions on a dom element :
+`damon` can perform two different actions on a dom element :
 
 - `click`
 
@@ -203,7 +203,7 @@ An `agent` can perform two different actions on a dom element :
 }
 ```
 
-The `agent` will click on the specified selector.
+`damon` will click on the specified selector.
 
 - `fill`
 
@@ -218,13 +218,13 @@ The `agent` will click on the specified selector.
 }
 ```
 
-The `agent` will enter text in the specified field.
+`damon` will enter text in the specified field.
 
 #### `get`
 
 ##### _store_
 
-An `agent` can perform different `get` to retrieve a value and store it for subsequent tasks :
+`damon` can perform different `get` to retrieve a value and store it for subsequent tasks :
 
 - `attribute`
 
@@ -240,7 +240,7 @@ An `agent` can perform different `get` to retrieve a value and store it for subs
 }
 ```
 
-The `agent` will get the value of the `attribute`, apply the `modifier` RegExp and store it as `infoTitle`.
+`damon` will get the value of the `attribute`, apply the `modifier` RegExp and store it as `infoTitle`.
 
 `@text` can also be used as an `attribute` to get the text content of the `selector`
 
@@ -256,7 +256,7 @@ The `agent` will get the value of the `attribute`, apply the `modifier` RegExp a
 }
 ```
 
-The `agent` will access to the specified variable with `window` as the root object and store its value as `varAttr2`
+`damon` will access to the specified variable with `window` as the root object and store its value as `varAttr2`
 
 - `resource`
 
@@ -273,7 +273,7 @@ The `agent` will access to the specified variable with `window` as the root obje
 }
 ```
 
-The `agent` will access to the specified variable of the matching `resource` and store it.
+`damon` will access to the specified variable of the matching `resource` and store it.
 
 A `method` can be specified to filter the resource. If nothing is specified, any `method` will be accepted.
 
@@ -296,7 +296,7 @@ To access the stored value, call the `key` in between double brackets `{{key}}`
 
 #### `request`
 
-An `agent` can perform an AJAX call from within its workflow.
+`damon` can perform an AJAX call from within its workflow.
 
 ```javascript
 {
@@ -326,7 +326,7 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
 
 #### `assert`
 
-An `agent` can perform different `assert` actions to test a value with an expected value:
+`damon` can perform different `assert` actions to test a value with an expected value:
 
 - attribute
 
@@ -342,7 +342,7 @@ An `agent` can perform different `assert` actions to test a value with an expect
 }
 ```
 
-The `agent` will `get` the value of the `attribute` and test it against the `expected` value or the value associated with `{{key}}`
+`damon` will `get` the value of the `attribute` and test it against the `expected` value or the value associated with `{{key}}`
 
 - variable
 
@@ -356,7 +356,7 @@ The `agent` will `get` the value of the `attribute` and test it against the `exp
 }
 ```
 
-The `agent` will `get` the value of the `variable` and test it against the `expected` value or the value associated with `{{key}}`
+`damon` will `get` the value of the `variable` and test it against the `expected` value or the value associated with `{{key}}`
 
 - key
 
@@ -370,4 +370,22 @@ The `agent` will `get` the value of the `variable` and test it against the `expe
 }
 ```
 
-The `agent` will `get` the value of the `key` and test it against the `expected` value.
+`damon` will `get` the value of the `key` and test it against the `expected` value.
+
+## Contribute
+
+We welcome Your interest in Autodesk’s Open Source Damon (the “Project”). 
+
+Any Contributor to the Project must accept and sign an Agreement indicating agreement 
+to the license terms below.
+
+##### [Individual Contribution](http://goo.gl/forms/ctQNFrveEF)
+##### [Corporate Contribution](http://goo.gl/forms/4DTn9ho2JT)
+
+## License
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
