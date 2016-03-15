@@ -1,6 +1,6 @@
-var config = function (casper, pid, level) {
+var config = function (pid, level) {
     // Logging what's happening on the page.
-    casper.on('remote.message', function (message) {
+    this.on('remote.message', function (message) {
         log('[log] ' + message, 'INFO');
     });
 
@@ -94,13 +94,15 @@ var config = function (casper, pid, level) {
                 dumps.push(message);
             }
         });
-        casper.echo(out);
+
+        this.echo(out);
         dumps.forEach(function (dump) {
-            casper.echo(color(' - dump : ', styles[type]));
+            this.echo(color(' - dump : ', styles[type]));
             utils.dump(dump);
-            casper.echo('\n');
-        });
-    };
+            this.echo('\n');
+        }, this);
+
+    }.bind(this);
 };
 
 module.exports = {

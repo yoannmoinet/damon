@@ -36,8 +36,10 @@ function getKeyValue (key) {
     return store[key];
 }
 
-module.exports = {
-    parse: parseTask,
-    store: storeKeyValue,
-    get: getKeyValue
+module.exports = function () {
+    return {
+        parse: parseTask,
+        store: storeKeyValue,
+        get: getKeyValue
+    };
 };

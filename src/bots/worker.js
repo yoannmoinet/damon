@@ -76,8 +76,16 @@ var cwd = casper.cli.has('cwd') ? casper.cli.get('cwd') : dirname;
 var config = opts.config;
 var logLevel = config.logLevel !== undefined ?
     config.logLevel : 'none';
-var log = require('./log').config(casper, pid, logLevel);
+var log = require('./log').config.call(casper, pid, logLevel);
 var logger = require('./logger')(cwd);
+
+//Extend Casper with helper modules
+casper.plugins = {
+    request: require('./plugins/request.js').call(casper),
+    template: require('./plugins/template.js').call(casper),
+    get: require('./plugins/get.js').call(casper),
+    assertion: require('./plugins/assertion.js').call(casper)
+};
 
 casper.options.waitTimeout = opts.config.timeout !== undefined ?
     opts.config.timeout : 10000;
@@ -88,7 +96,7 @@ casper.options.viewportSize = opts.config.size ?
         height: 720
     };
 
-var actions = require('./actions').config(casper, cwd);
+var actions = require('./actions').config.call(casper, cwd);
 
 function startTask (task) {
     task.start = +new Date();

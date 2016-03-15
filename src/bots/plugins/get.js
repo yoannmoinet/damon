@@ -52,7 +52,7 @@ function splitAccessors (variable) {
 //Set the first accessor as the main object
 //Get the value of window.object using casper.evaluate()
 //Access continuously to the next property until the end of the list
-function getVariable (casper, variable, variableValue) {
+function getVariable (variable, variableValue) {
     var object;
     var accessors = splitAccessors(variable);
 
@@ -62,7 +62,7 @@ function getVariable (casper, variable, variableValue) {
 
     object = accessors.shift();
     if (variableValue === undefined) {
-        variableValue = casper.evaluate(function (object) {
+        variableValue = this.evaluate(function (object) {
             return window[object];
         }, object);
     } else {
@@ -80,17 +80,17 @@ function getVariable (casper, variable, variableValue) {
 
 //This function retrieves the first attribute or text of the selector
 //Apply the RegExp if there is one
-function getAttribute (casper, params) {
+function getAttribute (params) {
     var attributeValue;
 
-    if (!casper.exists(params.selector)) {
+    if (!this.exists(params.selector)) {
         return;
     }
 
     if (params.attribute === '@text') {
-        attributeValue = casper.getElementInfo(params.selector).text;
+        attributeValue = this.getElementInfo(params.selector).text;
     } else {
-        attributeValue = casper.getElementAttribute(params.selector,
+        attributeValue = this.getElementAttribute(params.selector,
             params.attribute);
     }
 
@@ -119,8 +119,8 @@ function encodeResource (resource, regexp) {
     }
 }
 
-function getResource (casper, resourceMatcher, method, variable, status) {
-    var responses = casper.resources;
+function getResource (resourceMatcher, method, variable, status) {
+    var responses = this.resources;
     var request;
     var parsedData;
     var res;
@@ -133,7 +133,7 @@ function getResource (casper, resourceMatcher, method, variable, status) {
             resourceMatcher.test(res.url) ||
             res.url.indexOf(resourceMatcher) !== -1) {
 
-            request = casper.options.requests[res.id];
+            request = this.options.requests[res.id];
 
             // Get the resource with corresponding method or first resource if no method
             if ((!method || method === request.method) &&
@@ -151,16 +151,18 @@ function getResource (casper, resourceMatcher, method, variable, status) {
                         request.payload = request.postData;
                     }
                 }
-                return getVariable(null, variable, request);
+                return getVariable(variable, request);
             }
         }
     }
 }
 
-module.exports = {
-    getAttribute: getAttribute,
-    getVariable: getVariable,
-    splitAccessors: splitAccessors,
-    getResource: getResource,
-    encodeResource: encodeResource
+module.exports = function () {
+    return {
+        getAttribute: getAttribute.bind(this),
+        getVariable: getVariable.bind(this),
+        splitAccessors: splitAccessors,
+        getResource: getResource.bind(this),
+        encodeResource: encodeResource
+    };
 };

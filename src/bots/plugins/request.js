@@ -39,7 +39,7 @@ function xhr (opts) {
     return request.responseText;
 }
 
-function handleStore (template, taskGet, store, data) {
+function handleStore (store, data) {
     if (store.variable) {
         var parsedData;
         try {
@@ -51,16 +51,18 @@ function handleStore (template, taskGet, store, data) {
                 'ERROR'
             );
         }
-        template.store(
+        this.plugins.template.store(
             store.key,
-            taskGet.getVariable(null, store.variable, parsedData)
+            this.plugins.get.getVariable(store.variable, parsedData)
         );
     } else {
-        template.store(store.key, data);
+        this.plugins.template.store(store.key, data);
     }
 }
 
-module.exports = {
-    xhr: xhr,
-    handleStore: handleStore
+module.exports = function () {
+    return {
+        xhr: xhr,
+        handleStore: handleStore.bind(this)
+    };
 };
