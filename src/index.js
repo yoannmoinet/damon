@@ -27,17 +27,29 @@ function parsePath (filePath) {
     }
 }
 
-function start (filesPath, reporterFilePath) {
-    var filesList = [];
-
+function attachReporter (reporterFilePath) {
+    // Assign the reporter if it's directly passed as an argument
     try {
-        reporter = require(reporterFilePath || defaultReporter)(runner);
+        if (reporterFilePath && typeof reporterFilePath !== 'string') {
+            reporter = reporterFilePath(runner);
+        } else {
+            reporter = require(reporterFilePath || defaultReporter)(runner);
+        }
     } catch (err) {
         console.log(chalk.bgRed.bold.white(' No reporter ! ') +
                 ' [' + chalk.dim.red(err) + ']');
     }
+}
+
+function start (filesPath) {
+    var filesList = [];
 
     if (filesPath) {
+        // Allow strings
+        if (typeof filesPath === 'string') {
+            filesPath = [filesPath];
+        }
+
         filesPath.forEach(function (path) {
             filesList = filesList.concat(getFiles(path));
         });
@@ -46,9 +58,18 @@ function start (filesPath, reporterFilePath) {
             addFile(file);
         });
 
-        runner.on('finish', exitHandler.bind(null, {exit: true}, null));
         runner.run(files);
     }
+}
+
+function clear () {
+    files = [];
+    runner.clear();
+    runner.initialize();
+}
+
+function kill () {
+    return runner.killAll();
 }
 
 function addFile (taskFilename) {
@@ -59,35 +80,10 @@ function addFile (taskFilename) {
     });
 }
 
-var timeoutExit;
-function exitHandler (options, err) {
-    if (options.cleanup) {
-        runner.clean();
-    }
-
-    if (err) {
-        console.log(chalk.bgRed(' -[ ERROR ]- '), err);
-    }
-
-    if (options.exit) {
-        clearTimeout(timeoutExit);
-        // Delay the exit to let async task to finish.
-        // Runner's logging for example.
-        timeoutExit = setTimeout(function () {
-            process.exit();
-        }, 100);
-    }
-}
-
-// so the program will not close instantly
-process.stdin.resume();
-// do something when app is closing
-process.on('exit', exitHandler.bind(null, {cleanup: true}));
-// catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, {exit: true}));
-// catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, {exit: true}));
-
 module.exports = {
-    start: start
+    start: start,
+    clear: clear,
+    kill: kill,
+    attachReporter: attachReporter,
+    runner: runner
 };
