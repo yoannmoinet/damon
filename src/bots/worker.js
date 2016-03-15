@@ -130,6 +130,7 @@ function endTask (task) {
 // Prepare the navigation task.
 var taskNavigate = {
     type: 'navigate',
+    it: 'navigate to ' + config.url,
     params: {
         url: config.url
     }
