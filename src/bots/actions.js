@@ -9,7 +9,8 @@ var config = function (cwd) {
         dom: require('./actions/dom.js').bind(this),
         get: require('./actions/get.js').bind(this),
         request: require('./actions/request.js').bind(this),
-        wait: require('./actions/wait.js').bind(this)
+        wait: require('./actions/wait.js').bind(this),
+        download: require('./actions/download.js').bind(this)
     };
 
     return {
