@@ -258,7 +258,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 
 `damon` will enter text in the specified field.
 
-`xpath` cannot be used when filling a file field due to PhantomJS limitation.
+`xpath` cannot be used when filling a file field due to [PhantomJS limitiations](http://docs.casperjs.org/en/latest/modules/casper.html#fill).
 
 #### `get`
 
