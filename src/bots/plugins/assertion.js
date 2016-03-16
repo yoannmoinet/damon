@@ -23,10 +23,8 @@ function url (params) {
             return window.__STATUS__;
         });
     }, function then() {
-        var testValue = this.evaluate(function () {
-            return window.__STATUS__;
-        });
-        expect(params.expected).to.be.eql(testValue);
+        var testValue = this.plugins.request.getAndResetTestXHRStatus();
+        return expect(params.expected).to.be.eql(testValue);
     });
 };
 

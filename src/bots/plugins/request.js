@@ -91,10 +91,19 @@ function handleStore (store, data) {
     }
 }
 
+function getAndResetTestXHRStatus() {
+    return this.evaluate(function () {
+        var returnValue = window.__STATUS__;
+        window.__STATUS__ = undefined;
+        return returnValue;
+    });
+}
+
 module.exports = function () {
     return {
         xhr: xhr,
         handleStore: handleStore.bind(this),
-        testXHR: testXHR
+        testXHR: testXHR,
+        getAndResetTestXHRStatus: getAndResetTestXHRStatus.bind(this)
     };
 };
