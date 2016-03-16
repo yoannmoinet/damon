@@ -78,7 +78,8 @@ Your task file must have a `config` entry with a `size` and a `url`.
     },
     "url": "http://www.google.ca",
     "timeout": 1000,
-    "logLevel": "fatal"
+    "logLevel": "fatal",
+    "describe": "This is a job description"
 }
 ```
 
@@ -86,6 +87,7 @@ Your task file must have a `config` entry with a `size` and a `url`.
 - `url` is the starting point of `damon`.
 - `timeout` overwrite the general timeout used accross the test suite.
 - `logLevel` control at which level `damon` will log. Can be `none`, `fatal`, `error`, `warn`, `info`, `debug` or `trace`
+- `describe` is used to give a description of the job. It is printed next to the filename in the default reporter.
 
 ### `tasks`
 
@@ -98,7 +100,21 @@ Then you describe your tasks in a `tasks` entry that is an array of all the task
 ]
 ```
 
-It exists several kinds of tasks that `damon` can achieve :
+Each task will have three components:
+
+```javascript
+{
+    "type": "taskType",
+    "it": "should run this task",
+    "params": {}
+}
+```
+
+- `type` give the type of task for `damon` to run.
+- `params` provide arguments to be passed to the task.
+- `it` provide a description of the task, to be printed on the default reporter (optional).
+
+__It exists several kinds of tasks that `damon` can achieve :__
 
 #### `capture`
 
@@ -112,6 +128,23 @@ A simple screen capture :
     }
 }
 ```
+#### `download`
+
+Download the target url
+
+```javascript
+{
+    "type": "download",
+    "params": {
+        "url": "http://www.google.com",
+        "name": "google.html",
+        "method": "GET",
+        "data": ""
+    }
+}
+```
+
+An HTTP method can be set with `method`, and pass request arguments through `data`.
 
 #### `wait`
 
