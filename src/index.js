@@ -9,8 +9,9 @@ var reporter;
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
 var isWin = /^win/.test(process.platform);
+var is64 = process.arch === 'x64';
 env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.1' +
-    (isWin ? '.exe' : '');
+    (isWin ? '.exe' : (is64 ? '_64x' : ''));
 env.PATH += (isWin ? ';' : ':') + phantomjsPath;
 
 var files = [];
