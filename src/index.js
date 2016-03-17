@@ -11,7 +11,7 @@ var phantomjsPath = path.join(__dirname, '../bin');
 var isWin = /^win/.test(process.platform);
 env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.0' +
     (isWin ? '.exe' : '');
-env.PATH += ';' + phantomjsPath;
+env.PATH += (isWin ? ';' : ':') + phantomjsPath;
 
 var files = [];
 
