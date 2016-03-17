@@ -157,8 +157,6 @@ actions.navigate(config.url, function (err) {
                 failTask(currentTask);
             }
         }).then(function () {
-            casper.wait(500);
-        }).then(function () {
             // Close the current task.
             endTask(currentTask);
         });
