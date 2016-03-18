@@ -1,18 +1,18 @@
 {
   "version": "0.1.0",
   "name": "damon",
-  "private": true,
+  "private": false,
   "description": "Bot navigating urls and doing tasks.",
   "author": "Yoann Moinet <yoann.moinet@autodesk.com>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://git.autodesk.com/CICD/damon.git"
+    "url": "https://github.com/yoannmoinet/damon.git"
   },
   "bugs": {
-    "url": "https://git.autodesk.com/CICD/damon/issues"
+    "url": "https://github.com/yoannmoinet/damon/issues"
   },
-  "homepage": "https://git.autodesk.com/CICD/damon",
+  "homepage": "https://github.com/yoannmoinet/damon",
   "main": "src/index.js",
   "bin": {
     "damon": "cli.js"
