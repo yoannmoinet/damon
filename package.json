@@ -3,7 +3,7 @@
   "name": "damon",
   "private": false,
   "description": "Bot navigating urls and doing tasks.",
-  "author": "Yoann Moinet <yoann.moinet@autodesk.com>",
+  "author": "Yoann Moinet <yo@nnmoi.net>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
