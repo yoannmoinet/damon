@@ -32,6 +32,8 @@ var config = function (cwd) {
             }
         }.bind(this),
         navigate: function (url, next) {
+            // Template the url just in case
+            url = template.parse({params: url}).params;
             log('navigate to', url, 'INFO_BAR');
             var loadSuccess = function (status) {
                 this.removeListener('load.failed', loadFailed);
