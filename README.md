@@ -22,28 +22,15 @@ Options:
 
 ## Installation
 
-### Locally
-
-If you want to use it locally in your project, to automatically test your builds for example.
-It can be added manually in your `package.json` as :
-
-```javascript
-"devDependencies": {
-    "damon": "git://git.autodesk.com/CICD/damon"
-}
-```
-
-### Globally
-
-Or you can install it globally :
+via NPM :
 
 ```bash
-> git clone git@git.autodesk.com:CICD/damon.git
-> cd damon
-> npm link
-```
+# Locally
+npm install --save damon
 
-Because it's not yet available on `npm`.
+# Globally
+npm install -g damon
+```
 
 ## Usage
 
