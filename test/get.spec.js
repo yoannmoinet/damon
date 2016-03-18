@@ -16,12 +16,13 @@ describe('get', function () {
             if (attribute === 'empty') {
                 return '';
             }
-            return 'random value';
+            return 'random (value)';
         },
         evaluate: function (selector) {
             return {
                 inside: {
-                    attribute: 'value'
+                    attribute: 'value',
+                    2016: '2016Value'
                 }
             };
         }
@@ -92,6 +93,11 @@ describe('get', function () {
             expect(test).to.be('value');
         });
 
+        it('should return the value of an object for which the key is a number', function () {
+            var test = get.getVariable('key.inside[\'2016\']');
+            expect(test).to.be('2016Value');
+        });
+
         it('should return undefined for an inextant attribute of an object', function () {
             var test = get.getVariable('unknown.object');
             expect(test).to.be(undefined);
@@ -106,12 +112,17 @@ describe('get', function () {
 
         it('should return the value of an element\'s attribute', function () {
             var test = get.getAttribute({attribute: 'key', selector: '#id'});
-            expect(test).to.be('random value');
+            expect(test).to.be('random (value)');
         });
 
         it('should return what the modifier passed along captures', function () {
             var test = get.getAttribute({attribute: 'key', selector: '#id', modifier: '[^ ]*'});
             expect(test).to.be('random');
+        });
+
+        it('should return the first captured group of a modifier', function () {
+            var test = get.getAttribute({attribute: 'key', selector: '#id', modifier: '\\(([^)]+)\\)'});
+            expect(test).to.be('value');
         });
 
         it('should return undefined when an element doesn\'t exist', function () {
@@ -125,7 +136,7 @@ describe('get', function () {
         });
 
         it('should return undefined when the modifier doesn\'t capture anything', function () {
-            var test = get.getAttribute({attribute: 'key', selector: '#id', modifier: '[^a-zA-Z ]'});
+            var test = get.getAttribute({attribute: 'key', selector: '#id', modifier: '[^a-zA-Z() ]'});
             expect(test).to.be(undefined);
         });
     });

@@ -84,7 +84,8 @@ casper.plugins = {
     request: require('./plugins/request.js').call(casper),
     template: require('./plugins/template.js').call(casper),
     get: require('./plugins/get.js').call(casper),
-    assertion: require('./plugins/assertion.js').call(casper)
+    assertion: require('./plugins/assertion.js').call(casper),
+    xpath: require('./plugins/xpath.js').call(casper)
 };
 
 casper.options.waitTimeout = opts.config.timeout !== undefined ?
@@ -128,6 +129,7 @@ function endTask (task) {
 // Prepare the navigation task.
 var taskNavigate = {
     type: 'navigate',
+    it: 'navigate to ' + config.url,
     params: {
         url: config.url
     }

@@ -15,10 +15,24 @@ function key (params) {
     return expect(params.expected).to.be.eql(testValue);
 };
 
+function url (params) {
+    this.evaluate(this.plugins.request.testXHR, params);
+
+    return this.waitFor(function check() {
+        return this.evaluate(function() {
+            return window.__STATUS__;
+        });
+    }, function then() {
+        var testValue = this.plugins.request.getAndResetTestXHRStatus();
+        return expect(params.expected).to.be.eql(testValue);
+    });
+};
+
 module.exports = function () {
     return {
         variable: variable.bind(this),
         attribute: attribute.bind(this),
-        key: key.bind(this)
+        key: key.bind(this),
+        url: url.bind(this)
     };
 };

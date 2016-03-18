@@ -27,6 +27,7 @@ Runner.prototype.initialize = function () {
 
     this.folder = path.join(__dirname, './bots/files/', this.uuid);
     this.captures = path.join(this.folder, 'captures');
+    this.download = path.join(this.folder, 'download');
     this.log = path.join(this.folder, 'log.txt');
     this.cookie = path.join(this.folder, 'cookies.txt');
 
@@ -40,6 +41,8 @@ Runner.prototype.initialize = function () {
 Runner.prototype.createFiles = function createFiles () {
     // Create its captures folder.
     fs.mkdirsSync(this.captures);
+    // Create its download folder
+    fs.mkdirsSync(this.download);
     // Create the log file.
     fs.closeSync(fs.openSync(this.log, 'w'));
     // Create the cookie file.

@@ -63,31 +63,36 @@ function buildString (task) {
     // The longest a param can be.
     var maxLength = 20;
     var param;
-    for (var i in task.params) {
-        if (task.params.hasOwnProperty(i)) {
-            param = task.params[i];
-
-            if (typeof param === 'object') {
-                param = JSON.stringify(param);
-            }
-
-            // Cap param string length.
-            if (param.length > maxLength) {
-                param = param.substring(0, maxLength - 4) + '...';
-            }
-
-            st += chalk.blue.bold(i) + chalk.bold(' : ');
-            st += chalk.black(param) + ' ';
-        }
-    }
 
     if (task.duration) {
         duration = chalk.bold.magenta(' [' + task.duration + 'ms] ');
     }
 
-    return chalk.bold(task.type) + ' ' +
-        chalk.bgWhite(st) + ' ' +
-        chalk.bold.bgWhite(duration);
+    if (task.it) {
+        st += chalk.black(task.it) + ' ';
+        return chalk.bgWhite(st) + ' ' + chalk.bold.bgWhite(duration);
+    } else {
+        for (var i in task.params) {
+            if (task.params.hasOwnProperty(i)) {
+                param = task.params[i];
+
+                if (typeof param === 'object') {
+                    param = JSON.stringify(param);
+                }
+
+                // Cap param string length.
+                if (param.length > maxLength) {
+                    param = param.substring(0, maxLength - 4) + '...';
+                }
+
+                st += chalk.blue.bold(i) + chalk.bold(' : ');
+                st += chalk.black(param) + ' ';
+            }
+        }
+        return chalk.bold(task.type) + ' ' +
+            chalk.bgWhite(st) + ' ' +
+            chalk.bold.bgWhite(duration);
+    }
 }
 
 module.exports = function (runner) {
@@ -129,18 +134,24 @@ module.exports = function (runner) {
         st += ' ' + chalk.blue(path.basename(taskFile, '.json'));
 
         if (tasks) {
+            if (tasks.config.describe) {
+                st += chalk.blue.bold(': ');
+                st += chalk.black(tasks.config.describe);
+            }
+
             // Adding 1 for the navigation.
             nbTasks = tasks.tasks.length + 1;
-            st += ' ' + chalk.red(nbTasks + ' task');
+            st += chalk.bold.red(' (' + nbTasks + ' task');
             if (nbTasks > 1) {
-                st += chalk.red('s');
+                st += chalk.bold.red('s');
             }
-            st += ' ';
+            st += chalk.bold.red(') ');
 
             config = {
                 type: '   - configuration',
                 // Omit the url because we have it in the first task.
-                params: _.omit(tasks.config, 'url')
+                // Omit the describe because we have already wrote it.
+                params: _.omit(tasks.config, ['url', 'describe'])
             };
 
             st += '\n ' + buildString(config);

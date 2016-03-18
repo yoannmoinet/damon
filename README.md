@@ -78,7 +78,8 @@ Your task file must have a `config` entry with a `size` and a `url`.
     },
     "url": "http://www.google.ca",
     "timeout": 1000,
-    "logLevel": "fatal"
+    "logLevel": "fatal",
+    "describe": "This is a job description"
 }
 ```
 
@@ -86,6 +87,7 @@ Your task file must have a `config` entry with a `size` and a `url`.
 - `url` is the starting point of `damon`.
 - `timeout` overwrite the general timeout used accross the test suite.
 - `logLevel` control at which level `damon` will log. Can be `none`, `fatal`, `error`, `warn`, `info`, `debug` or `trace`
+- `describe` is used to give a description of the job. It is printed next to the filename in the default reporter.
 
 ### `tasks`
 
@@ -98,7 +100,21 @@ Then you describe your tasks in a `tasks` entry that is an array of all the task
 ]
 ```
 
-It exists several kinds of tasks that `damon` can achieve :
+Each task will have three components:
+
+```javascript
+{
+    "type": "taskType",
+    "it": "should run this task",
+    "params": {}
+}
+```
+
+- `type` give the type of task for `damon` to run.
+- `params` provide arguments to be passed to the task.
+- `it` provide a description of the task, to be printed on the default reporter (optional).
+
+__It exists several kinds of tasks that `damon` can achieve :__
 
 #### `capture`
 
@@ -112,6 +128,23 @@ A simple screen capture :
     }
 }
 ```
+#### `download`
+
+Download the target url
+
+```javascript
+{
+    "type": "download",
+    "params": {
+        "url": "http://www.google.com",
+        "name": "google.html",
+        "method": "GET",
+        "data": ""
+    }
+}
+```
+
+An HTTP method can be set with `method`, and pass request arguments through `data`.
 
 #### `wait`
 
@@ -142,12 +175,15 @@ For each one, except `time`, you can overwrite the `timeout`.
     "type": "wait",
     "params": {
         "selector": "#content",
-        "timeout": 1000
+        "timeout": 1000,
+        "xpath": false
     }
 }
 ```
 
 `damon` will wait at this step until the `selector` is available on the page.
+
+`xpath` can be used to select an element by setting it to true. Default value is false.
 
 - `visible`
 - `hidden`
@@ -198,7 +234,8 @@ A `method` can be specified to filter the resource. If nothing is specified, any
     "type": "dom",
     "params": {
         "selector": "button#btnSubmit",
-        "do": "click"
+        "xpath": false,
+        "do": "click",
     }
 }
 ```
@@ -212,6 +249,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
     "type": "dom",
     "params": {
         "selector": "input#userName",
+        "xpath": false,
         "do": "fill",
         "text": "yoann.dev"
     }
@@ -219,6 +257,8 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 ```
 
 `damon` will enter text in the specified field.
+
+`xpath` cannot be used when filling a file field due to [PhantomJS limitiations](http://docs.casperjs.org/en/latest/modules/casper.html#fill).
 
 #### `get`
 
@@ -233,6 +273,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
     "type": "get",
     "params": {
         "selector": "div#Info",
+        "xpath": false,
         "attribute": "title",
         "key": "infoTitle",
         "modifier": "[a-z]+"
@@ -278,6 +319,21 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 A `method` can be specified to filter the resource. If nothing is specified, any `method` will be accepted.
 
 To access to a variable in the payload of a resource, write `payload.variableName` for `variable` field. Resource also contains the `headers`, `method`, `time` and `url`.
+
+- `number of elements`
+
+```javascript
+{
+    "type": "get",
+    "params": {
+        "selector": "ul#list li",
+        "xpath": false,
+        "key": "liNumber"
+    }
+}
+```
+
+`damon` will store the number of elements that satisfy the `selector`
 
 ##### _access_
 
@@ -335,6 +391,7 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
     "type": "assert",
     "params": {
         "selector": "div#Info",
+        "xpath": false,
         "attribute": "title",
         "modifier": "[a-z]+",
         "expected": "expectedValue or {{key}}"
@@ -371,6 +428,23 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
 ```
 
 `damon` will `get` the value of the `key` and test it against the `expected` value.
+
+- status
+
+```javascript
+{
+    "type": "assert",
+    "params": {
+        "url": "url",
+        "https": false,
+        "expected": 200
+    }
+}
+```
+
+`damon` will try to make a `GET` request on the `url` and test the request status against the `expected` status. Same-origin policy applies.
+
+`https` flag can be set to `false` to replace `https` in the `url` by `http`.
 
 ## Contribute
 

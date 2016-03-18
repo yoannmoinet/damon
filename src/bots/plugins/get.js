@@ -16,8 +16,8 @@ function splitAccessors (variable) {
 
     //This RegExp is a combination of the two RegExp above
     //Make sure that each component follows the correct bracket notation
-    //[a-zA-Z_$][0-9a-zA-Z_$]* is to make sure that the captured variable has a valid variable name
-    var validationRegexp = /^[a-zA-Z_$][0-9a-zA-Z_$]*(\['[a-zA-Z_$][0-9a-zA-Z_$]*'\]|\["[a-zA-Z_$][0-9a-zA-Z_$]*"\])*$/;
+    //[0-9a-zA-Z_$]+ is to make sure that the captured variable has a valid variable name or key value
+    var validationRegexp = /^[a-zA-Z_$][0-9a-zA-Z_$]*(\['[0-9a-zA-Z_$]+'\]|\["[0-9a-zA-Z_$]+"\])*$/;
     var components = variable.split('.');
 
     for (var n = 0; n < components.length; n++) {
@@ -100,7 +100,8 @@ function getAttribute (params) {
         if (!matchedRegexp) {
             return;
         }
-        attributeValue = matchedRegexp[0];
+        // Try to get a captured group, return the matched string if there is no capture group
+        attributeValue = matchedRegexp[1] || matchedRegexp[0];
     }
 
     //when getting an HTML attribute, '' is equivalent of not existing, so undefined
@@ -157,12 +158,20 @@ function getResource (resourceMatcher, method, variable, status) {
     }
 }
 
+function getElementsCount (selector) {
+    var n = this.evaluate(function (selector) {
+        return __utils__.findAll(selector).length;
+    }, selector);
+    return n;
+}
+
 module.exports = function () {
     return {
         getAttribute: getAttribute.bind(this),
         getVariable: getVariable.bind(this),
         splitAccessors: splitAccessors,
         getResource: getResource.bind(this),
-        encodeResource: encodeResource
+        encodeResource: encodeResource,
+        getElementsCount: getElementsCount.bind(this)
     };
 };

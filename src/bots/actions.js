@@ -1,14 +1,16 @@
-var timeoutDuration = 10000;
+var timeoutDuration = 20000;
 
 var config = function (cwd) {
     var template = this.plugins.template;
+    var xpath = this.plugins.xpath;
     var actions = {
         assert: require('./actions/assert.js').bind(this),
         capture: require('./actions/capture.js').bind(this),
         dom: require('./actions/dom.js').bind(this),
         get: require('./actions/get.js').bind(this),
         request: require('./actions/request.js').bind(this),
-        wait: require('./actions/wait.js').bind(this)
+        wait: require('./actions/wait.js').bind(this),
+        download: require('./actions/download.js').bind(this)
     };
 
     return {
@@ -16,6 +18,8 @@ var config = function (cwd) {
             if (task.type && actions[task.type]) {
                 var response;
                 task = template.parse(task);
+                task.params = xpath.parse(task.params);
+
                 response = actions[task.type](
                     task.params,
                     timeoutDuration,
