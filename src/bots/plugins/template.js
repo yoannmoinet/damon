@@ -33,13 +33,13 @@ function parseTask (task) {
 }
 
 function getKeyValue (key) {
-    return store[key];
+    return this.plugins.get.getVariable(key, store);
 }
 
 module.exports = function () {
     return {
         parse: parseTask,
         store: storeKeyValue,
-        get: getKeyValue
+        get: getKeyValue.bind(this)
     };
 };

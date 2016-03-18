@@ -71,8 +71,8 @@ function testXHR(opts) {
 }
 
 function handleStore (store, data) {
+    var parsedData;
     if (store.variable) {
-        var parsedData;
         try {
             parsedData = JSON.parse(data);
         } catch (e) {
@@ -87,7 +87,14 @@ function handleStore (store, data) {
             this.plugins.get.getVariable(store.variable, parsedData)
         );
     } else {
-        this.plugins.template.store(store.key, data);
+        try {
+            // Try to save the data as a JSON object
+            parsedData = JSON.parse(data);
+            this.plugins.template.store(store.key, parsedData);
+        } catch (e) {
+            // not a json, so just pass the data as it is
+            this.plugins.template.store(store.key, data);
+        }
     }
 }
 

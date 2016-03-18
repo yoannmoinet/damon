@@ -81,7 +81,6 @@ var logger = require('./logger')(cwd);
 
 //Extend Casper with helper modules
 casper.plugins = {
-
     request: require('./plugins/request.js').call(casper),
     template: require('./plugins/template.js').call(casper),
     get: require('./plugins/get.js').call(casper),
