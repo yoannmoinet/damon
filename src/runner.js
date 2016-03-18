@@ -316,7 +316,10 @@ Runner.prototype.spawn = function spawnChild (tasks) {
             '--cookies-file=' + this.cookie,
             '--web-security=no',
             '--log-file=' + this.log
-        ]
+        ],
+        {
+            env: process.env
+        }
     );
     child.uuid = this.uuid + '-' + child.pid;
 

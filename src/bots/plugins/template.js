@@ -1,4 +1,9 @@
+var system = require('system');
 var store = {};
+// Transfer env vars into the store.
+for (var key in system.env) {
+    store[key] = system.env[key];
+}
 
 function storeKeyValue (key, value) {
     store[key] = value;
