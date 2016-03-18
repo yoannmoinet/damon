@@ -89,7 +89,7 @@ function handleStore (store, data) {
             this.plugins.get.getVariable(store.variable, parsedData)
         );
     } else {
-        this.plugins.template.store(store.key, parseData || data);
+        this.plugins.template.store(store.key, parsedData || data);
     }
 }
 
