@@ -1,5 +1,20 @@
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/yoannmoinet/damon/compare/v0.2.0...v0.2.1) (2016-03-22)
+
+
+### Bug Fixes
+
+* email ([0e2b7a8](https://github.com/yoannmoinet/damon/commit/0e2b7a8))
+
+### Features
+
+* add a postinstall script to chmod *nix executables ([2fb232d](https://github.com/yoannmoinet/damon/commit/2fb232d))
+* add logo ([f6a18ed](https://github.com/yoannmoinet/damon/commit/f6a18ed))
+
+
+
 <a name="0.2.0"></a>
-# [0.2.0](https://github.com/yoannmoinet/damon/compare/v0.0.9...v0.2.0) (2016-03-22)
+# [0.2.0](https://github.com/yoannmoinet/damon/compare/v0.1.0...v0.2.0) (2016-03-18)
 
 
 ### Bug Fixes
@@ -15,7 +30,7 @@
 * **get resource:** use strict equality for status ([97923e8](https://github.com/yoannmoinet/damon/commit/97923e8))
 * **getAttribute:** get captured group of a modifier ([693994a](https://github.com/yoannmoinet/damon/commit/693994a))
 * **log:** print dumps correctly ([9c4f5cc](https://github.com/yoannmoinet/damon/commit/9c4f5cc))
-* throw error when getVariable return null ([fa30092](https://github.com/yoannmoinet/damon/commit/fa30092))
+* add a timeout function when dom times out ([d551a80](https://github.com/yoannmoinet/damon/commit/d551a80))
 * **log:** print even if not a string (integer for example) ([7f596f8](https://github.com/yoannmoinet/damon/commit/7f596f8))
 * **log:** use bind instead of call ([8c70e97](https://github.com/yoannmoinet/damon/commit/8c70e97))
 * **logger:** transit the logId if already set ([3c8ce30](https://github.com/yoannmoinet/damon/commit/3c8ce30))
@@ -26,14 +41,11 @@
 * **runner:** do not unescape anti-slash escapes ([39b5d46](https://github.com/yoannmoinet/damon/commit/39b5d46))
 * **runner:** use 'test' and 'pass' events correctly ([5571dcc](https://github.com/yoannmoinet/damon/commit/5571dcc))
 * **taskGet:** handle better returned falsy values ([97b5a24](https://github.com/yoannmoinet/damon/commit/97b5a24))
-* add a timeout function when dom times out ([d551a80](https://github.com/yoannmoinet/damon/commit/d551a80))
 * add more time for timeout and give an half-second pause between each task ([ad144a9](https://github.com/yoannmoinet/damon/commit/ad144a9))
 * avoid considering the 'finish' report as an error ([162a493](https://github.com/yoannmoinet/damon/commit/162a493))
 * avoid multiple parallel runs ([ce0371b](https://github.com/yoannmoinet/damon/commit/ce0371b))
 * can pass status dynamically when getting resource ([e2e5be0](https://github.com/yoannmoinet/damon/commit/e2e5be0))
 * change how assert types are handled and log an error if no task found ([a836806](https://github.com/yoannmoinet/damon/commit/a836806))
-* **wait:** use params.time even if 0 ([6e78ecc](https://github.com/yoannmoinet/damon/commit/6e78ecc))
-* email ([0e2b7a8](https://github.com/yoannmoinet/damon/commit/0e2b7a8))
 * export directly actions function ([61e516c](https://github.com/yoannmoinet/damon/commit/61e516c))
 * more modular actions ([c5ba0c9](https://github.com/yoannmoinet/damon/commit/c5ba0c9))
 * pass the cwd to the actions ([a5fba01](https://github.com/yoannmoinet/damon/commit/a5fba01))
@@ -44,15 +56,17 @@
 * stop passing casper as a parameter for request helper function ([e22f6b1](https://github.com/yoannmoinet/damon/commit/e22f6b1))
 * support freaking node 0.10.x ([7f7a053](https://github.com/yoannmoinet/damon/commit/7f7a053))
 * take out the wait 500ms for each task ([1cc8ce5](https://github.com/yoannmoinet/damon/commit/1cc8ce5))
+* throw error when getVariable return null ([fa30092](https://github.com/yoannmoinet/damon/commit/fa30092))
 * try to save a response body as an object and ability to access an saved object w ([052231c](https://github.com/yoannmoinet/damon/commit/052231c))
 * typo ([de43472](https://github.com/yoannmoinet/damon/commit/de43472))
+* **template:** take out global for regexp test ([7579a5d](https://github.com/yoannmoinet/damon/commit/7579a5d))
 * use encodeURI instead of encodeURIComponent ([92ed2f9](https://github.com/yoannmoinet/damon/commit/92ed2f9))
 * use one call instead of bind + call ([80e60bb](https://github.com/yoannmoinet/damon/commit/80e60bb))
 * use strict comparisons ([4ddbe66](https://github.com/yoannmoinet/damon/commit/4ddbe66))
 * use this instead of casper ([e8bdbd2](https://github.com/yoannmoinet/damon/commit/e8bdbd2))
-* **template:** take out global for regexp test ([7579a5d](https://github.com/yoannmoinet/damon/commit/7579a5d))
 * **unix:** update to correctly write the PATH on unix systems ([7bd1384](https://github.com/yoannmoinet/damon/commit/7bd1384))
 * **wait:** pass a timeout function to avoid casper's throw ([d82982c](https://github.com/yoannmoinet/damon/commit/d82982c))
+* **wait:** use params.time even if 0 ([6e78ecc](https://github.com/yoannmoinet/damon/commit/6e78ecc))
 
 ### Features
 
@@ -65,7 +79,6 @@
 * add an initialize function to the runner ([1ef865c](https://github.com/yoannmoinet/damon/commit/1ef865c))
 * add clear function to the runner ([26a3020](https://github.com/yoannmoinet/damon/commit/26a3020))
 * add download ability ([2f99fd7](https://github.com/yoannmoinet/damon/commit/2f99fd7))
-* add logo ([f6a18ed](https://github.com/yoannmoinet/damon/commit/f6a18ed))
 * add the `request` action to do AJAX calls during the workflow ([8817c9a](https://github.com/yoannmoinet/damon/commit/8817c9a))
 * add the logger to help communicate between casper and node ([9edb988](https://github.com/yoannmoinet/damon/commit/9edb988))
 * add the possibility to unbind the logfile watching ([05706ed](https://github.com/yoannmoinet/damon/commit/05706ed))
@@ -84,13 +97,12 @@
 * make attaching the reporter part of the API ([82ff27b](https://github.com/yoannmoinet/damon/commit/82ff27b))
 * make src/index.js the main file ([c7f3836](https://github.com/yoannmoinet/damon/commit/c7f3836))
 * transmit attributes between tasks ([3505937](https://github.com/yoannmoinet/damon/commit/3505937))
-* **store:** allow templating of values in deep-objects too ([af1a217](https://github.com/yoannmoinet/damon/commit/af1a217))
 * update license to Apache-2.0 ([e30ae5c](https://github.com/yoannmoinet/damon/commit/e30ae5c))
+* **store:** allow templating of values in deep-objects too ([af1a217](https://github.com/yoannmoinet/damon/commit/af1a217))
 * use env vars as base for the template plugin ([d44073f](https://github.com/yoannmoinet/damon/commit/d44073f))
-* **get:** make `getVariable` to be useable on any var ([b4f899f](https://github.com/yoannmoinet/damon/commit/b4f899f))
-* WAY better begin/pending/end/fail/success task differentiation ([a42f101](https://github.com/yoannmoinet/damon/commit/a42f101))
 * **config:** get logLevel and timeout from the config of tasks file ([f8f78a6](https://github.com/yoannmoinet/damon/commit/f8f78a6))
 * **get:** get the number of elements satisfying a selector ([1b8277f](https://github.com/yoannmoinet/damon/commit/1b8277f))
+* **get:** make `getVariable` to be useable on any var ([b4f899f](https://github.com/yoannmoinet/damon/commit/b4f899f))
 * **log:** add logLevel feature in the log module ([9b96fb5](https://github.com/yoannmoinet/damon/commit/9b96fb5))
 * **phantom:** update phantomJS to 2.1.1 ([ba88ad4](https://github.com/yoannmoinet/damon/commit/ba88ad4))
 * **phantomjs:** add 64 architectures detection ([cc1ac54](https://github.com/yoannmoinet/damon/commit/cc1ac54))
@@ -98,6 +110,7 @@
 * **reporter:** add duration ([e4a737e](https://github.com/yoannmoinet/damon/commit/e4a737e))
 * **runner:** pass the complete report to the finish event ([cc09a26](https://github.com/yoannmoinet/damon/commit/cc09a26))
 * **wait:** timeout default to 10sec instead of 30sec ([8f6cb5e](https://github.com/yoannmoinet/damon/commit/8f6cb5e))
+* WAY better begin/pending/end/fail/success task differentiation ([a42f101](https://github.com/yoannmoinet/damon/commit/a42f101))
 * **worker:** transmit more details about errors ([618e434](https://github.com/yoannmoinet/damon/commit/618e434))
 
 ### Performance Improvements
@@ -107,27 +120,60 @@
 
 
 
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/yoannmoinet/damon/compare/v0.0.9...v0.1.0) (2016-01-28)
+
+
+
+
 <a name="0.0.9"></a>
-## [0.0.9](https://github.com/yoannmoinet/damon/compare/v0.0.6...v0.0.9) (2015-12-17)
+## [0.0.9](https://github.com/yoannmoinet/damon/compare/v0.0.8...v0.0.9) (2015-12-17)
+
+
+### Bug Fixes
+
+* **cli:** correct cwd when passing the file ([8fea490](https://github.com/yoannmoinet/damon/commit/8fea490))
+
+
+
+<a name="0.0.8"></a>
+## [0.0.8](https://github.com/yoannmoinet/damon/compare/v0.0.7...v0.0.8) (2015-12-17)
+
+
+### Bug Fixes
+
+* **phantom:** new build ([e5f42d6](https://github.com/yoannmoinet/damon/commit/e5f42d6))
+
+
+
+<a name="0.0.7"></a>
+## [0.0.7](https://github.com/yoannmoinet/damon/compare/v0.0.6...v0.0.7) (2015-12-17)
 
 
 ### Bug Fixes
 
 * rename phantomjs exec for ubuntu version ([3614586](https://github.com/yoannmoinet/damon/commit/3614586))
-* **cli:** correct cwd when passing the file ([8fea490](https://github.com/yoannmoinet/damon/commit/8fea490))
 * **phantom:** build phantom for ubuntu 12.0 ([2863f0c](https://github.com/yoannmoinet/damon/commit/2863f0c))
-* **phantom:** new build ([e5f42d6](https://github.com/yoannmoinet/damon/commit/e5f42d6))
 
 
 
 <a name="0.0.6"></a>
-## [0.0.6](https://github.com/yoannmoinet/damon/compare/v0.0.4...v0.0.6) (2015-12-17)
+## [0.0.6](https://github.com/yoannmoinet/damon/compare/v0.0.5...v0.0.6) (2015-12-17)
 
 
 ### Bug Fixes
 
 * remove duplicate import ([a8967bc](https://github.com/yoannmoinet/damon/commit/a8967bc))
 * **agent:** clean exit ([cf72682](https://github.com/yoannmoinet/damon/commit/cf72682))
+
+
+
+<a name="0.0.5"></a>
+## [0.0.5](https://github.com/yoannmoinet/damon/compare/v0.0.4...v0.0.5) (2015-12-17)
+
+
+### Bug Fixes
+
 * **phantom:** update unix build ([029d2c4](https://github.com/yoannmoinet/damon/commit/029d2c4))
 
 
