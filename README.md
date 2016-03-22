@@ -1,4 +1,4 @@
-# damon
+![logo](./media/logo.png)
 
 > Bots navigating urls and doing tasks.
 
