@@ -318,6 +318,8 @@ Runner.prototype.spawn = function spawnChild (tasks) {
             '--cwd=' + this.folder,
             '--cookies-file=' + this.cookie,
             '--web-security=no',
+            '--ssl-protocol=any',
+            '--ignore-ssl-errors=yes',
             '--log-file=' + this.log
         ],
         {
