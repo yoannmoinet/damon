@@ -161,6 +161,7 @@ Runner.prototype.clear = function clear () {
 // Kill all subprocesses
 Runner.prototype.killAll = function killAll () {
     this.cancelled = true;
+    this.files = [];
     for (var i in this.children) {
         if (this.children.hasOwnProperty(i)) {
             this.killChild(i);
