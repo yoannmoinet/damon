@@ -23,15 +23,9 @@ var damon = require('damon');
 damon.start('./tasks.json');
 ```
 
-### Globally
+## CLI
 
-```bash
-> damon run tasks.json
-or
-> damon run tasks1.json tasks2.json
-or 
-> damon run *.json
-```
+You can use `damon` via a CLI, available at [damonjs/damon-cli](https://github.com/damonjs/damon-cli)
 
 ## Task File
 
