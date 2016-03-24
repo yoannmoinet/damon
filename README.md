@@ -2,8 +2,6 @@
 
 > Bots navigating urls and doing tasks.
 
-![logo](./media/demo.gif)
-
 `damon` is a tool that runs on [CasperJS](http://casperjs.org/) which runs on [PhantomJS](http://phantomjs.org/).
 
 He feeds on JSON files that describe what tasks he needs to achieve on specified starting URL.
