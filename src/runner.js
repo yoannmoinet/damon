@@ -192,12 +192,15 @@ Runner.prototype.killChild = function killChild (uuid) {
         exec(killCommand, function (error, stdout, stderr) {
             if (error !== null) {
                 console.log(chalk.bgRed(' -[ ERROR ]- '), error);
+                return;
             }
             child.kill('SIGTERM');
         });
     }
 
-    this.cleanChild(uuid);
+    if (child.killed) {
+        this.cleanChild(uuid);
+    }
 };
 
 // Clean instance of child
