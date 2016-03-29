@@ -3,6 +3,7 @@
 var program = require('commander');
 var agent = require('./src/index');
 var pkg = require('./package.json');
+var chalk = require('chalk');
 
 program._name = pkg.name;
 

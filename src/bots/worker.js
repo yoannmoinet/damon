@@ -6,6 +6,9 @@ var utils = require('utils');
 var system = require('system');
 var pid = system.pid;
 
+// Pass the PhantomJS pid to the runner
+console.log('PhantomJS PID: ' + pid);
+
 var opts, currentTask;
 
 if (dirname.length > 1) {

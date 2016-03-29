@@ -1,6 +1,7 @@
 var Emitter = require('events').EventEmitter;
 var util = require('util');
 var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
 var fs = require('fs-extra');
 var path = require('path');
 var uuid = require('node-uuid').v1;
@@ -161,7 +162,6 @@ Runner.prototype.clear = function clear () {
 // Kill all subprocesses
 Runner.prototype.killAll = function killAll () {
     this.cancelled = true;
-    this.files = [];
     for (var i in this.children) {
         if (this.children.hasOwnProperty(i)) {
             this.killChild(i);
@@ -182,7 +182,19 @@ Runner.prototype.killChild = function killChild (uuid) {
     }
 
     if (typeof child.kill === 'function') {
-        child.kill('SIGTERM');
+        var isWin = /^win/.test(process.platform);
+        var killCommand = killCommand = 'kill -9 ' + child.PhantomPID;
+
+        if (isWin) {
+            killCommand = 'taskkill /PID ' + child.PhantomPID + ' /F';
+        }
+
+        exec(killCommand, function (error, stdout, stderr) {
+            if (error !== null) {
+                console.log(chalk.bgRed(' -[ ERROR ]- '), error);
+            }
+            child.kill('SIGTERM');
+        });
     }
 
     this.cleanChild(uuid);
@@ -202,7 +214,7 @@ Runner.prototype.runTask = function runTask () {
         // Clean the previous child and do the next one.
         this.once('end', function (child, code, signal) {
             if (child) {
-                this.killChild(child.uuid);
+                this.cleanChild(child.uuid);
             }
             // Do the next one.
             this.runTask();
@@ -347,7 +359,12 @@ Runner.prototype.bindChild = function bindChild (child) {
     child.on('close', this.end.bind(this, child));
 
     child.stdout.on('data', function (data) {
-        console.log(chalk.blue(' -[ child ]- '), data.toString());
+        var output = data.toString();
+        if (output.indexOf('PhantomJS PID: ') > -1) {
+            child.PhantomPID = parseInt(output.split(': ')[1]);
+        } else {
+            console.log(chalk.blue(' -[ child ]- '), output);
+        }
     });
 
     child.stderr.on('data', function (data) {
