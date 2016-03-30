@@ -64,6 +64,7 @@ Your task file must have a `config` entry with a `size` and a `url`.
         "height": 768
     },
     "url": "http://www.google.ca",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A",
     "timeout": 1000,
     "logLevel": "fatal",
     "describe": "This is a job description"
@@ -72,6 +73,7 @@ Your task file must have a `config` entry with a `size` and a `url`.
 
 - `size` is for the viewport's size.
 - `url` is the starting point of `damon`.
+- `userAgent` is a custom userAgent for `damon` to use. Default one is Chrome 44 on Windows 7.
 - `timeout` overwrite the general timeout used accross the test suite.
 - `logLevel` control at which level `damon` will log. Can be `none`, `fatal`, `error`, `warn`, `info`, `debug` or `trace`
 - `describe` is used to give a description of the job. It is printed next to the filename in the default reporter.
