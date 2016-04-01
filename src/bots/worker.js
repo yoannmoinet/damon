@@ -76,8 +76,7 @@ var logLevel = config.logLevel !== undefined ?
     config.logLevel : 'none';
 var log = require('./log').config.call(casper, pid, logLevel);
 var logger = require('./logger')(cwd);
-var userAgent = config.userAgent !== undefined ?
-    config.userAgent : 'Mozilla/5.0 (Windows NT 6.1; WOW64) ' +
+var userAgent = config.userAgent || 'Mozilla/5.0 (Windows NT 6.1; WOW64) ' +
     'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36';
 
 //Extend Casper with helper modules
