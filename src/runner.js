@@ -182,6 +182,8 @@ Runner.prototype.killChild = function killChild (uuid) {
     }
 
     if (typeof child.kill === 'function') {
+        //Child process can't be killed if it has a subprocess still running
+        //So, PhantomJs has to be killed first in order to kill CasperJs
         var isWin = /^win/.test(process.platform);
         var killCommand = 'kill -9 ' + child.PhantomPID;
 
@@ -189,15 +191,21 @@ Runner.prototype.killChild = function killChild (uuid) {
             killCommand = 'taskkill /PID ' + child.PhantomPID + ' /F';
         }
 
+        //Kill PhantomJs using a kill command depending on the platform
         exec(killCommand, function (error, stdout, stderr) {
             if (error !== null) {
-                console.log(chalk.bgRed(' -[ ERROR ]- '), error);
+                console.log(
+                    chalk.bgRed(' -[ ERROR ]- Cannot end PhantomJs: '),
+                    error
+                );
                 return;
             }
+            //Kill CasperJs if PhantomJs has been successfully killed
             child.kill('SIGTERM');
         });
     }
 
+    //Clean the child process if it has been successfully killed
     if (child.killed) {
         this.cleanChild(uuid);
     }
@@ -363,6 +371,10 @@ Runner.prototype.bindChild = function bindChild (child) {
 
     child.stdout.on('data', function (data) {
         var output = data.toString();
+
+        //PhantomJS PID is passed as 'PhantomJS PID: PID'
+        //Extract PhantomJS's PID once received
+        //Otherwise, console.log the output message
         if (output.indexOf('PhantomJS PID: ') > -1) {
             child.PhantomPID = parseInt(output.split(': ')[1]);
         } else {
