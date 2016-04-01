@@ -183,7 +183,7 @@ Runner.prototype.killChild = function killChild (uuid) {
 
     if (typeof child.kill === 'function') {
         var isWin = /^win/.test(process.platform);
-        var killCommand = killCommand = 'kill -9 ' + child.PhantomPID;
+        var killCommand = 'kill -9 ' + child.PhantomPID;
 
         if (isWin) {
             killCommand = 'taskkill /PID ' + child.PhantomPID + ' /F';
