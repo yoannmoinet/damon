@@ -10,7 +10,8 @@ var config = function (cwd) {
         get: require('./actions/get.js').bind(this),
         request: require('./actions/request.js').bind(this),
         wait: require('./actions/wait.js').bind(this),
-        download: require('./actions/download.js').bind(this)
+        download: require('./actions/download.js').bind(this),
+        navigate: require('./actions/navigate.js').bind(this)
     };
 
     return {
