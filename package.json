@@ -7,12 +7,12 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yoannmoinet/damon.git"
+    "url": "https://github.com/damonjs/damon.git"
   },
   "bugs": {
-    "url": "https://github.com/yoannmoinet/damon/issues"
+    "url": "https://github.com/damonjs/damon/issues"
   },
-  "homepage": "https://github.com/yoannmoinet/damon",
+  "homepage": "https://github.com/damonjs/damon",
   "main": "src/index.js",
   "scripts": {
     "preversion": "npm test",
