@@ -6,12 +6,21 @@ var runner = require('./runner.js');
 var defaultReporter = path.join(__dirname, './reporter.js');
 var reporter;
 
+// Configure environment
 var env = process.env;
 var phantomjsPath = path.join(__dirname, '../bin');
 var isWin = /^win/.test(process.platform);
+var isMac = /^darwin/.test(process.platform);
 var is64 = process.arch === 'x64';
-env.PHANTOMJS_EXECUTABLE = phantomjsPath + '/phantomjs_2.1' +
-    (isWin ? '.exe' : (is64 ? '_64x' : ''));
+var phantom = phantomjsPath + '/phantomjs_2.1_';
+if (isWin) {
+    phantom += 'win.exe';
+} else if (isMac) {
+    phantom += 'mac';
+} else {
+    phantom += 'linux' + (is64 ? '_64x' : '');
+}
+env.PHANTOMJS_EXECUTABLE = phantom;
 env.PATH += (isWin ? ';' : ':') + phantomjsPath;
 
 var files = [];
