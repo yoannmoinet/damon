@@ -1,5 +1,3 @@
-var timeoutDuration = 20000;
-
 var config = function (cwd) {
     var template = this.plugins.template;
     var xpath = this.plugins.xpath;
@@ -23,7 +21,8 @@ var config = function (cwd) {
 
                 response = actions[task.type](
                     task.params,
-                    timeoutDuration,
+                    task.params && task.params.timeout !== undefined ?
+                        task.params.timeout : this.options.waitTimeout,
                     cwd
                 );
 
