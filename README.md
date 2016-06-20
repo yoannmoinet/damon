@@ -20,6 +20,10 @@ npm install --save damon
 
 ```node
 var damon = require('damon');
+// Attach the reporter.
+damon.attachReporter();
+// You can attach your own reporter too
+// damon.attachReporter('./path/to/my/reporter.js');
 damon.start('./tasks.json');
 ```
 
