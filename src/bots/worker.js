@@ -22,9 +22,7 @@ var casper = require('casper').create({
     pageSettings: {
         loadImages: true,
         loadPlugins: true,
-        localToRemoteUrlAccessEnabled: true,
-        userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 ' +
-            '(KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
+        localToRemoteUrlAccessEnabled: true
     },
     requests: {},
     verbose: false,
@@ -81,6 +79,8 @@ var logLevel = config.logLevel !== undefined ?
     config.logLevel : 'none';
 var log = require('./log').config.call(casper, pid, logLevel);
 var logger = require('./logger')(cwd);
+var userAgent = config.userAgent || 'Mozilla/5.0 (Windows NT 6.1; WOW64) ' +
+    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36';
 
 //Extend Casper with helper modules
 casper.plugins = {
@@ -91,14 +91,15 @@ casper.plugins = {
     xpath: require('./plugins/xpath.js').call(casper)
 };
 
-casper.options.waitTimeout = opts.config.timeout !== undefined ?
-    opts.config.timeout : 10000;
+casper.options.waitTimeout = config.timeout !== undefined ?
+    config.timeout : 10000;
 casper.options.logLevel = logLevel;
-casper.options.viewportSize = opts.config.size ?
-    opts.config.size : {
+casper.options.viewportSize = config.size ?
+    config.size : {
         width: 1024,
         height: 720
     };
+casper.userAgent(userAgent);
 
 var actions = require('./actions').config.call(casper, cwd);
 
