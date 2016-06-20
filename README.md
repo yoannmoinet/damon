@@ -349,6 +349,29 @@ If you don't pass a `variable` it will store the complete response.
 
 Otherwise, it will try to parse the response as JSON and look for your variable.
 
+#### `navigate`
+
+`damon` can arbitrarily navigate to other urls during its worflow.
+
+```javascript
+{
+    "type": "navigate",
+    "params": {
+        "url": "https://www.google.com",
+        "method": "GET",
+        "data": {
+            "key": "value"
+        },
+        "headers": {
+            "name": "value"
+        },
+        "encoding": "utf8"
+    }
+}
+```
+
+Only `params.url` is required.
+
 #### `assert`
 
 `damon` can perform different `assert` actions to test a value with an expected value:
