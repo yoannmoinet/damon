@@ -1,3 +1,22 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/yoannmoinet/damon/compare/v0.2.1...v0.3.0) (2016-06-20)
+
+
+### Bug Fixes
+
+* add phantomjs ssl "support" via flags ([a4ae5ff](https://github.com/yoannmoinet/damon/commit/a4ae5ff))
+* **runner:** empty runner file queue when killing the bots process ([bda265a](https://github.com/yoannmoinet/damon/commit/bda265a))
+* cleanChild only if the child process has been killed ([c548152](https://github.com/yoannmoinet/damon/commit/c548152))
+* kill casper and phantom processes with killAll ([e150b6e](https://github.com/yoannmoinet/damon/commit/e150b6e))
+* take out the double assignment ([2e1d60c](https://github.com/yoannmoinet/damon/commit/2e1d60c))
+
+
+### Features
+
+* ability to pass a custom userAgent in config ([50619e8](https://github.com/yoannmoinet/damon/commit/50619e8))
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/yoannmoinet/damon/compare/v0.2.0...v0.2.1) (2016-03-22)
 
@@ -5,6 +24,7 @@
 ### Bug Fixes
 
 * email ([0e2b7a8](https://github.com/yoannmoinet/damon/commit/0e2b7a8))
+
 
 ### Features
 
@@ -57,7 +77,7 @@
 * support freaking node 0.10.x ([7f7a053](https://github.com/yoannmoinet/damon/commit/7f7a053))
 * take out the wait 500ms for each task ([1cc8ce5](https://github.com/yoannmoinet/damon/commit/1cc8ce5))
 * throw error when getVariable return null ([fa30092](https://github.com/yoannmoinet/damon/commit/fa30092))
-* try to save a response body as an object and ability to access an saved object w ([052231c](https://github.com/yoannmoinet/damon/commit/052231c))
+* try to save a response body as an object and ability to access an saved object when doing assert key ([052231c](https://github.com/yoannmoinet/damon/commit/052231c))
 * typo ([de43472](https://github.com/yoannmoinet/damon/commit/de43472))
 * **template:** take out global for regexp test ([7579a5d](https://github.com/yoannmoinet/damon/commit/7579a5d))
 * use encodeURI instead of encodeURIComponent ([92ed2f9](https://github.com/yoannmoinet/damon/commit/92ed2f9))
@@ -68,10 +88,11 @@
 * **wait:** pass a timeout function to avoid casper's throw ([d82982c](https://github.com/yoannmoinet/damon/commit/d82982c))
 * **wait:** use params.time even if 0 ([6e78ecc](https://github.com/yoannmoinet/damon/commit/6e78ecc))
 
+
 ### Features
 
 * ability to get values from requests ([2843eb5](https://github.com/yoannmoinet/damon/commit/2843eb5))
-* accept modifier for an attribute and accept @text as an attribute for text insid ([7b2b3d5](https://github.com/yoannmoinet/damon/commit/7b2b3d5))
+* accept modifier for an attribute and accept [@text](https://github.com/text) as an attribute for text inside of the selector ([7b2b3d5](https://github.com/yoannmoinet/damon/commit/7b2b3d5))
 * accept reporters not only as filepath but as objects also ([6bdffdb](https://github.com/yoannmoinet/damon/commit/6bdffdb))
 * add a killAll function to the runner ([f37c642](https://github.com/yoannmoinet/damon/commit/f37c642))
 * add a runner ([887ac21](https://github.com/yoannmoinet/damon/commit/887ac21))
@@ -113,6 +134,7 @@
 * WAY better begin/pending/end/fail/success task differentiation ([a42f101](https://github.com/yoannmoinet/damon/commit/a42f101))
 * **worker:** transmit more details about errors ([618e434](https://github.com/yoannmoinet/damon/commit/618e434))
 
+
 ### Performance Improvements
 
 * Wait url can now accept a regexp as option ([1a53678](https://github.com/yoannmoinet/damon/commit/1a53678))
@@ -122,7 +144,6 @@
 
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/yoannmoinet/damon/compare/v0.0.9...v0.1.0) (2016-01-28)
-
 
 
 
@@ -183,7 +204,6 @@
 
 
 
-
 <a name="0.0.3"></a>
 ## [0.0.3](https://github.com/yoannmoinet/damon/compare/v0.0.2...v0.0.3) (2015-12-15)
 
@@ -202,6 +222,7 @@
 
 * update to new casper syntax for internal modules ([2939a04](https://github.com/yoannmoinet/damon/commit/2939a04))
 * use absolute path ([41c6ef2](https://github.com/yoannmoinet/damon/commit/41c6ef2))
+
 
 ### Features
 

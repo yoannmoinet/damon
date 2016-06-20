@@ -1,6 +1,7 @@
 var Emitter = require('events').EventEmitter;
 var util = require('util');
 var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
 var fs = require('fs-extra');
 var path = require('path');
 var uuid = require('node-uuid').v1;
@@ -181,10 +182,33 @@ Runner.prototype.killChild = function killChild (uuid) {
     }
 
     if (typeof child.kill === 'function') {
-        child.kill('SIGTERM');
+        //Child process can't be killed if it has a subprocess still running
+        //So, PhantomJs has to be killed first in order to kill CasperJs
+        var isWin = /^win/.test(process.platform);
+        var killCommand = 'kill -9 ' + child.PhantomPID;
+
+        if (isWin) {
+            killCommand = 'taskkill /PID ' + child.PhantomPID + ' /F';
+        }
+
+        //Kill PhantomJs using a kill command depending on the platform
+        exec(killCommand, function (error, stdout, stderr) {
+            if (error !== null) {
+                console.log(
+                    chalk.bgRed(' -[ ERROR ]- Cannot end PhantomJs: '),
+                    error
+                );
+                return;
+            }
+            //Kill CasperJs if PhantomJs has been successfully killed
+            child.kill('SIGTERM');
+        });
     }
 
-    this.cleanChild(uuid);
+    //Clean the child process if it has been successfully killed
+    if (child.killed) {
+        this.cleanChild(uuid);
+    }
 };
 
 // Clean instance of child
@@ -201,7 +225,7 @@ Runner.prototype.runTask = function runTask () {
         // Clean the previous child and do the next one.
         this.once('end', function (child, code, signal) {
             if (child) {
-                this.killChild(child.uuid);
+                this.cleanChild(child.uuid);
             }
             // Do the next one.
             this.runTask();
@@ -348,7 +372,16 @@ Runner.prototype.bindChild = function bindChild (child) {
     child.on('close', this.end.bind(this, child));
 
     child.stdout.on('data', function (data) {
-        console.log(chalk.blue(' -[ child ]- '), data.toString());
+        var output = data.toString();
+
+        //PhantomJS PID is passed as 'PhantomJS PID: PID'
+        //Extract PhantomJS's PID once received
+        //Otherwise, console.log the output message
+        if (output.indexOf('PhantomJS PID: ') > -1) {
+            child.PhantomPID = parseInt(output.split(': ')[1]);
+        } else {
+            console.log(chalk.blue(' -[ child ]- '), output);
+        }
     });
 
     child.stderr.on('data', function (data) {
