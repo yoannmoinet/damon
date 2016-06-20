@@ -1,3 +1,8 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/yoannmoinet/damon/compare/v0.3.0...v0.4.0) (2016-06-20)
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/yoannmoinet/damon/compare/v0.2.1...v0.3.0) (2016-06-20)
 
