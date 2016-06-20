@@ -1,3 +1,21 @@
+<a name="0.4.2"></a>
+## [0.4.2](https://github.com/damonjs/damon/compare/v0.4.1...v0.4.2) (2016-06-20)
+
+
+### Bug Fixes
+
+* **actions:** correctly pass the timeout from parent ([e2c8e7e](https://github.com/damonjs/damon/commit/e2c8e7e))
+* **runner:** better handle file changes on unix ([5e40cf7](https://github.com/damonjs/damon/commit/5e40cf7))
+* **runner:** remove watch leak ([13785c5](https://github.com/damonjs/damon/commit/13785c5))
+
+
+### Features
+
+* **actions:** add the navigate action ([9d1e69f](https://github.com/damonjs/damon/commit/9d1e69f))
+* **phantomjs:** update execs and add Mac's one ([6576732](https://github.com/damonjs/damon/commit/6576732))
+
+
+
 <a name="0.4.1"></a>
 ## [0.4.1](https://github.com/damonjs/damon/compare/v0.4.0...v0.4.1) (2016-06-20)
 
