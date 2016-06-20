@@ -265,6 +265,7 @@ Runner.prototype.finish = function finish () {
     this.started = false;
     this.cancelled = false;
     this.emit('finish', this.tasks);
+    this.unbindings();
 };
 
 // A task is pending.
