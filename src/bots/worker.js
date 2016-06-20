@@ -132,15 +132,15 @@ function endTask (task) {
 
 // Prepare the navigation task.
 var taskNavigate = {
-    type: 'navigate',
-    it: 'Navigate to ' + config.url,
+    type: 'start',
+    it: 'Start on ' + config.url,
     params: {
         url: config.url
     }
 };
 startTask(taskNavigate);
 
-actions.navigate(config.url, function (err) {
+actions.start(config.url, function (err) {
     if (err) {
         log('Error Loading', err, 'ERROR');
         errorTask(taskNavigate, 'load error : ' + err.status, err);

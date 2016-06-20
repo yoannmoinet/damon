@@ -35,10 +35,10 @@ var config = function (cwd) {
                 throw new Error('no task found');
             }
         }.bind(this),
-        navigate: function (url, next) {
+        start: function (url, next) {
             // Template the url just in case
             url = template.parse({params: url}).params;
-            log('navigate to', url, 'INFO_BAR');
+            log('start on', url, 'INFO_BAR');
             var loadSuccess = function (status) {
                 this.removeListener('load.failed', loadFailed);
                 this.removeListener('load.finished', loadSuccess);
