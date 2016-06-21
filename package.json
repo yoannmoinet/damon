@@ -17,19 +17,16 @@
   "scripts": {
     "preversion": "npm test",
     "postversion": "npm run changelog",
-    "postinstall": "npm run chmod",
     "pretest": "npm run format && npm run lint",
     "test": "mocha ./test",
     "format": "jscs ./src/ ./src/bots && npm run formatTests",
     "formatTests": "jscs -c ./test/.jscsrc ./test/",
     "lint": "eslint ./src/ ./test/ ./src/bots",
-    "changelog": "node ./bin/changelog.js",
-    "chmod": "node ./bin/chmod.js"
+    "changelog": "node ./bin/changelog.js"
   },
   "dependencies": {
     "casperjs": "yoannmoinet/casperjs#a45c64d",
     "chalk": "^1.1.1",
-    "chmod": "^0.2.1",
     "expect.js": "^0.3.1",
     "fs-extra": "^0.26.5",
     "glob": "^6.0.4",
