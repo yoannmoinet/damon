@@ -1,3 +1,13 @@
+<a name="0.4.3"></a>
+## [0.4.3](https://github.com/damonjs/damon/compare/v0.4.2...v0.4.3) (2016-06-21)
+
+
+### Bug Fixes
+
+* **npm:** remove useless chmod script ([2328d2e](https://github.com/damonjs/damon/commit/2328d2e))
+
+
+
 <a name="0.4.2"></a>
 ## [0.4.2](https://github.com/damonjs/damon/compare/v0.4.1...v0.4.2) (2016-06-20)
 
