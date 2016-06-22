@@ -36,7 +36,6 @@ Runner.prototype.initialize = function () {
     this.children = {};
 
     this.createFiles();
-    this.bindings();
 };
 
 Runner.prototype.createFiles = function createFiles () {
@@ -144,6 +143,7 @@ Runner.prototype.run = function run (files) {
     if (this.started) {
         return;
     }
+    this.bindings();
     this.clear();
     this.started = true;
     this.files = files;
