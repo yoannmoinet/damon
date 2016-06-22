@@ -1,3 +1,13 @@
+<a name="0.4.4"></a>
+## [0.4.4](https://github.com/damonjs/damon/compare/v0.4.3...v0.4.4) (2016-06-22)
+
+
+### Bug Fixes
+
+* **runner:** remove fs.watch leak when not running ([1051d3b](https://github.com/damonjs/damon/commit/1051d3b))
+
+
+
 <a name="0.4.3"></a>
 ## [0.4.3](https://github.com/damonjs/damon/compare/v0.4.2...v0.4.3) (2016-06-21)
 
