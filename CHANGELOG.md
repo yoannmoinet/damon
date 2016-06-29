@@ -1,3 +1,21 @@
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/damonjs/damon/compare/v0.5.0...v0.5.1) (2016-06-29)
+
+
+### Bug Fixes
+
+* **reporter:** update the display of the report ([69f73a7](https://github.com/damonjs/damon/commit/69f73a7))
+* **worker:** add missing error type ([ca35e58](https://github.com/damonjs/damon/commit/ca35e58))
+
+
+### Features
+
+* **runner:** attach the error object to the error report byError ([e4207f2](https://github.com/damonjs/damon/commit/e4207f2))
+* **runner:** ignore 'Operation canceled' errors ([816b56b](https://github.com/damonjs/damon/commit/816b56b))
+* **runner:** pass the type into the error event and task object ([33ec590](https://github.com/damonjs/damon/commit/33ec590))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/damonjs/damon/compare/v0.4.4...v0.5.0) (2016-06-29)
 
