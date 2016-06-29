@@ -338,10 +338,12 @@ Runner.prototype.error = function error (log) {
     } else {
         this.tasks[test.logId].logs.push(log);
     }
-    this.tasks[test.logId].errors.push({
+    var error = {
         message: test.error,
         details: test.details
-    });
+    };
+    this.tasks[test.logId].errors.push(error);
+    this.emit('error', error);
 };
 
 // A task failed
