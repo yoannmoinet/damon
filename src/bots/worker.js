@@ -185,6 +185,14 @@ casper.on('step.timeout', function(step, timeout) {
     }, 'timeout');
     failTask(currentTask);
 });
+casper.on('resource.error', function (msg) {
+    log('Resource Error', msg, 'ERROR');
+    errorTask(currentTask, msg.errorString, msg, 'resource');
+});
+casper.on('page.error', function (msg, trace) {
+    log('Js Error', msg, 'ERROR');
+    errorTask(currentTask, msg, trace, 'js');
+});
 casper.on('timeout', function() {
     log('timeout', arguments, 'ERROR');
     errorTask(currentTask, 'timeout');
