@@ -12,11 +12,13 @@ var spinners = [
 var selectedSpinner = 1;
 var index;
 var currentPending;
+var currentErrors = [];
 var log = {
     info: chalk.bgWhite.black,
     pending: chalk.bgCyan.white,
     error: chalk.bgRed.white,
-    success: chalk.bgGreen.white
+    success: chalk.bgGreen.white,
+    warn: chalk.bgYellow.white
 };
 var writeStream = process.stdout;
 
@@ -55,6 +57,10 @@ function pending (text, tab) {
 function clear () {
     readline.clearLine(writeStream);
     readline.cursorTo(writeStream, 0);
+}
+
+function finishTask () {
+    currentErrors = [];
 }
 
 function buildString (task) {
@@ -169,14 +175,30 @@ module.exports = function (runner) {
         pending(buildString(task), '    ');
     });
 
+    runner.on('error', function (error) {
+        currentErrors.push(error);
+    });
+
     runner.on('pass', function (task) {
         clearInterval(currentPending);
         clear();
 
-        write(
-            '    ' +
-            log.success(chalk.bold(' [ √ ] ') + buildString(task)) + '\n'
-        );
+        if (currentErrors.length) {
+            write(
+                '    ' +
+                log.warn(chalk.bold(' [ ! ] ') + buildString(task)) +
+                    chalk.bgYellow.red(' ' + currentErrors.length +
+                        ' error(s) ') +
+                    '\n'
+            );
+        } else {
+            write(
+                '    ' +
+                log.success(chalk.bold(' [ √ ] ') + buildString(task)) + '\n'
+            );
+        }
+
+        finishTask();
     });
 
     runner.on('fail', function (task, err) {
@@ -192,6 +214,7 @@ module.exports = function (runner) {
         }
 
         write('    ' + log.error(st) + '\n');
+        finishTask();
     });
 
     runner.on('finish', function (report) {
