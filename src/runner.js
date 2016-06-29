@@ -105,6 +105,7 @@ Runner.prototype.createReport = function createReport () {
         _.each(task.errors, function (error) {
             this.report.errors.byError[error.message] =
                 this.report.errors.byError[error.message] || [];
+            this.report.errors.byError[error.message].error = error;
             this.report.errors.byError[error.message].push(task);
         }.bind(this));
     }.bind(this));
