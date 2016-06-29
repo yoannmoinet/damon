@@ -342,6 +342,10 @@ Runner.prototype.error = function error (log) {
         message: test.error,
         details: test.details
     };
+    // Ignore 'Operation Cancelled' type of error.
+    if (/Operation canceled/.test(test.error)) {
+        return;
+    }
     this.tasks[test.logId].errors.push(error);
     this.emit('error', error);
 };
