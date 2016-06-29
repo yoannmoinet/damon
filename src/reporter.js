@@ -71,7 +71,7 @@ function buildString (task) {
     var param;
 
     if (task.duration) {
-        duration = chalk.bold.magenta(' [' + task.duration + 'ms] ');
+        duration = chalk.bold.magenta(' [' + (task.duration / 1000).toFixed(2) + 's] ');
     }
 
     if (task.it) {
