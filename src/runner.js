@@ -67,6 +67,53 @@ Runner.prototype.unbindings = function unbindings () {
     }
 };
 
+Runner.prototype.createReport = function createReport () {
+    this.report = {};
+
+    this.report.timing = {};
+    // Total time of everything
+    this.report.timing.total = _.reduce(this.tasks, function (memo, task) {
+        return memo + task.test.duration;
+    }, 0);
+    // The longest task
+    this.report.timing.slowest = _.max(this.tasks, function (task) {
+        return task.test.duration;
+    });
+    // The fastest task
+    this.report.timing.fastest = _.min(this.tasks, function (task) {
+        return task.test.duration;
+    });
+    // All the tasks that are above the median
+    this.report.timing.above = _.filter(this.tasks, function (task) {
+        return task.test.duration >
+            (this.report.timing.slowest.test.duration / 2);
+    }.bind(this));
+
+    // All the errors
+    this.report.errors = {
+        byTask: {},
+        byError: {}
+    };
+
+    // Different indexation
+    _.each(this.tasks, function (task) {
+        if (task.errors.length) {
+            this.report.errors.byTask[task.test.it || task.test.type] =
+                task.errors;
+        }
+
+        _.each(task.errors, function (error) {
+            this.report.errors.byError[error.message] =
+                this.report.errors.byError[error.message] || [];
+            this.report.errors.byError[error.message].push(task);
+        }.bind(this));
+    }.bind(this));
+
+    this.report.tasks = this.tasks;
+
+    return this.report;
+};
+
 // Throttle the call.
 Runner.prototype.parseLog = function parseLog (logFile) {
     clearTimeout(this.timeoutParse);
@@ -264,7 +311,7 @@ Runner.prototype.end = function end (child, code, signal) {
 Runner.prototype.finish = function finish () {
     this.started = false;
     this.cancelled = false;
-    this.emit('finish', this.tasks);
+    this.emit('finish', this.createReport());
     this.unbindings();
 };
 
