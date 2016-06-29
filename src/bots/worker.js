@@ -196,7 +196,7 @@ casper.on('page.error', function (msg, trace) {
 });
 casper.on('timeout', function() {
     log('timeout', arguments, 'ERROR');
-    errorTask(currentTask, 'timeout');
+    errorTask(currentTask, 'timeout', null, 'timeout');
     failTask(currentTask);
 });
 casper.on('waitFor.timeout', function(timeout, params) {
