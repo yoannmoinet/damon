@@ -114,11 +114,12 @@ function configEndTask (task) {
     return task;
 }
 
-function errorTask (task, message, details) {
+function errorTask (task, message, details, type) {
     logger.write({
         error: message,
         details: details,
-        logId: task.logId
+        logId: task.logId,
+        type: type
     }, 'TASK.ERROR');
 }
 
@@ -143,7 +144,7 @@ startTask(taskNavigate);
 actions.start(config.url, function (err) {
     if (err) {
         log('Error Loading', err, 'ERROR');
-        errorTask(taskNavigate, 'load error : ' + err.status, err);
+        errorTask(taskNavigate, 'load error : ' + err.status, err, 'task');
         failTask(taskNavigate);
     } else {
         endTask(taskNavigate);
@@ -156,7 +157,8 @@ actions.start(config.url, function (err) {
                 return actions.execute(task);
             } catch (e) {
                 log('Catched', e.message, e, 'ERROR');
-                errorTask(currentTask, 'thrown error : ' + e.message, e);
+                errorTask(currentTask, 'thrown error : ' + e.message,
+                    e, 'task');
                 failTask(currentTask);
             }
         }).then(function () {
@@ -172,12 +174,15 @@ casper.on('error', function(msg, backtrace) {
 });
 casper.on('step.error', function(err) {
     log('step.error', arguments, 'ERROR');
-    errorTask(currentTask, 'step error : ' + err.message, err);
+    errorTask(currentTask, 'step error : ' + err.message, err, 'step');
     failTask(currentTask);
 });
 casper.on('step.timeout', function(step, timeout) {
     log('step.timeout', arguments, 'ERROR');
-    errorTask(currentTask, 'timeout step', {step: step, timeout: timeout});
+    errorTask(currentTask, 'timeout step', {
+        step: step,
+        timeout: timeout
+    }, 'timeout');
     failTask(currentTask);
 });
 casper.on('timeout', function() {
@@ -190,7 +195,7 @@ casper.on('waitFor.timeout', function(timeout, params) {
     errorTask(currentTask, 'timeout waitFor', {
         timeout: timeout,
         params: params
-    });
+    }, 'timeout');
     failTask(currentTask);
 });
 
