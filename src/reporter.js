@@ -218,7 +218,30 @@ module.exports = function (runner) {
     });
 
     runner.on('finish', function (report) {
+        var t = report.timing;
+        var e = report.errors;
+        var i, max, j;
+
         clearInterval(currentPending);
-        write(log.info('\n end ') + '\n');
+        write(log.info(chalk.bold('\n Report ')) + '\n');
+        write(log.info('- Ran for : ' +
+            chalk.bold((t.total / 1000).toFixed(2) + 's ')) + '\n');
+        write(log.info('- Slowest : ' +
+            chalk.bold(t.slowest.test.it + ' ' +
+            (t.slowest.test.duration / 1000).toFixed(2) + 's ')) + '\n');
+        write(log.info('- Above median : ') + '\n');
+        for (i = 0, max = t.above.length; i < max; i += 1) {
+            write(log.info('    - ' + t.above[i].test.it + ' ') + '\n');
+        }
+        write(log.info('- Errors : ') + '\n');
+        for (i in e.byError) {
+            write(log.info('    - ' + i + ' : ') + '\n');
+            for (j = 0, max = e.byError[i].length; j < max; j += 1) {
+                write(
+                    log.info('        - ' + e.byError[i][j].test.it + ' ') +
+                    '\n'
+                );
+            }
+        }
     });
 };
