@@ -1,3 +1,24 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/damonjs/damon/compare/v0.4.4...v0.5.0) (2016-06-29)
+
+
+### Bug Fixes
+
+* **worker:** consider the first navigate as a regular task ([4a74307](https://github.com/damonjs/damon/commit/4a74307))
+
+
+### Features
+
+* **reporter:** consider errors in the CLI ([55aaa4b](https://github.com/damonjs/damon/commit/55aaa4b))
+* **reporter:** display a report at the end ([2ed8c9e](https://github.com/damonjs/damon/commit/2ed8c9e))
+* **reporter:** display times in seconds ([37d76a2](https://github.com/damonjs/damon/commit/37d76a2))
+* **runner:** create a report at the end of the run ([efa0796](https://github.com/damonjs/damon/commit/efa0796))
+* **runner:** emit an 'error' event ([78d67ea](https://github.com/damonjs/damon/commit/78d67ea))
+* **worker:** add a type to errors ([815aa47](https://github.com/damonjs/damon/commit/815aa47))
+* **worker:** report both resource and javascript errors ([95793d1](https://github.com/damonjs/damon/commit/95793d1))
+
+
+
 <a name="0.4.4"></a>
 ## [0.4.4](https://github.com/damonjs/damon/compare/v0.4.3...v0.4.4) (2016-06-22)
 
