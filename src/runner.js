@@ -340,7 +340,8 @@ Runner.prototype.error = function error (log) {
     }
     var error = {
         message: test.error,
-        details: test.details
+        details: test.details,
+        type: test.type
     };
     // Ignore 'Operation Cancelled' type of error.
     if (/Operation canceled/.test(test.error)) {
