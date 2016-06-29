@@ -140,6 +140,7 @@ var taskNavigate = {
     }
 };
 startTask(taskNavigate);
+currentTask = taskNavigate;
 
 actions.start(config.url, function (err) {
     if (err) {
