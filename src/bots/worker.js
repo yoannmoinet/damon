@@ -108,6 +108,7 @@ function startTask (task) {
     casper.options._ignoreErrors = false;
     task.start = +new Date();
     task.logId = logger.write(task, 'TASK.START');
+    return task;
 }
 
 function configEndTask (task) {
@@ -135,25 +136,20 @@ function endTask (task) {
 
 // Prepare the navigation task.
 var taskNavigate = {
-    type: 'start',
+    type: 'navigate',
     it: 'Start on ' + config.url,
     params: {
         url: config.url
     }
 };
-startTask(taskNavigate);
-currentTask = taskNavigate;
 
-actions.start(config.url, function (err) {
-    if (err) {
-        log('Error Loading', err, 'ERROR');
-        errorTask(taskNavigate, (err.status || err), err, 'task');
-        failTask(taskNavigate);
-        // TODO Fail on error.
-    }
+// Add the first navigate at the top.
+tasks.unshift(startTask(taskNavigate));
 
-    endTask(taskNavigate);
-
+// GO.
+casper.start();
+// The Loop.
+casper.then(function () {
     tasks.forEach(function (task) {
         casper.then(function () {
             currentTask = task;
