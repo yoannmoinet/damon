@@ -1,3 +1,20 @@
+<a name="0.5.3"></a>
+## [0.5.3](https://github.com/damonjs/damon/compare/v0.5.2...v0.5.3) (2016-07-04)
+
+
+### Bug Fixes
+
+* **navigate:** clean listeners to avoid leaks and handle load fails ([5fc73dd](https://github.com/damonjs/damon/commit/5fc73dd))
+* **navigate:** remove undefined requests usage ([965f541](https://github.com/damonjs/damon/commit/965f541))
+* **runner:** escape double-quotes one more time ([26eafa7](https://github.com/damonjs/damon/commit/26eafa7))
+
+
+### Features
+
+* **worker:** add the resourceTimeout setting ([a0e2c04](https://github.com/damonjs/damon/commit/a0e2c04))
+
+
+
 <a name="0.5.2"></a>
 ## [0.5.2](https://github.com/damonjs/damon/compare/v0.5.1...v0.5.2) (2016-07-04)
 
