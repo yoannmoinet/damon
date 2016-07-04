@@ -12,9 +12,6 @@ module.exports = function (params, timeoutDuration, cwd) {
     var cancelOpen = function () {
         clearTimeout(failTimeout);
 
-        for (var i = 0, max = requests.length; i < max; i += 1) {
-            requests[i].abort();
-        }
 
         // Tell casper to ignore errors due to page cancellation
         this.options._ignoreErrors = true;
