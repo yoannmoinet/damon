@@ -1,3 +1,19 @@
+<a name="0.5.2"></a>
+## [0.5.2](https://github.com/damonjs/damon/compare/v0.5.1...v0.5.2) (2016-07-04)
+
+
+### Bug Fixes
+
+* **start, navigate:** add a timeout to handle long requests ([f9a7dfa](https://github.com/damonjs/damon/commit/f9a7dfa))
+* better error reporting on navigation ([de84fab](https://github.com/damonjs/damon/commit/de84fab))
+
+
+### Features
+
+* **casper:** add a flag to ignore errors ([01995fd](https://github.com/damonjs/damon/commit/01995fd))
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/damonjs/damon/compare/v0.5.0...v0.5.1) (2016-06-29)
 
