@@ -16,6 +16,8 @@ module.exports = function (params, timeoutDuration, cwd) {
             requests[i].abort();
         }
 
+        // Tell casper to ignore errors due to page cancellation
+        this.options._ignoreErrors = true;
         this.unwait();
         this.clear();
         this.page.stop();

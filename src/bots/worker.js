@@ -104,6 +104,7 @@ casper.userAgent(userAgent);
 var actions = require('./actions').config.call(casper, cwd);
 
 function startTask (task) {
+    casper.options._ignoreErrors = false;
     task.start = +new Date();
     task.logId = logger.write(task, 'TASK.START');
 }
@@ -188,11 +189,15 @@ casper.on('step.timeout', function(step, timeout) {
 });
 casper.on('resource.error', function (msg) {
     log('Resource Error', msg, 'ERROR');
-    errorTask(currentTask, msg.errorString, msg, 'resource');
+    if (!casper.options._ignoreErrors) {
+        errorTask(currentTask, msg.errorString, msg, 'resource');
+    }
 });
 casper.on('page.error', function (msg, trace) {
     log('Js Error', msg, 'ERROR');
-    errorTask(currentTask, msg, trace, 'js');
+    if (!casper.options._ignoreErrors) {
+        errorTask(currentTask, msg, trace, 'js');
+    }
 });
 casper.on('timeout', function() {
     log('timeout', arguments, 'ERROR');

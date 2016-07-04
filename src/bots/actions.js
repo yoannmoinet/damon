@@ -51,6 +51,7 @@ var config = function (cwd) {
                 }
             };
             var loadFailed = function (err) {
+                casper.options._ignoreErrors = true;
                 clearTimeout(failTimeout);
                 this.removeListener('load.failed', loadFailed);
                 this.removeListener('load.finished', loadSuccess);
