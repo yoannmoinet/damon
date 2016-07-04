@@ -36,10 +36,12 @@ var config = function (cwd) {
             }
         }.bind(this),
         start: function (url, next) {
+            var failTimeout;
             // Template the url just in case
             url = template.parse({params: url}).params;
             log('start on', url, 'INFO_BAR');
             var loadSuccess = function (status) {
+                clearTimeout(failTimeout);
                 this.removeListener('load.failed', loadFailed);
                 this.removeListener('load.finished', loadSuccess);
                 if (status === 'fail') {
@@ -49,12 +51,22 @@ var config = function (cwd) {
                 }
             };
             var loadFailed = function (err) {
+                clearTimeout(failTimeout);
                 this.removeListener('load.failed', loadFailed);
                 this.removeListener('load.finished', loadSuccess);
+                this.clear();
+                this.page.stop();
                 next(err);
             };
+            // Attach events
             this.on('load.failed', loadFailed);
             this.on('load.finished', loadSuccess);
+
+            // Fail first step if going further than the set up timeout
+            failTimeout = setTimeout(
+                loadFailed.bind(this, 'timeout waitFor'),
+                this.options.waitTimeout
+            );
             return this.start(url);
         }.bind(this)
     };
