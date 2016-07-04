@@ -158,7 +158,8 @@ Runner.prototype.handleLog = function handleLog (logObject) {
         // Remove escaped characters.
         logObject.message = logObject.message
             .replace(/\\\\\//g, '\/')
-            .replace(/\\\\"/g, '\"');
+            .replace(/\\\\"/g, '\"')
+            .replace(/\\"/g, '\"');
         logObject.message = JSON.parse(logObject.message);
     } catch (e) {
         // Not and object.
