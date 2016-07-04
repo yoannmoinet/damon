@@ -146,11 +146,13 @@ currentTask = taskNavigate;
 actions.start(config.url, function (err) {
     if (err) {
         log('Error Loading', err, 'ERROR');
-        errorTask(taskNavigate, 'load error : ' + err.status, err, 'task');
+        errorTask(taskNavigate, (err.status || err), err, 'task');
         failTask(taskNavigate);
-    } else {
-        endTask(taskNavigate);
+        // TODO Fail on error.
     }
+
+    endTask(taskNavigate);
+
     tasks.forEach(function (task) {
         casper.then(function () {
             currentTask = task;
@@ -172,6 +174,9 @@ actions.start(config.url, function (err) {
 
 casper.on('error', function(msg, backtrace) {
     log('error', arguments, 'ERROR');
+    if (currentTask) {
+        errorTask(currentTask, msg, backtrace, 'default');
+    }
     failTask(currentTask);
 });
 casper.on('step.error', function(err) {

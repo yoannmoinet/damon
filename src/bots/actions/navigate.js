@@ -6,7 +6,7 @@ module.exports = function (params, timeoutDuration, cwd) {
     var toReturn = this.waitForUrl(params.url, function () {
         log('got', params.url, 'SUCCESS');
     }, function () {
-        log('timeout url', params.url, 'WARNING');
+        log('timeout url', params.url, 'WARN');
     }, timeoutDuration);
 
     var cancelOpen = function () {
