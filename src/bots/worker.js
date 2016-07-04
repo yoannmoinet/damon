@@ -94,6 +94,7 @@ casper.plugins = {
 casper.options.waitTimeout = config.timeout !== undefined ?
     config.timeout : 10000;
 casper.options.logLevel = logLevel;
+casper.options.pageSettings.resourceTimeout = casper.options.waitTimeout;
 casper.options.viewportSize = config.size ?
     config.size : {
         width: 1024,
