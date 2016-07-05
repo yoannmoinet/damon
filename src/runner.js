@@ -53,18 +53,15 @@ Runner.prototype.bindings = function bindings () {
     // To avoid multiple watchers we unbind before.
     this.unbindings();
     // Listen for the agent's files.
-    this.watcher = fs.watch(this.folder, function (evt, filename) {
-        // If it's a new log.
-        if (filename === 'log.txt' && (evt === 'rename' || evt === 'change')) {
-            this.parseLog(path.join(this.folder, filename));
-        }
+    fs.watchFile(this.log, {
+        interval: 1000
+    }, function () {
+        this.parseLog(this.log);
     }.bind(this));
 };
 
 Runner.prototype.unbindings = function unbindings () {
-    if (this.watcher) {
-        this.watcher.close();
-    }
+    fs.unwatchFile(this.log);
 };
 
 Runner.prototype.createReport = function createReport () {
@@ -119,13 +116,15 @@ Runner.prototype.createReport = function createReport () {
 
 // Throttle the call.
 Runner.prototype.parseLog = function parseLog (logFile) {
+    // TODO try to make this synchrone
     clearTimeout(this.timeoutParse);
     this.timeoutParse = setTimeout(
         this.doParseLog.bind(this, logFile),
     10);
 };
 
-Runner.prototype.doParseLog = function doParseLog (logFile) {
+Runner.prototype.doParseLog = function doParseLog (logFile, cb) {
+    this.parserAvailable = false;
     var reader = readline.createInterface({
         input: fs.createReadStream(logFile),
         terminal: false
@@ -133,6 +132,13 @@ Runner.prototype.doParseLog = function doParseLog (logFile) {
 
     reader.on('line', function (line) {
         this.parseLine(line);
+    }.bind(this));
+
+    reader.on('close', function () {
+        this.parserAvailable = true;
+        if (typeof cb === 'function') {
+            cb.call(this);
+        }
     }.bind(this));
 };
 
@@ -313,10 +319,14 @@ Runner.prototype.end = function end (child, code, signal) {
 
 // When everything is done.
 Runner.prototype.finish = function finish () {
-    this.started = false;
-    this.cancelled = false;
-    this.emit('finish', this.createReport());
-    this.unbindings();
+    // Parse the log one last time to avoid any
+    // missing log.
+    this.doParseLog(this.log, function () {
+        this.started = false;
+        this.cancelled = false;
+        this.emit('finish', this.createReport());
+        this.unbindings();
+    }.bind(this));
 };
 
 // A task is pending.
