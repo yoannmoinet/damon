@@ -32,6 +32,8 @@ Runner.prototype.initialize = function () {
     this.log = path.join(this.folder, 'log.txt');
     this.cookie = path.join(this.folder, 'cookies.txt');
 
+    console.log('FILES :', this.folder);
+
     this.cancelled = false;
     this.children = {};
 
@@ -55,10 +57,12 @@ Runner.prototype.bindings = function bindings () {
     // Listen for the agent's files.
     this.watcher = fs.watch(this.folder, function (evt, filename) {
         // If it's a new log.
+        console.log('WATCH', evt, filename);
         if (filename === 'log.txt' && (evt === 'rename' || evt === 'change')) {
             this.parseLog(path.join(this.folder, filename));
         }
     }.bind(this));
+    console.log('WATCHER', this.watcher);
 };
 
 Runner.prototype.unbindings = function unbindings () {
