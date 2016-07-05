@@ -227,15 +227,22 @@ module.exports = function (runner) {
         write(log.info(chalk.bold('\n Report ')) + '\n');
         write(log.info('- Ran for : ' +
             chalk.bold((t.total / 1000).toFixed(2) + 's ')) + '\n');
-        write(
-            log.info('- Slowest : ' +
-            chalk.bold(t.slowest.test.it + ' ' +
-            chalk.red((t.slowest.test.duration / 1000).toFixed(2) + 's '))) +
-            '\n'
-        );
-        write(log.info('- Above median : ') + '\n');
-        for (i = 0, max = t.above.length; i < max; i += 1) {
-            write(log.info('    - ' + t.above[i].test.it + ' ') + '\n');
+
+        if (t.slowest) {
+            write(
+                log.info('- Slowest : ' +
+                chalk.bold((t.slowest.test.it + ' ') +
+                chalk.red(
+                    (t.slowest.test.duration / 1000).toFixed(2) + 's '))
+                ) + '\n'
+            );
+        }
+
+        if (t.above.length) {
+            write(log.info('- Above median : ') + '\n');
+            for (i = 0, max = t.above.length; i < max; i += 1) {
+                write(log.info('    - ' + t.above[i].test.it + ' ') + '\n');
+            }
         }
 
         if (_.isEmpty(e.byError)) {
