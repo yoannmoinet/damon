@@ -1,3 +1,8 @@
+<a name="0.5.10"></a>
+## [0.5.10](https://github.com/damonjs/damon/compare/v0.5.9...v0.5.10) (2016-07-05)
+
+
+
 <a name="0.5.9"></a>
 ## [0.5.9](https://github.com/damonjs/damon/compare/v0.5.8...v0.5.9) (2016-07-05)
 
