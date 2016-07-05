@@ -68,9 +68,15 @@ Runner.prototype.unbindings = function unbindings () {
 };
 
 Runner.prototype.createReport = function createReport () {
-    this.report = {};
+    this.report = {
+        tasks: this.tasks,
+        timing: {}
+    };
 
-    this.report.timing = {};
+    if (!_.isEmpty(this.tasks)) {
+        return this.report;
+    }
+
     // Total time of everything
     this.report.timing.total = _.reduce(this.tasks, function (memo, task) {
         return memo + task.test.duration;
@@ -109,8 +115,6 @@ Runner.prototype.createReport = function createReport () {
             this.report.errors.byError[error.message].push(task);
         }.bind(this));
     }.bind(this));
-
-    this.report.tasks = this.tasks;
 
     return this.report;
 };
