@@ -32,8 +32,6 @@ Runner.prototype.initialize = function () {
     this.log = path.join(this.folder, 'log.txt');
     this.cookie = path.join(this.folder, 'cookies.txt');
 
-    console.log(process.arch, process.platform, process.features);
-
     this.cancelled = false;
     this.children = {};
 
