@@ -1,3 +1,13 @@
+<a name="0.5.4"></a>
+## [0.5.4](https://github.com/damonjs/damon/compare/v0.5.3...v0.5.4) (2016-07-05)
+
+
+### Bug Fixes
+
+* **reporter:** check for object before logging it ([fe33076](https://github.com/damonjs/damon/commit/fe33076))
+
+
+
 <a name="0.5.3"></a>
 ## [0.5.3](https://github.com/damonjs/damon/compare/v0.5.2...v0.5.3) (2016-07-04)
 
