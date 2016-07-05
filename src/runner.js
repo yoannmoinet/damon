@@ -408,7 +408,7 @@ Runner.prototype.spawn = function spawnChild (tasks) {
         }
     );
     child.uuid = this.uuid + '-' + child.pid;
-    console.log('Spawn ' + child.uuid + ':' + child.pid);
+
     this.children[child.uuid] = {
         id: child.uuid,
         name: child.pid.toString(),

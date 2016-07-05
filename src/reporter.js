@@ -228,8 +228,7 @@ module.exports = function (runner) {
         write(log.info('- Ran for : ' +
             chalk.bold((t.total / 1000).toFixed(2) + 's ')) + '\n');
 
-        if (t.slowest) {
-            console.log(t, typeof t.slowest);
+        if (t.slowest && t.slowest.test) {
             write(
                 log.info('- Slowest : ' +
                 chalk.bold((t.slowest.test.it + ' ') +
