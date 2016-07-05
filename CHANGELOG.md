@@ -1,3 +1,13 @@
+<a name="0.5.9"></a>
+## [0.5.9](https://github.com/damonjs/damon/compare/v0.5.8...v0.5.9) (2016-07-05)
+
+
+### Bug Fixes
+
+* **runner:** better reporting ([653d793](https://github.com/damonjs/damon/commit/653d793))
+
+
+
 <a name="0.5.8"></a>
 ## [0.5.8](https://github.com/damonjs/damon/compare/v0.5.7...v0.5.8) (2016-07-05)
 
