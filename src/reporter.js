@@ -229,7 +229,7 @@ module.exports = function (runner) {
             chalk.bold((t.total / 1000).toFixed(2) + 's ')) + '\n');
 
         if (t.slowest) {
-            console.log(JSON.stringify(t.slowest));
+            console.log(t, typeof t.slowest);
             write(
                 log.info('- Slowest : ' +
                 chalk.bold((t.slowest.test.it + ' ') +
