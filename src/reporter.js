@@ -238,7 +238,7 @@ module.exports = function (runner) {
             );
         }
 
-        if (t.above.length) {
+        if (t.above && t.above.length) {
             write(log.info('- Above median : ') + '\n');
             for (i = 0, max = t.above.length; i < max; i += 1) {
                 write(log.info('    - ' + t.above[i].test.it + ' ') + '\n');

@@ -74,36 +74,34 @@ Runner.prototype.unbindings = function unbindings () {
 Runner.prototype.createReport = function createReport () {
     this.report = {
         tasks: this.tasks,
-        timing: {}
+        timing: {},
+        errors: {
+            byTask: {},
+            byError: {}
+        }
     };
 
-    if (!_.isEmpty(this.tasks)) {
+    if (_.isEmpty(this.tasks)) {
         return this.report;
     }
 
     // Total time of everything
     this.report.timing.total = _.reduce(this.tasks, function (memo, task) {
-        return memo + task.test.duration;
+        return memo + (task.test.duration || 0);
     }, 0);
     // The longest task
     this.report.timing.slowest = _.max(this.tasks, function (task) {
-        return task.test.duration;
+        return (task.test.duration || 0);
     });
     // The fastest task
     this.report.timing.fastest = _.min(this.tasks, function (task) {
-        return task.test.duration;
+        return (task.test.duration || 0);
     });
     // All the tasks that are above the median
     this.report.timing.above = _.filter(this.tasks, function (task) {
         return task.test.duration >
             (this.report.timing.slowest.test.duration / 2);
     }.bind(this));
-
-    // All the errors
-    this.report.errors = {
-        byTask: {},
-        byError: {}
-    };
 
     // Different indexation
     _.each(this.tasks, function (task) {
