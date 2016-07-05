@@ -1,3 +1,13 @@
+<a name="0.5.12"></a>
+## [0.5.12](https://github.com/damonjs/damon/compare/v0.5.11...v0.5.12) (2016-07-05)
+
+
+### Features
+
+* **runner:** make a file watch compatible with network file system (eg. docker) ([5273d83](https://github.com/damonjs/damon/commit/5273d83))
+
+
+
 <a name="0.5.11"></a>
 ## [0.5.11](https://github.com/damonjs/damon/compare/v0.5.10...v0.5.11) (2016-07-05)
 
