@@ -47,7 +47,8 @@ module.exports = function (cwd) {
 
             st += '\n';
 
-            fs.write(cwd + '/log.txt', st, 'a');
+            fs.write(cwd + '/log.txt', st, 'a+');
+            fs.touch(cwd + '/log.txt');
             return logId;
         }
     };

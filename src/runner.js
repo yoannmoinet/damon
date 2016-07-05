@@ -57,7 +57,7 @@ Runner.prototype.bindings = function bindings () {
     // Listen for the agent's files.
     this.watcher = fs.watch(this.folder, function (evt, filename) {
         // If it's a new log.
-        console.log('WATCH', evt, filename);
+        console.log('\nWATCH', evt, filename);
         if (filename === 'log.txt' && (evt === 'rename' || evt === 'change')) {
             this.parseLog(path.join(this.folder, filename));
         }
