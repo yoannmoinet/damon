@@ -6,6 +6,11 @@
 
 He feeds on JSON files that describe what tasks he needs to achieve on specified starting URL.
 
+## Damon Projects
+
+- [💻 CLI](https://github.com/damonjs/damon-cli).
+- [💬 Reporter](https://github.com/damonjs/damon-reporter).
+
 ## Installation
 
 via NPM :
