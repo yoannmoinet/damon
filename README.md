@@ -443,6 +443,17 @@ Only `params.url` is required.
 
 `https` flag can be set to `false` to replace `https` in the `url` by `http`.
 
+## Roadmap
+
+- [x] Extract the CLI component.
+- [x] Extract the default reporter component.
+- [ ] Extract default actions.
+- [ ] Extract default plugins.
+- [ ] Extract runner component.
+- [ ] Extract logger component.
+- [ ] Add examples.
+- [ ] Test everything individually.
+
 ## Contribute
 
 We welcome Your interest in Autodesk’s Open Source Damon (the “Project”). 
