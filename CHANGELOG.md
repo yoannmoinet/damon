@@ -1,3 +1,13 @@
+<a name="0.5.13"></a>
+## [0.5.13](https://github.com/damonjs/damon/compare/v0.5.12...v0.5.13) (2016-07-06)
+
+
+### Features
+
+* **reporter:** put the default reporter in its own repo ([9b0d895](https://github.com/damonjs/damon/commit/9b0d895))
+
+
+
 <a name="0.5.12"></a>
 ## [0.5.12](https://github.com/damonjs/damon/compare/v0.5.11...v0.5.12) (2016-07-05)
 
