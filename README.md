@@ -447,6 +447,8 @@ Only `params.url` is required.
 
 - [x] Extract the CLI component.
 - [x] Extract the default reporter component.
+- [ ] Create Github Page to use as main website.
+- [ ] Create wiki to document how to create reporter/action/plugin.
 - [ ] Extract default actions.
 - [ ] Extract default plugins.
 - [ ] Extract runner component.
