@@ -3,7 +3,7 @@ var uuid = require('node-uuid').v1;
 var glob = require('glob');
 var chalk = require('chalk');
 var runner = require('./runner.js');
-var defaultReporter = path.join(__dirname, './reporter.js');
+var defaultReporter = 'damon-reporter';
 var reporter;
 
 // Configure environment
