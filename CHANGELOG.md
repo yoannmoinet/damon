@@ -1,3 +1,13 @@
+<a name="0.5.15"></a>
+## [0.5.15](https://github.com/damonjs/damon/compare/v0.5.14...v0.5.15) (2016-07-07)
+
+
+### Features
+
+* **assert:** add a regexp flag for assert.status ([e59d534](https://github.com/damonjs/damon/commit/e59d534))
+
+
+
 <a name="0.5.14"></a>
 ## [0.5.14](https://github.com/damonjs/damon/compare/v0.5.13...v0.5.14) (2016-07-06)
 
