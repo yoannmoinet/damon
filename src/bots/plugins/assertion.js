@@ -24,6 +24,10 @@ function url (params) {
         });
     }, function then() {
         var testValue = this.plugins.request.getAndResetTestXHRStatus();
+        if (params.regexp) {
+            var regex = new RegExp(params.expected);
+            return expect(regex.test(testValue)).to.be.ok();
+        }
         return expect(params.expected).to.be.eql(testValue);
     });
 };

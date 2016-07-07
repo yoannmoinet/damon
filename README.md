@@ -434,6 +434,7 @@ Only `params.url` is required.
     "params": {
         "url": "url",
         "https": false,
+        "regexp": false,
         "expected": 200
     }
 }
@@ -442,6 +443,8 @@ Only `params.url` is required.
 `damon` will try to make a `GET` request on the `url` and test the request status against the `expected` status. Same-origin policy applies.
 
 `https` flag can be set to `false` to replace `https` in the `url` by `http`.
+
+`regexp` flag can be set to `true` to have a regexp in the `expected` field.
 
 ## Roadmap
 
