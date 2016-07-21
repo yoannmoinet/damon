@@ -15,7 +15,7 @@ function key (params) {
     return expect(params.expected).to.be.eql(testValue);
 };
 
-function url (params) {
+function status (params) {
     this.evaluate(this.plugins.request.testXHR, params);
 
     return this.waitFor(function check() {
@@ -37,6 +37,6 @@ module.exports = function () {
         variable: variable.bind(this),
         attribute: attribute.bind(this),
         key: key.bind(this),
-        url: url.bind(this)
+        status: status.bind(this)
     };
 };
