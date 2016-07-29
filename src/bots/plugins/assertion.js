@@ -15,28 +15,10 @@ function key (params) {
     return expect(params.expected).to.be.eql(testValue);
 };
 
-function status (params) {
-    this.evaluate(this.plugins.request.testXHR, params);
-
-    return this.waitFor(function check() {
-        return this.evaluate(function() {
-            return window.__STATUS__;
-        });
-    }, function then() {
-        var testValue = this.plugins.request.getAndResetTestXHRStatus();
-        if (params.regexp) {
-            var regex = new RegExp(params.expected);
-            return expect(regex.test(testValue)).to.be.ok();
-        }
-        return expect(params.expected).to.be.eql(testValue);
-    });
-};
-
 module.exports = function () {
     return {
         variable: variable.bind(this),
         attribute: attribute.bind(this),
-        key: key.bind(this),
-        status: status.bind(this)
+        key: key.bind(this)
     };
 };

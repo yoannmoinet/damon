@@ -10,6 +10,9 @@ var config = function (cwd) {
 
     var template = this.plugins.template;
     var xpath = this.plugins.xpath;
+
+    var http = require('./actions/http.js');
+
     var actions = {
         assert: require('./actions/assert.js').bind(this),
         capture: require('./actions/capture.js').bind(this),
@@ -18,7 +21,9 @@ var config = function (cwd) {
         request: require('./actions/request.js').bind(this),
         wait: require('./actions/wait.js').bind(this),
         download: require('./actions/download.js').bind(this),
-        navigate: require('./actions/navigate.js').bind(this)
+        navigate: http.navigate.bind(this),
+        status: http.status.bind(this),
+        redirection: http.redirection.bind(this)
     };
 
     return {
