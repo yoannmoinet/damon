@@ -1,4 +1,13 @@
 var config = function (cwd) {
+    //Extend Casper with helper modules
+    this.plugins = {
+        request: require('./plugins/request.js').call(this),
+        template: require('./plugins/template.js').call(this),
+        get: require('./plugins/get.js').call(this),
+        assertion: require('./plugins/assertion.js').call(this),
+        xpath: require('./plugins/xpath.js').call(this)
+    };
+
     var template = this.plugins.template;
     var xpath = this.plugins.xpath;
     var actions = {
