@@ -125,18 +125,6 @@ function endTask (task) {
     logger.write(configEndTask(task), 'TASK.END');
 }
 
-// Prepare the navigation task.
-var taskNavigate = {
-    type: 'navigate',
-    it: 'Start on ' + config.url,
-    params: {
-        url: config.url
-    }
-};
-
-// Add the first navigate at the top.
-tasks.unshift(startTask(taskNavigate));
-
 // GO.
 casper.start();
 // The Loop.
