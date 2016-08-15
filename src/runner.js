@@ -54,9 +54,9 @@ Runner.prototype.bindings = function bindings () {
     this.unbindings();
     // Listen for the agent's files.
     fs.watchFile(this.log, {
-        interval: 1000
+        interval: 500
     }, function () {
-        this.parseLog(this.log);
+        this.doParseLog(this.log);
     }.bind(this));
 };
 
@@ -112,15 +112,6 @@ Runner.prototype.createReport = function createReport () {
     }.bind(this));
 
     return this.report;
-};
-
-// Throttle the call.
-Runner.prototype.parseLog = function parseLog (logFile) {
-    // TODO try to make this synchrone
-    clearTimeout(this.timeoutParse);
-    this.timeoutParse = setTimeout(
-        this.doParseLog.bind(this, logFile),
-    10);
 };
 
 Runner.prototype.doParseLog = function doParseLog (logFile, cb) {
