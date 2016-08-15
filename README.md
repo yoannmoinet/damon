@@ -6,6 +6,41 @@
 
 He feeds on JSON files that describe what tasks he needs to achieve on specified starting URL.
 
+# Table Of Contents
+<details>
+
+<!-- toc -->
+
+- [Damon Projects](#damon-projects)
+- [Installation](#installation)
+- [Usage](#usage)
+  * [Locally](#locally)
+  * [CLI](#cli)
+- [Task File](#task-file)
+  * [`config`](#config)
+  * [`tasks`](#tasks)
+    + [`navigate`](#navigate)
+    + [`status`](#status)
+    + [`redirection`](#redirection)
+    + [`capture`](#capture)
+    + [`download`](#download)
+    + [`wait`](#wait)
+    + [`dom`](#dom)
+    + [`get`](#get)
+      - [_store_](#_store_)
+      - [_access_](#_access_)
+    + [`request`](#request)
+    + [`assert`](#assert)
+- [Roadmap](#roadmap)
+- [Contribute](#contribute)
+      - [Individual Contribution](#individual-contribution)
+      - [Corporate Contribution](#corporate-contribution)
+- [License](#license)
+
+<!-- tocstop -->
+
+</details>
+
 ## Damon Projects
 
 - [💻 CLI](https://github.com/damonjs/damon-cli).
@@ -32,7 +67,7 @@ damon.attachReporter();
 damon.start('./tasks.json');
 ```
 
-## CLI
+### CLI
 
 You can use `damon` via a CLI, available at [damonjs/damon-cli](https://github.com/damonjs/damon-cli)
 
@@ -429,9 +464,9 @@ To access the stored value, call the `key` in between double brackets `{{key}}`
 }
 ```
 
-You can also `store` the response for later use with `{{key}}`. 
+You can also `store` the response for later use with `{{key}}`.
 
-If you don't pass a `variable` it will store the complete response. 
+If you don't pass a `variable` it will store the complete response.
 
 Otherwise, it will try to parse the response as JSON and look for your variable.
 
@@ -499,9 +534,9 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
 
 ## Contribute
 
-We welcome Your interest in Autodesk’s Open Source Damon (the “Project”). 
+We welcome Your interest in Autodesk’s Open Source Damon (the “Project”).
 
-Any Contributor to the Project must accept and sign an Agreement indicating agreement 
+Any Contributor to the Project must accept and sign an Agreement indicating agreement
 to the license terms below.
 
 ##### [Individual Contribution](http://goo.gl/forms/ctQNFrveEF)
@@ -509,11 +544,11 @@ to the license terms below.
 
 ## License
 
-Licensed under the Apache License, Version 2.0 (the "License"); 
-you may not use this file except in compliance with the License. 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
 
 You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under 
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing permissions and limitations under the License.

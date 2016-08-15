@@ -22,6 +22,7 @@
     "format": "jscs ./src/ ./src/bots && npm run formatTests",
     "formatTests": "jscs -c ./test/.jscsrc ./test/",
     "lint": "eslint ./src/ ./test/ ./src/bots",
+    "toc": "markdown-toc -i README.md",
     "changelog": "node ./bin/changelog.js"
   },
   "dependencies": {
@@ -40,6 +41,7 @@
     "conventional-changelog": "^1.1.0",
     "eslint": "^3.1.1",
     "jscs": "^3.0.7",
+    "markdown-toc": "^0.12.16",
     "mocha": "^2.3.0"
   }
 }
