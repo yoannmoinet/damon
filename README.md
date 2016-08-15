@@ -48,7 +48,6 @@ Your task file must have a `config` entry with a `size` and a `url`.
         "width": 1024,
         "height": 768
     },
-    "url": "http://www.google.ca",
     "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A",
     "timeout": 1000,
     "logLevel": "fatal",
@@ -57,7 +56,6 @@ Your task file must have a `config` entry with a `size` and a `url`.
 ```
 
 - `size` is for the viewport's size.
-- `url` is the starting point of `damon`.
 - `userAgent` is a custom userAgent for `damon` to use. Default one is Chrome 44 on Windows 7.
 - `timeout` overwrite the general timeout used accross the test suite.
 - `logLevel` control at which level `damon` will log. Can be `none`, `fatal`, `error`, `warn`, `info`, `debug` or `trace`
@@ -89,6 +87,89 @@ Each task will have three components:
 - `it` provide a description of the task, to be printed on the default reporter (optional).
 
 __It exists several kinds of tasks that `damon` can achieve :__
+
+#### `navigate`
+
+`damon` can navigate to other urls at the start or during its worflow.
+
+```javascript
+{
+    "type": "navigate",
+    "params": {
+        "url": "https://www.google.com",
+        "method": "GET",
+        "data": {
+            "key": "value"
+        },
+        "headers": {
+            "name": "value"
+        },
+        "encoding": "utf8"
+    }
+}
+```
+
+Only `params.url` is required.
+
+#### `status`
+
+Verify that the page answers with a specific status.
+
+```javascript
+{
+    "type": "status",
+    "params": {
+        "url": "url",
+        "method": "GET",
+        "data": {
+            "key": "value"
+        },
+        "headers": {
+            "name": "value"
+        },
+        "encoding": "utf8",
+        "status": [301, 302]
+    }
+}
+```
+
+`damon` will navigate to `params.url` and will wait until it gets the awaited status.
+
+The request gets cancelled as soon as the status is returned.
+
+`params.status` can be a string of a single status, or an array of all status required.
+
+In the case of the array, the first encounter will validate the task.
+
+Only `params.url`and `params.status` are required.
+
+#### `redirection`
+
+Verify that the page redirects to another specified one.
+
+```javascript
+{
+    "type": "redirection",
+    "params": {
+        "from": "url",
+        "to": "url",
+        "method": "GET",
+        "data": {
+            "key": "value"
+        },
+        "headers": {
+            "name": "value"
+        },
+        "encoding": "utf8"
+    }
+}
+```
+
+`damon` will navigate to `params.from` and verify that we have a redirection to `params.to`.
+
+The `params.method`, `params.data`, `params.heades` and `params.encoding` are for `params.from` only.
+
+Only `params.from`and `params.to` are required.
 
 #### `capture`
 
@@ -354,29 +435,6 @@ If you don't pass a `variable` it will store the complete response.
 
 Otherwise, it will try to parse the response as JSON and look for your variable.
 
-#### `navigate`
-
-`damon` can arbitrarily navigate to other urls during its worflow.
-
-```javascript
-{
-    "type": "navigate",
-    "params": {
-        "url": "https://www.google.com",
-        "method": "GET",
-        "data": {
-            "key": "value"
-        },
-        "headers": {
-            "name": "value"
-        },
-        "encoding": "utf8"
-    }
-}
-```
-
-Only `params.url` is required.
-
 #### `assert`
 
 `damon` can perform different `assert` actions to test a value with an expected value:
@@ -426,34 +484,14 @@ Only `params.url` is required.
 
 `damon` will `get` the value of the `key` and test it against the `expected` value.
 
-- status
-
-```javascript
-{
-    "type": "assert",
-    "params": {
-        "url": "url",
-        "https": false,
-        "regexp": false,
-        "expected": 200
-    }
-}
-```
-
-`damon` will try to make a `GET` request on the `url` and test the request status against the `expected` status. Same-origin policy applies.
-
-`https` flag can be set to `false` to replace `https` in the `url` by `http`.
-
-`regexp` flag can be set to `true` to have a regexp in the `expected` field.
-
 ## Roadmap
 
 - [x] Extract the CLI component.
 - [x] Extract the default reporter component.
+- [ ] Extract default actions. (place them in the config file to be imported)
+- [ ] Extract default plugins. (place them in the config file to be imported)
 - [ ] Create Github Page to use as main website.
-- [ ] Create wiki to document how to create reporter/action/plugin.
-- [ ] Extract default actions.
-- [ ] Extract default plugins.
+- [ ] Create wiki to document how to create reporters/actions/plugins.
 - [ ] Extract runner component.
 - [ ] Extract logger component.
 - [ ] Add examples.
@@ -471,8 +509,11 @@ to the license terms below.
 
 ## License
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License"); 
+you may not use this file except in compliance with the License. 
 
-http://www.apache.org/licenses/LICENSE-2.0
+You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+Unless required by applicable law or agreed to in writing, software distributed under 
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+either express or implied. See the License for the specific language governing permissions and limitations under the License.

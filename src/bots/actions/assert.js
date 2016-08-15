@@ -12,7 +12,7 @@ module.exports = function (params) {
             this.plugins.assertion.key(params);
         } else if (params.url) {
             log('assert url', params.url, 'INFO_BAR');
-            return this.plugins.assertion.url(params);
+            return this.plugins.assertion.status(params);
         } else {
             log('no assertion found', 'ERROR');
             throw new Error('no assertion found');

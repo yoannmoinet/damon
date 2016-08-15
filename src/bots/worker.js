@@ -82,15 +82,6 @@ var logger = require('./logger')(cwd);
 var userAgent = config.userAgent || 'Mozilla/5.0 (Windows NT 6.1; WOW64) ' +
     'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36';
 
-//Extend Casper with helper modules
-casper.plugins = {
-    request: require('./plugins/request.js').call(casper),
-    template: require('./plugins/template.js').call(casper),
-    get: require('./plugins/get.js').call(casper),
-    assertion: require('./plugins/assertion.js').call(casper),
-    xpath: require('./plugins/xpath.js').call(casper)
-};
-
 casper.options.waitTimeout = config.timeout !== undefined ?
     config.timeout : 10000;
 casper.options.logLevel = logLevel;
@@ -133,18 +124,6 @@ function failTask (task) {
 function endTask (task) {
     logger.write(configEndTask(task), 'TASK.END');
 }
-
-// Prepare the navigation task.
-var taskNavigate = {
-    type: 'navigate',
-    it: 'Start on ' + config.url,
-    params: {
-        url: config.url
-    }
-};
-
-// Add the first navigate at the top.
-tasks.unshift(startTask(taskNavigate));
 
 // GO.
 casper.start();
