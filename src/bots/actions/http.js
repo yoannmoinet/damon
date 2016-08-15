@@ -149,7 +149,6 @@ var status = function (params, timeoutDuration, cwd) {
         log('timeout status', params.url, 'WARN');
     }, timeoutDuration);
 
-
     var listenStatus = function (st, hdlr) {
         if (!(st instanceof Array)) {
             st = [st];
