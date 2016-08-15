@@ -1,3 +1,24 @@
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/damonjs/damon/compare/v0.5.15...v0.6.0) (2016-08-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([81a3dcd](https://github.com/damonjs/damon/commit/81a3dcd))
+* **runner:** force parse log after each suite, not only end ([13ccf7b](https://github.com/damonjs/damon/commit/13ccf7b))
+
+
+### Features
+
+* **actions:** use http instead of the navigate standalone ([e728cc9](https://github.com/damonjs/damon/commit/e728cc9))
+* **assert:** rename assert.url to assert.status for better semantics ([8fed25e](https://github.com/damonjs/damon/commit/8fed25e))
+* **http:** add an action set for http stuff ([507c792](https://github.com/damonjs/damon/commit/507c792))
+* **reporter:** upgrade to damon-reporter 0.1.0 ([0e32886](https://github.com/damonjs/damon/commit/0e32886))
+* **runner:** make the log parser synchronous ([45bca38](https://github.com/damonjs/damon/commit/45bca38))
+* **worker:** remove the prepended task of navigate ([ff9afbe](https://github.com/damonjs/damon/commit/ff9afbe))
+
+
+
 <a name="0.5.15"></a>
 ## [0.5.15](https://github.com/damonjs/damon/compare/v0.5.14...v0.5.15) (2016-07-07)
 
