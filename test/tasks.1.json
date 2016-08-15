@@ -1,0 +1,25 @@
+{
+    "config": {
+        "describe": "This is a first suite"
+    },
+    "tasks": [
+        {
+            "type": "status",
+            "it": "Test https://www.google.ca",
+            "params": {
+                "url": "https://www.google.ca",
+                "method": "GET",
+                "status": 200
+            }
+        },
+        {
+            "type": "status",
+            "it": "Test https://www.google.de",
+            "params": {
+                "url": "https://www.google.de",
+                "method": "GET",
+                "status": 200
+            }
+        }
+    ]
+}
