@@ -284,8 +284,12 @@ Runner.prototype.runTask = function runTask () {
             if (child) {
                 this.cleanChild(child.uuid);
             }
-            // Do the next one.
-            this.runTask();
+            // Parse the log one last time to avoid any
+            // missing log.
+            this.doParseLog(this.log, function () {
+                // Do the next one.
+                this.runTask();
+            }.bind(this), true);
         }.bind(this));
 
         this.start(file.tasks);
@@ -319,14 +323,10 @@ Runner.prototype.end = function end (child, code, signal) {
 
 // When everything is done.
 Runner.prototype.finish = function finish () {
-    // Parse the log one last time to avoid any
-    // missing log.
-    this.doParseLog(this.log, function () {
-        this.started = false;
-        this.cancelled = false;
-        this.emit('finish', this.createReport());
-        this.unbindings();
-    }.bind(this));
+    this.started = false;
+    this.cancelled = false;
+    this.emit('finish', this.createReport());
+    this.unbindings();
 };
 
 // A task is pending.
