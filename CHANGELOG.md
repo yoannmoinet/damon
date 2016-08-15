@@ -1,3 +1,13 @@
+<a name="0.6.1"></a>
+## [0.6.1](https://github.com/damonjs/damon/compare/v0.6.0...v0.6.1) (2016-08-15)
+
+
+### Features
+
+* **docs:** add a ToC ([38e4859](https://github.com/damonjs/damon/commit/38e4859))
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/damonjs/damon/compare/v0.5.15...v0.6.0) (2016-08-15)
 
