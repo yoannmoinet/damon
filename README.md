@@ -4,7 +4,7 @@
 
 `damon` is a tool that runs on [CasperJS](http://casperjs.org/) which runs on [PhantomJS](http://phantomjs.org/).
 
-He feeds on JSON files that describe what tasks he needs to achieve on specified starting URL.
+It feeds on JSON files that describe what tasks he needs to achieve on specified starting URL.
 
 # Table Of Contents
 <details>
@@ -60,10 +60,11 @@ npm install --save damon
 
 ```node
 var damon = require('damon');
-// Attach the reporter.
+// Attach the default reporter.
 damon.attachReporter();
-// You can attach your own reporter too
+// You can attach your own reporter as well
 // damon.attachReporter('./path/to/my/reporter.js');
+// Start your suite(s), it accepts globs.
 damon.start('./tasks.json');
 ```
 
@@ -72,6 +73,17 @@ damon.start('./tasks.json');
 You can use `damon` via a CLI, available at [damonjs/damon-cli](https://github.com/damonjs/damon-cli)
 
 ## Task File
+
+This is the json file you'll pass to `damon`.
+
+It's composed of two attributes, a `config` hash and a `tasks` array.
+
+```javascript
+{
+    "config": {},
+    "tasks": []
+}
+```
 
 ### `config`
 
@@ -442,7 +454,7 @@ To access the stored value, call the `key` in between double brackets `{{key}}`
 
 #### `request`
 
-`damon` can perform an AJAX call from within its workflow.
+`damon` can perform any HTTP call.
 
 ```javascript
 {
