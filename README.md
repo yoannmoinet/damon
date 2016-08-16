@@ -552,6 +552,8 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
 - [x] Extract the default reporter component.
 - [ ] Extract default actions. (place them in the config file to be imported)
 - [ ] Extract default plugins. (place them in the config file to be imported)
+- [ ] Create Sitemap crawling plugin (almost there).
+- [ ] Create Retry mecanic plugin.
 - [ ] Create Github Page to use as main website.
 - [ ] Create wiki to document how to create reporters/actions/plugins.
 - [ ] Extract runner component.
