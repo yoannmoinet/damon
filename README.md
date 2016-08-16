@@ -17,20 +17,35 @@ It feeds on JSON files that describe what tasks he needs to achieve on specified
   * [Locally](#locally)
   * [CLI](#cli)
 - [Task File](#task-file)
-  * [`config`](#config)
-  * [`tasks`](#tasks)
-    + [`navigate`](#navigate)
-    + [`status`](#status)
-    + [`redirection`](#redirection)
-    + [`capture`](#capture)
-    + [`download`](#download)
-    + [`wait`](#wait)
-    + [`dom`](#dom)
-    + [`get`](#get)
+  * [config](#config)
+  * [tasks](#tasks)
+    + [navigate](#navigate)
+    + [status](#status)
+    + [redirection](#redirection)
+    + [capture](#capture)
+    + [download](#download)
+    + [wait](#wait)
+      - [url](#url)
+      - [selector](#selector)
+      - [visible](#visible)
+      - [hidden](#hidden)
+      - [time](#time)
+      - [resource](#resource)
+    + [dom](#dom)
+      - [click](#click)
+      - [fill](#fill)
+    + [get](#get)
       - [_store_](#_store_)
+        * [attribute](#attribute)
+        * [variable](#variable)
+        * [resource](#resource-1)
+        * [number of elements](#number-of-elements)
       - [_access_](#_access_)
-    + [`request`](#request)
-    + [`assert`](#assert)
+    + [request](#request)
+    + [assert](#assert)
+      - [attribute](#attribute-1)
+      - [variable](#variable-1)
+      - [key](#key)
 - [Roadmap](#roadmap)
 - [Contribute](#contribute)
       - [Individual Contribution](#individual-contribution)
@@ -85,7 +100,7 @@ It's composed of two attributes, a `config` hash and a `tasks` array.
 }
 ```
 
-### `config`
+### config
 
 Your task file must have a `config` entry with a `size` and a `url`.
 
@@ -108,7 +123,7 @@ Your task file must have a `config` entry with a `size` and a `url`.
 - `logLevel` control at which level `damon` will log. Can be `none`, `fatal`, `error`, `warn`, `info`, `debug` or `trace`
 - `describe` is used to give a description of the job. It is printed next to the filename in the default reporter.
 
-### `tasks`
+### tasks
 
 Then you describe your tasks in a `tasks` entry that is an array of all the tasks to achieve sequentially :
 
@@ -135,7 +150,7 @@ Each task will have three components:
 
 __It exists several kinds of tasks that `damon` can achieve :__
 
-#### `navigate`
+#### navigate
 
 `damon` can navigate to other urls at the start or during its worflow.
 
@@ -158,7 +173,7 @@ __It exists several kinds of tasks that `damon` can achieve :__
 
 Only `params.url` is required.
 
-#### `status`
+#### status
 
 Verify that the page answers with a specific status.
 
@@ -190,7 +205,7 @@ In the case of the array, the first encounter will validate the task.
 
 Only `params.url`and `params.status` are required.
 
-#### `redirection`
+#### redirection
 
 Verify that the page redirects to another specified one.
 
@@ -218,7 +233,7 @@ The `params.method`, `params.data`, `params.heades` and `params.encoding` are fo
 
 Only `params.from`and `params.to` are required.
 
-#### `capture`
+#### capture
 
 A simple screen capture :
 
@@ -230,7 +245,7 @@ A simple screen capture :
     }
 }
 ```
-#### `download`
+#### download
 
 Download the target url
 
@@ -248,12 +263,12 @@ Download the target url
 
 An HTTP method can be set with `method`, and pass request arguments through `data`.
 
-#### `wait`
+#### wait
 
 `damon` can wait for several different things.
 For each one, except `time`, you can overwrite the `timeout`.
 
-- `url`
+##### url
 
 ```javascript
 {
@@ -270,7 +285,7 @@ For each one, except `time`, you can overwrite the `timeout`.
 
 `url` will be interpreted as a `regexp` if set to `true`. Default value of `regexp` is `false`.
 
-- `selector`
+##### selector
 
 ```javascript
 {
@@ -287,12 +302,12 @@ For each one, except `time`, you can overwrite the `timeout`.
 
 `xpath` can be used to select an element by setting it to true. Default value is false.
 
-- `visible`
-- `hidden`
+##### visible
+##### hidden
 
 Both are the same as `selector` but will wait for these specific states of the element.
 
-- `time`
+##### time
 
 ```javascript
 {
@@ -305,7 +320,7 @@ Both are the same as `selector` but will wait for these specific states of the e
 
 `damon` will wait for the specified amount of milliseconds.
 
-- `resource`
+##### resource
 
 ```javascript
 {
@@ -325,11 +340,11 @@ Both are the same as `selector` but will wait for these specific states of the e
 
 A `method` can be specified to filter the resource. If nothing is specified, any `method` will be accepted.
 
-#### `dom`
+#### dom
 
 `damon` can perform two different actions on a dom element :
 
-- `click`
+##### click
 
 ```javascript
 {
@@ -344,7 +359,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 
 `damon` will click on the specified selector.
 
-- `fill`
+##### fill
 
 ```javascript
 {
@@ -362,13 +377,13 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 
 `xpath` cannot be used when filling a file field due to [PhantomJS limitiations](http://docs.casperjs.org/en/latest/modules/casper.html#fill).
 
-#### `get`
+#### get
 
 ##### _store_
 
 `damon` can perform different `get` to retrieve a value and store it for subsequent tasks :
 
-- `attribute`
+###### attribute
 
 ```javascript
 {
@@ -387,7 +402,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 
 `@text` can also be used as an `attribute` to get the text content of the `selector`
 
-- `variable`
+###### variable
 
 ```javascript
 {
@@ -401,7 +416,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 
 `damon` will access to the specified variable with `window` as the root object and store its value as `varAttr2`
 
-- `resource`
+###### resource
 
 ```javascript
 {
@@ -422,7 +437,7 @@ A `method` can be specified to filter the resource. If nothing is specified, any
 
 To access to a variable in the payload of a resource, write `payload.variableName` for `variable` field. Resource also contains the `headers`, `method`, `time` and `url`.
 
-- `number of elements`
+###### number of elements
 
 ```javascript
 {
@@ -452,7 +467,7 @@ The value can then be accessed in any following tasks via its `key` value
 
 To access the stored value, call the `key` in between double brackets `{{key}}`
 
-#### `request`
+#### request
 
 `damon` can perform any HTTP call.
 
@@ -482,11 +497,11 @@ If you don't pass a `variable` it will store the complete response.
 
 Otherwise, it will try to parse the response as JSON and look for your variable.
 
-#### `assert`
+#### assert
 
 `damon` can perform different `assert` actions to test a value with an expected value:
 
-- attribute
+##### attribute
 
 ```javascript
 {
@@ -503,7 +518,7 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
 
 `damon` will `get` the value of the `attribute` and test it against the `expected` value or the value associated with `{{key}}`
 
-- variable
+##### variable
 
 ```javascript
 {
@@ -517,7 +532,7 @@ Otherwise, it will try to parse the response as JSON and look for your variable.
 
 `damon` will `get` the value of the `variable` and test it against the `expected` value or the value associated with `{{key}}`
 
-- key
+##### key
 
 ```javascript
 {
