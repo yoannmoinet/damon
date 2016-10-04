@@ -102,7 +102,7 @@ It's composed of two attributes, a `config` hash and a `tasks` array.
 
 ### config
 
-Your task file must have a `config` entry with a `size` and a `url`.
+Your task file must have a `config` entry.
 
 ```javascript
 "config": {
@@ -125,7 +125,7 @@ Your task file must have a `config` entry with a `size` and a `url`.
 
 ### tasks
 
-Then you describe your tasks in a `tasks` entry that is an array of all the tasks to achieve sequentially :
+Then you describe your `tasks` entry, an array of all the tasks to achieve sequentially :
 
 ```javascript
 "tasks": [
@@ -144,9 +144,9 @@ Each task will have three components:
 }
 ```
 
-- `type` give the type of task for `damon` to run.
-- `params` provide arguments to be passed to the task.
-- `it` provide a description of the task, to be printed on the default reporter (optional).
+- `type` the type of task.
+- `params` arguments to be passed to the task.
+- `it` description of the task, to be printed on the default reporter (optional).
 
 __It exists several kinds of tasks that `damon` can achieve :__
 
