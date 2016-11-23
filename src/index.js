@@ -1,5 +1,5 @@
 var path = require('path');
-var uuid = require('node-uuid').v1;
+var uuid = require('uuid').v1;
 var glob = require('glob');
 var chalk = require('chalk');
 var runner = require('./runner.js');
